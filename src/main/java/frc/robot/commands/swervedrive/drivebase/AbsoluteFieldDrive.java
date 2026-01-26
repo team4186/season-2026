@@ -16,15 +16,14 @@ import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
 import swervelib.math.SwerveMath;
 
-
 /**
  * An example command that uses an example subsystem.
  */
-public class AbsoluteFieldDrive extends Command {
+public class AbsoluteFieldDrive extends Command
+{
 
   private final SwerveSubsystem swerve;
   private final DoubleSupplier  vX, vY, heading;
-
 
   /**
    * Used to drive a swerve robot in full field-centric mode.  vX and vY supply translation inputs, where x is
@@ -41,7 +40,8 @@ public class AbsoluteFieldDrive extends Command {
    * @param heading DoubleSupplier that supplies the robot's heading angle.
    */
   public AbsoluteFieldDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY,
-                            DoubleSupplier heading) {
+                            DoubleSupplier heading)
+  {
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
@@ -50,14 +50,15 @@ public class AbsoluteFieldDrive extends Command {
     addRequirements(swerve);
   }
 
-
   @Override
-  public void initialize() {}
-
+  public void initialize()
+  {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
+  public void execute()
+  {
 
     // Get the desired chassis speeds based on a 2 joystick module.
 
@@ -74,17 +75,21 @@ public class AbsoluteFieldDrive extends Command {
 
     // Make the robot move
     swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
-  }
 
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
-
+  public void end(boolean interrupted)
+  {
+  }
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
+  public boolean isFinished()
+  {
     return false;
   }
+
+
 }
