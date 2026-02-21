@@ -35,9 +35,9 @@ import swervelib.SwerveInputStream;
 public class RobotContainer {
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    final CommandXboxController driverXbox = new CommandXboxController(1);
-    final CommandPS5Controller driverPS5 = new CommandPS5Controller(0);
-    final CommandStadiaController driverStadia = new CommandStadiaController(2);
+    final CommandXboxController driverXbox = new CommandXboxController(3);
+    final CommandPS5Controller driverPS5 = new CommandPS5Controller(4);
+    final CommandStadiaController driverStadia = new CommandStadiaController(0);
 
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
@@ -60,19 +60,34 @@ public class RobotContainer {
             .allianceRelativeControl(true);
 
 
-    SwerveInputStream driveAngularVelocityPS5 = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                    () -> driverPS5.getLeftY() * -1,
-                    () -> driverPS5.getLeftX() * -1)
+//    SwerveInputStream driveAngularVelocityPS5 = SwerveInputStream.of(drivebase.getSwerveDrive(),
+//                    () -> driverPS5.getLeftY() * -1,
+//                    () -> driverPS5.getLeftX() * -1)
+//            .withControllerRotationAxis(
+//                    () -> driverPS5.getRawAxis(3))
+//            .deadband(OperatorConstants.DEADBAND)
+//            .scaleTranslation(0.8)
+//            .allianceRelativeControl(true);
+
+    SwerveInputStream driveAngularVelocityStadia = SwerveInputStream.of(drivebase.getSwerveDrive(),
+                    () -> driverStadia.getLeftY() * -1,
+                    () -> driverStadia.getLeftX() * -1)
             .withControllerRotationAxis(
-                    () -> driverPS5.getRawAxis(3))
+                    () -> driverStadia.getRawAxis(3))
             .deadband(OperatorConstants.DEADBAND)
             .scaleTranslation(0.8)
             .allianceRelativeControl(true);
 
-    SwerveInputStream driveDirectAnglePS5 = driveAngularVelocityPS5.copy()
+//    SwerveInputStream driveDirectAnglePS5 = driveAngularVelocityPS5.copy()
+//            .withControllerHeadingAxis(
+//                    () -> driverPS5.getRawAxis(3),
+//                    () -> driverPS5.getRawAxis(4))
+//            .headingWhile(true);0
+
+    SwerveInputStream driveDirectAngleStadia = driveAngularVelocityStadia.copy()
             .withControllerHeadingAxis(
-                    () -> driverPS5.getRawAxis(3),
-                    () -> driverPS5.getRawAxis(4))
+                    () -> driverStadia.getRawAxis(3),
+                    () -> driverStadia.getRawAxis(4))
             .headingWhile(true);
 
 
@@ -160,20 +175,51 @@ public class RobotContainer {
      * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick
      * Flight joysticks}.
      */
+
+    private double attenuated(double value, int exponent, double scale) {
+        double res = scale * Math.pow( Math.abs(value), exponent );
+        if ( value < 0 ) { res *= -1; }
+        return res;
+    }
+
+    SwerveInputStream driveStadia = SwerveInputStream.of(
+                    drivebase.getSwerveDrive(),
+                    () -> attenuated( driverStadia.getLeftY(), 2, 0.5 ) * -1,
+                    () -> attenuated( driverStadia.getLeftX(), 2, 0.5 ) * -1)
+            .withControllerRotationAxis(
+                    // () -> stadiaController.getRawAxis(2))
+                    driverStadia::getRightX)
+            // () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
+            .deadband(OperatorConstants.DEADBAND)
+            .scaleTranslation(0.8)
+            .allianceRelativeControl(true);
+
+    SwerveInputStream driveStadiaHeadingAxis = driveStadia.copy().withControllerHeadingAxis(
+                    driverStadia::getRightX,
+                    driverStadia::getRightY)
+            .headingWhile(true);
+
     private void configureBindings() {
+
+        driverStadia.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+        driverStadia.rightBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+
         Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
         Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity); // SIM
         Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
         Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
-        Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
 
-        Command driveFieldOrientedAnglularVelocityPS5 = drivebase.driveFieldOriented(driveAngularVelocityPS5);
-        Command driveFieldOrientedAnglularVelocityPS5Angle = drivebase.driveFieldOriented(driveDirectAnglePS5);
+    Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
+//        Command driveFieldOrientedAnglularVelocityPS5 = drivebase.driveFieldOriented(driveAngularVelocityPS5);
+//        Command driveFieldOrientedAnglularVelocityPS5Angle = drivebase.driveFieldOriented(driveDirectAnglePS5);
+        Command driveFieldOrientedAnglularVelocityStadia = drivebase.driveFieldOriented(driveAngularVelocityStadia);
+        Command driveFieldOrientedAnglularVelocityStadiaAngle = drivebase.driveFieldOriented(driveDirectAngleStadia);
 
         if (RobotBase.isSimulation()) {
             // drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
             // drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityPS5);
-            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityPS5Angle);
+//            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityPS5Angle);
+            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityStadiaAngle);
         } else {
             drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
         }
