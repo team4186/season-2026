@@ -37,11 +37,12 @@ public class RobotContainer {
     // Replace with CommandPS4Controller or CommandJoystick if needed
     final CommandXboxController driverXbox = new CommandXboxController(3);
     final CommandPS5Controller driverPS5 = new CommandPS5Controller(4);
-    final CommandStadiaController driverStadia = new CommandStadiaController(0);
+    final CommandStadiaController driverStadia = new CommandStadiaController(5);
+    final CommandJoystick joystickDriver = new CommandJoystick(0);
 
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-            "swerve/neo"));
+            "swerve/maxSwerve"));
 
     // Establish a Sendable Chooser that will be able to be sent to the
     // SmartDashboard, allowing selection of desired auto
@@ -70,10 +71,10 @@ public class RobotContainer {
 //            .allianceRelativeControl(true);
 
     SwerveInputStream driveAngularVelocityStadia = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                    () -> driverStadia.getLeftY() * -1,
-                    () -> driverStadia.getLeftX() * -1)
+                    () -> attenuated( driverStadia.getLeftY() * -1, 2, 0.6),
+                    () -> attenuated( driverStadia.getLeftX(), 2, 0.60) * 1)
             .withControllerRotationAxis(
-                    () -> driverStadia.getRawAxis(3))
+                    () -> attenuated(driverStadia.getRawAxis(3), 2, 0.6))
             .deadband(OperatorConstants.DEADBAND)
             .scaleTranslation(0.8)
             .allianceRelativeControl(true);
@@ -86,8 +87,8 @@ public class RobotContainer {
 
     SwerveInputStream driveDirectAngleStadia = driveAngularVelocityStadia.copy()
             .withControllerHeadingAxis(
-                    () -> driverStadia.getRawAxis(3),
-                    () -> driverStadia.getRawAxis(4))
+                    () -> attenuated( driverStadia.getRawAxis(3), 2, 0.60),
+                    () -> attenuated( driverStadia.getRawAxis(4), 2, 0.60) * -1)
             .headingWhile(true);
 
 
@@ -137,6 +138,34 @@ public class RobotContainer {
                     0));
 
 
+    SwerveInputStream driveStadia = SwerveInputStream.of(
+                    drivebase.getSwerveDrive(),
+                    () -> attenuated( driverStadia.getLeftY(), 2, 0.5 ) * -1,
+                    () -> attenuated( driverStadia.getLeftX(), 2, 0.5 ) * -1)
+            .withControllerRotationAxis(
+                    // () -> stadiaController.getRawAxis(2))
+                    driverStadia::getRightX)
+            // () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
+            .deadband(OperatorConstants.DEADBAND)
+            .scaleTranslation(0.8)
+            .allianceRelativeControl(true);
+
+    SwerveInputStream driveStadiaHeadingAxis = driveStadia.copy().withControllerHeadingAxis(
+                    driverStadia::getRightX,
+                    driverStadia::getRightY)
+            .headingWhile(true);
+
+    SwerveInputStream driveAngularVelocityJoystick = SwerveInputStream.of(
+                    drivebase.getSwerveDrive(),
+                    () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * -1,
+                    () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * -1)
+            .withControllerRotationAxis(
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
+            .deadband(OperatorConstants.DEADBAND)
+            .allianceRelativeControl(true);
+
+
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -182,27 +211,9 @@ public class RobotContainer {
         return res;
     }
 
-    SwerveInputStream driveStadia = SwerveInputStream.of(
-                    drivebase.getSwerveDrive(),
-                    () -> attenuated( driverStadia.getLeftY(), 2, 0.5 ) * -1,
-                    () -> attenuated( driverStadia.getLeftX(), 2, 0.5 ) * -1)
-            .withControllerRotationAxis(
-                    // () -> stadiaController.getRawAxis(2))
-                    driverStadia::getRightX)
-            // () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
-            .deadband(OperatorConstants.DEADBAND)
-            .scaleTranslation(0.8)
-            .allianceRelativeControl(true);
-
-    SwerveInputStream driveStadiaHeadingAxis = driveStadia.copy().withControllerHeadingAxis(
-                    driverStadia::getRightX,
-                    driverStadia::getRightY)
-            .headingWhile(true);
 
     private void configureBindings() {
-
-        driverStadia.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-        driverStadia.rightBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+        Command driveFieldOrientedAngularVelocityJoystick = drivebase.driveFieldOriented(driveAngularVelocityJoystick);
 
         Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
         Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity); // SIM
@@ -221,7 +232,7 @@ public class RobotContainer {
 //            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityPS5Angle);
             drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityStadiaAngle);
         } else {
-            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+            // drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
         }
 
         if (Robot.isSimulation()) {
@@ -247,7 +258,6 @@ public class RobotContainer {
         }
 
         if (DriverStation.isTest()) {
-            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
             driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -255,6 +265,15 @@ public class RobotContainer {
             driverXbox.leftBumper().onTrue(Commands.none());
             driverXbox.rightBumper().onTrue(Commands.none());
         } else {
+
+            drivebase.setDefaultCommand(driveFieldOrientedAngularVelocityJoystick);
+
+            joystickDriver.button(11).onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            joystickDriver.button(12).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+
+            driverStadia.leftBumper().whileTrue(driveFieldOrientedAnglularVelocityStadia);
+
+
             driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
             driverXbox.start().whileTrue(Commands.none());
             driverXbox.back().whileTrue(Commands.none());
