@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
 
@@ -166,6 +166,23 @@ public class RobotContainer {
             .allianceRelativeControl(true);
 
 
+    SwerveInputStream driveFieldPS5 = SwerveInputStream.of(
+            drivebase.getSwerveDrive(),
+            () -> attenuated( driverPS5.getLeftY(), 2, 1.0 ) * -1,
+            () -> attenuated( driverPS5.getLeftX(), 2, 1.0 ) * -1)
+        .withControllerRotationAxis(
+            driverPS5::getRightX)
+        .deadband(OperatorConstants.DEADBAND)
+        .allianceRelativeControl(true);
+
+
+    SwerveInputStream driveHeadingAxisPS5 = driveFieldPS5.copy().withControllerHeadingAxis(
+            driverPS5::getRightX,
+            driverPS5::getRightY)
+        .headingWhile(true);
+
+
+
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -221,22 +238,18 @@ public class RobotContainer {
         Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
         Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
 
-    Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
-//        Command driveFieldOrientedAnglularVelocityPS5 = drivebase.driveFieldOriented(driveAngularVelocityPS5);
-//        Command driveFieldOrientedAnglularVelocityPS5Angle = drivebase.driveFieldOriented(driveDirectAnglePS5);
+        Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
         Command driveFieldOrientedAnglularVelocityStadia = drivebase.driveFieldOriented(driveAngularVelocityStadia);
         Command driveFieldOrientedStadia = drivebase.driveFieldOriented(driveStadia);
 
         Command driveFieldOrientedAnglularVelocityStadiaAngle = drivebase.driveFieldOriented(driveDirectAngleStadia);
 
-        if (RobotBase.isSimulation()) {
-            // drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
-            // drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityPS5);
-//            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityPS5Angle);
-            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocityStadiaAngle);
-        } else {
-            // drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-        }
+        Command driveFieldOrientedPS5 = drivebase.driveFieldOriented(driveFieldPS5);
+        Command driveFieldHeadingPS5 = drivebase.driveFieldOriented(driveHeadingAxisPS5);
+
+        // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocityJoystick);
+        drivebase.setDefaultCommand(driveFieldOrientedStadia);
+
 
         if (Robot.isSimulation()) {
             Pose2d target = new Pose2d(new Translation2d(1, 4),
@@ -258,24 +271,26 @@ public class RobotContainer {
             driverXbox.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
                     () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
 
+            // Testing PS5 Controls in Sim, both work as intended
+            driverPS5.L1().whileTrue( driveFieldOrientedPS5 );
+            driverPS5.R1().whileTrue( driveFieldHeadingPS5 );
         }
 
-        if (DriverStation.isTest()) {
 
+        if (DriverStation.isTest()) {
             driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
             driverXbox.back().whileTrue(drivebase.centerModulesCommand());
             driverXbox.leftBumper().onTrue(Commands.none());
             driverXbox.rightBumper().onTrue(Commands.none());
+
         } else {
            //Teleop Command Keybinds
-
-            //drivebase.setDefaultCommand(driveFieldOrientedAngularVelocityJoystick);
-             drivebase.setDefaultCommand(driveFieldOrientedStadia);
             driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
             joystickDriver.button(11).onTrue((Commands.runOnce(drivebase::zeroGyro)));
             joystickDriver.button(12).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+
 
             driverStadia.leftBumper().whileTrue(driveFieldOrientedAnglularVelocityStadia);
 
@@ -286,7 +301,6 @@ public class RobotContainer {
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.rightBumper().onTrue(Commands.none());
         }
-
     }
 
 
