@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,6 +24,9 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.io.File;
+
+import frc.robot.vision.LimelightHelpers;
+import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
 
 
@@ -46,7 +52,7 @@ public class RobotContainer {
 
     // Establish a Sendable Chooser that will be able to be sent to the
     // SmartDashboard, allowing selection of desired auto
-    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    private final SendableChooser<Command> autoChooser;
 
     /**
      * Converts driver input into a field-relative ChassisSpeeds that is controlled
@@ -59,7 +65,6 @@ public class RobotContainer {
             .deadband(OperatorConstants.DEADBAND)
             .scaleTranslation(0.8)
             .allianceRelativeControl(true);
-
 
 //    SwerveInputStream driveAngularVelocityPS5 = SwerveInputStream.of(drivebase.getSwerveDrive(),
 //                    () -> driverPS5.getLeftY() * -1,
@@ -91,7 +96,6 @@ public class RobotContainer {
                     () -> attenuated( driverStadia.getRawAxis(3), 2, 0.60),
                     () -> attenuated( driverStadia.getRawAxis(4), 2, 0.60) * -1)
             .headingWhile(true);
-
 
     /**
      * Clone's the angular velocity input stream and converts it to a fieldRelative
@@ -138,7 +142,6 @@ public class RobotContainer {
             .translationHeadingOffset(Rotation2d.fromDegrees(
                     0));
 
-
     SwerveInputStream driveStadia = SwerveInputStream.of(
                     drivebase.getSwerveDrive(),
                     () -> attenuated( driverStadia.getLeftY(), 2, 1.0 ) * -1,
@@ -165,7 +168,6 @@ public class RobotContainer {
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
-
     SwerveInputStream driveFieldPS5 = SwerveInputStream.of(
             drivebase.getSwerveDrive(),
             () -> attenuated( driverPS5.getLeftY(), 2, 1.0 ) * -1,
@@ -175,13 +177,10 @@ public class RobotContainer {
         .deadband(OperatorConstants.DEADBAND)
         .allianceRelativeControl(true);
 
-
     SwerveInputStream driveHeadingAxisPS5 = driveFieldPS5.copy().withControllerHeadingAxis(
             driverPS5::getRightX,
             driverPS5::getRightY)
         .headingWhile(true);
-
-
 
 
     /**
@@ -192,6 +191,12 @@ public class RobotContainer {
         configureBindings();
         DriverStation.silenceJoystickConnectionWarning(true);
 
+        // Create the NamedCommands that will be used in PathPlanner
+        NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+
+        //Have the autoChooser pull in all PathPlanner autos as options
+        autoChooser = AutoBuilder.buildAutoChooser();
+
         // Set the default auto (do nothing)
         autoChooser.setDefaultOption("Do Nothing", Commands.runOnce(drivebase::zeroGyroWithAlliance)
                 .andThen(Commands.none()));
@@ -200,6 +205,7 @@ public class RobotContainer {
         // stop
         autoChooser.addOption("Drive Forward", Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
                 .andThen(drivebase.driveForward().withTimeout(1)));
+
         // Put the autoChooser on the SmartDashboard
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -222,14 +228,6 @@ public class RobotContainer {
      * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick
      * Flight joysticks}.
      */
-
-    private double attenuated(double value, int exponent, double scale) {
-        double res = scale * Math.pow( Math.abs(value), exponent );
-        if ( value < 0 ) { res *= -1; }
-        return res;
-    }
-
-
     private void configureBindings() {
         Command driveFieldOrientedAngularVelocityJoystick = drivebase.driveFieldOriented(driveAngularVelocityJoystick);
 
@@ -247,9 +245,13 @@ public class RobotContainer {
         Command driveFieldOrientedPS5 = drivebase.driveFieldOriented(driveFieldPS5);
         Command driveFieldHeadingPS5 = drivebase.driveFieldOriented(driveHeadingAxisPS5);
 
-        // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocityJoystick);
-        drivebase.setDefaultCommand(driveFieldOrientedStadia);
-
+        if (RobotBase.isSimulation()) {
+            // drivebase.setDefaultCommand(driveFieldOrientedPS5);
+            drivebase.setDefaultCommand(driveFieldHeadingPS5);
+        } else {
+            // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocityJoystick);
+            drivebase.setDefaultCommand(driveFieldOrientedStadia);
+        }
 
         if (Robot.isSimulation()) {
             Pose2d target = new Pose2d(new Translation2d(1, 4),
@@ -276,7 +278,6 @@ public class RobotContainer {
             driverPS5.R1().whileTrue( driveFieldHeadingPS5 );
         }
 
-
         if (DriverStation.isTest()) {
             driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -291,9 +292,7 @@ public class RobotContainer {
             joystickDriver.button(11).onTrue((Commands.runOnce(drivebase::zeroGyro)));
             joystickDriver.button(12).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-
             driverStadia.leftBumper().whileTrue(driveFieldOrientedAnglularVelocityStadia);
-
 
             driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
             driverXbox.start().whileTrue(Commands.none());
@@ -316,7 +315,29 @@ public class RobotContainer {
     }
 
 
+    public void updatePoseEstimation(SwerveDrive swerveDrive) {
+        double robotYaw = swerveDrive.getYaw().getDegrees();
+        LimelightHelpers.SetRobotOrientation("limelight-robot", robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
+
+        // Add vision measurement, StdDevs larger number is lower confidence (0.01 - 0.05)
+        swerveDrive.addVisionMeasurement(
+            limelightMeasurement.pose,
+            limelightMeasurement.timestampSeconds,
+            VecBuilder.fill(.5, .5, 9999999) // StdDevs (x, y, heading)
+        );
+    }
+
+
     public void setMotorBrake(boolean brake) {
         drivebase.setMotorBrake(brake);
+    }
+
+
+    private double attenuated(double value, int exponent, double scale) {
+        double res = scale * Math.pow( Math.abs(value), exponent );
+        if ( value < 0 ) { res *= -1; }
+        return res;
     }
 }

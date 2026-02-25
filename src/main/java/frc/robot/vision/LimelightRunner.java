@@ -1,5 +1,7 @@
 package frc.robot.vision;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -9,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class LimelightRunner extends SubsystemBase {
+    public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(
+        AprilTagFields.k2026RebuiltWelded);
+
     private final DoubleSubscriber tvSub;
     private final DoubleSubscriber txSub;
     private final DoubleSubscriber tySub;
@@ -33,6 +38,7 @@ public class LimelightRunner extends SubsystemBase {
 
         SmartDashboard.putNumber("tx", txSub.get());
         SmartDashboard.putNumber("ty", tySub.get());
+
 //        SmartDashboard.putNumber("X Offset", tagOffset)
 //        SmartDashboard.putNumber("Y Offset", yOffset)
 //        SmartDashboard.putNumber("% of Image", tagArea)
