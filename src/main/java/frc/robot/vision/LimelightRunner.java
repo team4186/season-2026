@@ -31,6 +31,8 @@ public class LimelightRunner {
         NetworkTable turretTable = NetworkTableInstance.getDefault().getTable("limelight-turret");
         NetworkTable robotTable = NetworkTableInstance.getDefault().getTable("limelight-robot");
 
+        // TODO: Set Limelight Positions programmatically
+
         tvSub = turretTable.getDoubleTopic("tv").subscribe(0.0);
         txSub = turretTable.getDoubleTopic("tx").subscribe(0.0);
         tySub = turretTable.getDoubleTopic("ty").subscribe(0.0);
@@ -56,7 +58,9 @@ public class LimelightRunner {
     }
 
 
-    // Update the camera pose every loop based on your mechanism's current state
+    /**
+     * Information on how to set camera pose based on turret camera
+     * Update the camera pose every loop based on your mechanism's current state
 //    double forward = 0.3;  // meters, forward from robot center
 //    double side = 0.0;     // meters, left of robot center
 //    double up = 0.5;       // meters, up from robot center
@@ -67,16 +71,16 @@ public class LimelightRunner {
 //    LimelightHelpers.setCameraPose_RobotSpace("",
 //        forward, side, up, roll, pitch, yaw
 //    );
-
-
-    // Us
-    // Seed the internal IMU with your external gyro (call while disabled)
+//
+//
+//     Us
+//     Seed the internal IMU with your external gyro (call while disabled)
 //    LimelightHelpers.SetIMUMode("", 1);
 //
 //    // Switch to internal IMU with external assist when enabled
 //    LimelightHelpers.SetIMUMode("", 4);
 //    LimelightHelpers.SetIMUAssistAlpha("", 0.001);  // Adjust correction strength
-
+*/
 
     private boolean hasTargetTag(){ return tvSub.get() > 0.0; }
 

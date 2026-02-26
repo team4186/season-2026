@@ -84,7 +84,7 @@ public final class MotorConfigs {
     }
 
 
-    public SparkFlex applyShooterConfig(
+    public SparkFlex applyShooterSparkConfig(
         SparkFlex motorLeader,
         SparkFlex motorFollower,
         boolean invertSecondMotor,
@@ -146,5 +146,34 @@ public final class MotorConfigs {
             PersistMode.kPersistParameters);
 
         return motorLeader;
+    }
+
+
+    // TODO: Setup SparkMax config
+    public SparkMax applyIntakePickupSparkConfig(){
+        return null;
+    }
+
+    // TODO: Setup SparkMax config
+    public SparkMax applyIntakeDeployerSparkConfig(){
+        return null;
+    }
+
+
+    // TODO: Setup SparkMax config
+    public SparkMax applyClimbSparkConfig(){
+        return null;
+    }
+
+
+    // TODO: Setup SparkMax config
+    public SparkMax applyTurretLoaderSparkConfig(){
+        return null;
+    }
+
+
+    // TODO: Setup SparkMax config
+    public SparkMax applySpindexerSparkConfig(){
+        return null;
     }
 }

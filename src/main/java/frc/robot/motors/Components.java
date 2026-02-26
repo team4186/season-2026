@@ -35,7 +35,7 @@ public class Components {
 
     public SparkFlex getShooterMotor(){
         if (shooterMotor == null) {
-            shooterMotor = customConfigs.applyShooterConfig(
+            shooterMotor = customConfigs.applyShooterSparkConfig(
                 new SparkFlex(21, SparkLowLevel.MotorType.kBrushless),
                 new SparkFlex(22, SparkLowLevel.MotorType.kBrushless),
                 true,
@@ -45,4 +45,24 @@ public class Components {
 
         return shooterMotor;
     }
+
+
+    // TODO: Create Motor instance and apply config
+    public SparkMax getLoaderMotor(){ return null; }
+
+
+    // TODO: Create Motor instance and apply config
+    public SparkMax getIntakePickupMotor(){ return null; }
+
+
+    // TODO: Create Motor instance and apply config
+    public SparkMax getIntakeDeployMotor(){ return null; }
+
+
+    // TODO: Create Motor instance and apply config
+    public SparkMax getClimbMotor(){ return null; }
+
+
+    // TODO: Create Motor instance and apply config
+    public SparkMax getSpindexerMotor(){ return null; }
 }
