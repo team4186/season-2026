@@ -5,13 +5,16 @@
 package frc.robot.subsystems;
 
 
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Meter;
+import static frc.robot.Constants.LimelightConstants;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,6 +31,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import frc.robot.vision.LimelightHelpers;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -171,6 +176,7 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
+    updatePoseEstimate(swerveDrive);
   }
 
 
@@ -592,4 +598,28 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return swerveDrive;
   }
+
+
+  /**
+   * Updates pose using limelight pose estimation
+   */
+  public void updatePoseEstimate(SwerveDrive swerveDrive) {
+    double robotYaw = swerveDrive.getYaw().getDegrees();
+    LimelightHelpers.SetRobotOrientation(LimelightConstants.LIMELIGHT_ROBOT, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+    LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimelightConstants.LIMELIGHT_ROBOT);
+    if ( limelightMeasurement.tagCount != 0 &&
+        Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720.0) {
+      // Add vision measurement, StdDevs larger number is lower confidence (0.01 - 0.05)
+      swerveDrive.addVisionMeasurement(
+          limelightMeasurement.pose,
+          limelightMeasurement.timestampSeconds,
+          VecBuilder.fill(
+              LimelightConstants.LIMELIGHT_X_STD_DEVS,
+              LimelightConstants.LIMELIGHT_Y_STD_DEVS,
+              LimelightConstants.LIMELIGHT_HEADING_STD_DEVS)
+      );
+    }
+  }
+
 }

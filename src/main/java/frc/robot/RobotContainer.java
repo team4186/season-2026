@@ -315,21 +315,6 @@ public class RobotContainer {
     }
 
 
-    public void updatePoseEstimation(SwerveDrive swerveDrive) {
-        double robotYaw = swerveDrive.getYaw().getDegrees();
-        LimelightHelpers.SetRobotOrientation("limelight-robot", robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
-
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("");
-
-        // Add vision measurement, StdDevs larger number is lower confidence (0.01 - 0.05)
-        swerveDrive.addVisionMeasurement(
-            limelightMeasurement.pose,
-            limelightMeasurement.timestampSeconds,
-            VecBuilder.fill(.5, .5, 9999999) // StdDevs (x, y, heading)
-        );
-    }
-
-
     public void setMotorBrake(boolean brake) {
         drivebase.setMotorBrake(brake);
     }
