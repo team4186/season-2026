@@ -33,6 +33,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import frc.robot.vision.LimelightHelpers;
+import frc.robot.vision.LimelightRunner;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -50,6 +51,7 @@ public class SwerveSubsystem extends SubsystemBase
    * Swerve drive object.
    */
   private final SwerveDrive swerveDrive;
+  private final LimelightRunner vision = LimelightRunner.getInstance();
 
 
   /**
@@ -176,7 +178,7 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
-    updatePoseEstimate(swerveDrive);
+    vision.updatePoseEstimate(swerveDrive);
   }
 
 
@@ -597,29 +599,6 @@ public class SwerveSubsystem extends SubsystemBase
   public SwerveDrive getSwerveDrive()
   {
     return swerveDrive;
-  }
-
-
-  /**
-   * Updates pose using limelight pose estimation
-   */
-  public void updatePoseEstimate(SwerveDrive swerveDrive) {
-    double robotYaw = swerveDrive.getYaw().getDegrees();
-    LimelightHelpers.SetRobotOrientation(LimelightConstants.LIMELIGHT_ROBOT, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
-
-    LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimelightConstants.LIMELIGHT_ROBOT);
-    if ( limelightMeasurement.tagCount != 0 &&
-        Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720.0) {
-      // Add vision measurement, StdDevs larger number is lower confidence (0.01 - 0.05)
-      swerveDrive.addVisionMeasurement(
-          limelightMeasurement.pose,
-          limelightMeasurement.timestampSeconds,
-          VecBuilder.fill(
-              LimelightConstants.LIMELIGHT_X_STD_DEVS,
-              LimelightConstants.LIMELIGHT_Y_STD_DEVS,
-              LimelightConstants.LIMELIGHT_HEADING_STD_DEVS)
-      );
-    }
   }
 
 }

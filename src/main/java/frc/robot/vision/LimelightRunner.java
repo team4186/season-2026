@@ -2,15 +2,22 @@ package frc.robot.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import swervelib.SwerveDrive;
+
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 
 
-public class LimelightRunner extends SubsystemBase {
+public class LimelightRunner {
+
+    private static final LimelightRunner instance = new LimelightRunner();
+
     public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(
         AprilTagFields.k2026RebuiltWelded);
 
@@ -20,7 +27,7 @@ public class LimelightRunner extends SubsystemBase {
     private final DoublePublisher ledPub;
 
 
-    public LimelightRunner(){
+    private LimelightRunner(){
         NetworkTable turretTable = NetworkTableInstance.getDefault().getTable("limelight-turret");
         NetworkTable robotTable = NetworkTableInstance.getDefault().getTable("limelight-robot");
 
@@ -30,8 +37,11 @@ public class LimelightRunner extends SubsystemBase {
         ledPub = turretTable.getDoubleTopic("ledMode").publish();
     }
 
-    @Override
-    public void periodic() {
+
+    public static LimelightRunner getInstance(){ return instance; }
+
+
+    public void update() {
         boolean tagInView = hasTargetTag();
         SmartDashboard.putBoolean("Has Target Tag?", tagInView);
         ledPub.set( tagInView? 3.0 : 1.0 );
@@ -46,7 +56,52 @@ public class LimelightRunner extends SubsystemBase {
     }
 
 
+    // Update the camera pose every loop based on your mechanism's current state
+//    double forward = 0.3;  // meters, forward from robot center
+//    double side = 0.0;     // meters, left of robot center
+//    double up = 0.5;       // meters, up from robot center
+//    double roll = 0.0;     // degrees
+//    double pitch = -30.0;  // degrees (e.g. camera tilted down as arm moves)
+//    double yaw = 0.0;      // degrees
+//
+//    LimelightHelpers.setCameraPose_RobotSpace("",
+//        forward, side, up, roll, pitch, yaw
+//    );
+
+
+    // Us
+    // Seed the internal IMU with your external gyro (call while disabled)
+//    LimelightHelpers.SetIMUMode("", 1);
+//
+//    // Switch to internal IMU with external assist when enabled
+//    LimelightHelpers.SetIMUMode("", 4);
+//    LimelightHelpers.SetIMUAssistAlpha("", 0.001);  // Adjust correction strength
+
+
     private boolean hasTargetTag(){ return tvSub.get() > 0.0; }
+
+
+    /**
+     * Updates pose using limelight pose estimation
+     */
+    public void updatePoseEstimate(SwerveDrive swerveDrive) {
+        double robotYaw = swerveDrive.getYaw().getDegrees();
+        LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.LIMELIGHT_ROBOT, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.LIMELIGHT_ROBOT);
+        if ( limelightMeasurement.tagCount != 0 &&
+            Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720.0) {
+            // Add vision measurement, StdDevs larger number is lower confidence (0.01 - 0.05)
+            swerveDrive.addVisionMeasurement(
+                limelightMeasurement.pose,
+                limelightMeasurement.timestampSeconds,
+                VecBuilder.fill(
+                    Constants.LimelightConstants.LIMELIGHT_X_STD_DEVS,
+                    Constants.LimelightConstants.LIMELIGHT_Y_STD_DEVS,
+                    Constants.LimelightConstants.LIMELIGHT_HEADING_STD_DEVS)
+            );
+        }
+    }
 
 
     public void close(){
