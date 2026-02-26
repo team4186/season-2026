@@ -62,7 +62,9 @@ public final class Constants {
         public static final String LIMELIGHT_TURRET = "limelight-turret";
 
         // StdDevs for pose estimation trust levels
-        // TODO
+        public static final double LIMELIGHT_X_STD_DEVS = 0.5;
+        public static final double LIMELIGHT_Y_STD_DEVS = 0.5;
+        public static final double LIMELIGHT_HEADING_STD_DEVS = 9999999; // StdDevs (x, y, heading)
     }
 
 
