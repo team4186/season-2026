@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.motors.MotorConfigs;
 import org.dyn4j.geometry.hull.GiftWrap;
 import com.revrobotics.RelativeEncoder;
-
+import frc.robot.UnitsUtility;
 
 public class IntakeSubsystem extends SubsystemBase {
     // pickup intake motor
@@ -40,7 +40,31 @@ public class IntakeSubsystem extends SubsystemBase {
 
         this.intakeRelativeEncoder = intakeMotor.getEncoder();
 
+
+
     }
+
+//    public extendIntake() {
+//        if (!isIntakeExtended()){
+//
+//
+//        }
+//    }
+    private boolean intakeOneSwitch(){
+        return UnitsUtility.isBeamBroken(extendedSwitch1,false,"Intake Extension Switch 1");
+    }
+
+
+    private boolean intaketTwoSwitch(){
+        return UnitsUtility.isBeamBroken(extendedSwitch2,false,"Intake Extension Switch 2");
+    }
+
+
+    private boolean isIntakeExtended(){
+        return intakeOneSwitch() && intaketTwoSwitch();
+    }
+
+
 
     @Override
     public void periodic() {}
