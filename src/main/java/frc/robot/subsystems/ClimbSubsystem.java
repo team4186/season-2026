@@ -10,8 +10,11 @@ public class ClimbSubsystem extends SubsystemBase {
     // left retracted limit switch
     // right deployed limit switch
     // right retracked limit switch
+    private int endOfTravel;
 
-    public ClimbSubsystem() {}
+    public ClimbSubsystem(int endOfTravelConst) {
+        this.endOfTravel = endOfTravelConst;
+    }
 
     @Override
     public void periodic(){}

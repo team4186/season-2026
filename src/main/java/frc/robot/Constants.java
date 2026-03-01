@@ -62,7 +62,8 @@ public final class Constants {
 
     public static class LimelightConstants {
         // Camera names
-        public static final String LIMELIGHT_ROBOT = "limelight-robot";
+        public static final String LIMELIGHT_ROBOT = "limelight-turret";
+        // public static final String LIMELIGHT_ROBOT = "limelight-robot";
         public static final String LIMELIGHT_TURRET = "limelight-turret";
 
         // StdDevs for pose estimation trust levels
@@ -123,9 +124,36 @@ public final class Constants {
     }
 
 
-    // TODO: Update with Constants
-    public static final class IntakeConstants {}
+    // TODO: Update with Accurate Constants
+    public static final class IntakeConstants {
+        //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
+         public static final int INTAKE_EXTENDED_LSChannel1 = 0;
+        public static final int INTAKE_EXTENDED_LSChannel2 = 0;
+        public static final int INTAKE_RETRACTED_LSChannel1 = 0;
+        public static final int INTAKE_RETRACTED_LSChannel2 = 0;
 
+        // NEO 550
+
+        public static final int INTAKE_CAN_ID = 50;
+        public static final int INTAKE_CURRENT_LIMIT = 50;
+        public static final double INTAKE_PICKUP_FREE_SPEED = 11000;
+        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final double GEAR_RATIO = 1.0; // probably a little different but who cares
+
+        // PID
+        public static final double INTAKE_PICKUP_P = 0.0075;
+        public static final double INTAKE_PICKUP_I = 0.0;
+        public static final double INTAKE_PICKUP_D = 0.002;
+
+        // FeedForward
+        public static final double INTAKE_PICKUP_KS = 0.185;
+        public static final double INTAKE_PICKUP_KV = NOMINAL_VOLTAGE / INTAKE_PICKUP_FREE_SPEED;
+
+        public static final double POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
+        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double MIN_OUTPUT = -0.75;
+        public static final double MAX_OUTPUT = 0.75;
+    }
 
     // TODO: Update with Constants
     public static final class ClimbConstants {}

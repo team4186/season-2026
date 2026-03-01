@@ -8,6 +8,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.Constants.IntakeConstants;
 
 
 // MotorConfigs Singleton for Subsystem Motors (Swerve Subsystem not included)
@@ -150,8 +151,49 @@ public final class MotorConfigs {
 
 
     // TODO: Setup SparkMax config
-    public SparkMax applyIntakePickupSparkConfig(){
-        return null;
+    public SparkMax applyIntakePickupSparkConfig(
+        SparkMax motor,
+        boolean inverse
+    ) {
+            SparkBaseConfig config = DefaultSparkMaxConfig;
+
+            config
+                    .inverted(inverse)
+                    .smartCurrentLimit(IntakeConstants.INTAKE_CURRENT_LIMIT)
+                    .idleMode(IntakeConstants.IDLE_MODE);
+
+            config.encoder
+                    .positionConversionFactor(IntakeConstants.POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(IntakeConstants.VELOCITY_CONVERSION_FACTOR);
+
+            config.closedLoop
+                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // Set PID values for position control. We don't need to pass a closed loop
+                    // slot, as it will default to slot 0.
+                    .pid(
+                            IntakeConstants.INTAKE_PICKUP_P,
+                            IntakeConstants.INTAKE_PICKUP_I,
+                            IntakeConstants.INTAKE_PICKUP_D,
+                            ClosedLoopSlot.kSlot0)
+                    .outputRange(
+                            IntakeConstants.MIN_OUTPUT,
+                            IntakeConstants.MAX_OUTPUT,
+                            ClosedLoopSlot.kSlot0)
+                    .feedForward
+                    .kS(
+                            IntakeConstants.INTAKE_PICKUP_KS,
+                            ClosedLoopSlot.kSlot0)
+                    .kV(
+                            IntakeConstants.INTAKE_PICKUP_KV,
+                            ClosedLoopSlot.kSlot0);
+
+            motor.configure(
+                    config,
+                    ResetMode.kResetSafeParameters,
+                    PersistMode.kPersistParameters
+            );
+
+            return motor;
     }
 
     // TODO: Setup SparkMax config

@@ -7,12 +7,14 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -22,7 +24,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.motors.Components;
 import java.io.File;
 
 import frc.robot.vision.LimelightHelpers;
@@ -45,6 +49,7 @@ public class RobotContainer {
     final CommandPS5Controller driverPS5 = new CommandPS5Controller(4);
     final CommandStadiaController driverStadia = new CommandStadiaController(0);
     final CommandJoystick joystickDriver = new CommandJoystick(1); //set port 0 for stadia/joystick, whichever is being used
+    private final Components motorComponents = Components.getInstance();
 
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
@@ -53,6 +58,20 @@ public class RobotContainer {
     // Establish a Sendable Chooser that will be able to be sent to the
     // SmartDashboard, allowing selection of desired auto
     private final SendableChooser<Command> autoChooser;
+
+    private final IntakeSubsystem intake = new IntakeSubsystem(
+            motorComponents.getIntakePickupMotor(),
+            motorComponents.getIntakeDeployMotor(),
+            new DigitalInput(Constants.IntakeConstants.INTAKE_EXTENDED_LSChannel1),
+            new DigitalInput(Constants.IntakeConstants.INTAKE_EXTENDED_LSChannel2),
+            new DigitalInput(Constants.IntakeConstants.INTAKE_RETRACTED_LSChannel1),
+            new DigitalInput(Constants.IntakeConstants.INTAKE_RETRACTED_LSChannel2)
+
+    );
+
+
+
+
 
     /**
      * Converts driver input into a field-relative ChassisSpeeds that is controlled

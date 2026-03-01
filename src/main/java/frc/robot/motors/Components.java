@@ -3,6 +3,7 @@ package frc.robot.motors;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import frc.robot.Constants.IntakeConstants;
 
 
 // Flexible motor creation for fast testing between systems
@@ -12,7 +13,7 @@ public class Components {
 
     private SparkMax turretMotor;
     private SparkFlex shooterMotor;
-
+    private SparkMax intakePickupMotor;
 
     // private constructor to prevent public class creation
     private Components() { }
@@ -46,13 +47,20 @@ public class Components {
         return shooterMotor;
     }
 
-
     // TODO: Create Motor instance and apply config
     public SparkMax getLoaderMotor(){ return null; }
 
 
-    // TODO: Create Motor instance and apply config
-    public SparkMax getIntakePickupMotor(){ return null; }
+    // TODO: Check Inverse Condition
+    public SparkMax getIntakePickupMotor(){
+        if(intakePickupMotor == null) {
+            intakePickupMotor = customConfigs.applyIntakePickupSparkConfig(
+                    new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
+                    true
+            );
+        }
+        return intakePickupMotor; //67 -S and R
+    }
 
 
     // TODO: Create Motor instance and apply config
