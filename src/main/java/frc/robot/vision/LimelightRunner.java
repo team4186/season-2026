@@ -28,8 +28,8 @@ public class LimelightRunner {
 
 
     private LimelightRunner(){
-        NetworkTable turretTable = NetworkTableInstance.getDefault().getTable("limelight-turret");
-        NetworkTable robotTable = NetworkTableInstance.getDefault().getTable("limelight-robot");
+        NetworkTable turretTable = NetworkTableInstance.getDefault().getTable(Constants.LimelightConstants.LIMELIGHT_TURRET);
+        NetworkTable robotTable = NetworkTableInstance.getDefault().getTable(Constants.LimelightConstants.LIMELIGHT_ROBOT);
 
         // TODO: Set Limelight Positions programmatically
 
