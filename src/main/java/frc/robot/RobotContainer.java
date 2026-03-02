@@ -70,10 +70,10 @@ public class RobotContainer {
 //
 //    );
 
-    private final SpindexerSubsystem spindexer = new SpindexerSubsystem(
-            motorComponents.getSpindexerRotateMotor(),
-            motorComponents.getSpindexerFeedMotor()
-    );
+//    private final SpindexerSubsystem spindexer = new SpindexerSubsystem(
+//            motorComponents.getSpindexerRotateMotor(),
+//            motorComponents.getSpindexerFeedMotor()
+//    );
 
 
 
@@ -268,6 +268,7 @@ public class RobotContainer {
         Command driveFieldOrientedPS5 = drivebase.driveFieldOriented(driveFieldPS5);
         Command driveFieldHeadingPS5 = drivebase.driveFieldOriented(driveHeadingAxisPS5);
 
+
         if (RobotBase.isSimulation()) {
             // drivebase.setDefaultCommand(driveFieldOrientedPS5);
             drivebase.setDefaultCommand(driveFieldHeadingPS5);
@@ -310,7 +311,27 @@ public class RobotContainer {
 
         } else {
            //Teleop Command Keybinds
-            driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            // driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+
+            Pose2d targetPose = new Pose2d(new Translation2d(15, 4),
+                    Rotation2d.fromDegrees(180));
+
+            driveStadia.driveToPose(() -> targetPose,
+                    new ProfiledPIDController(5,
+                            0,
+                            0,
+                            new Constraints(5, 2)),
+                    new ProfiledPIDController(5,
+                            0,
+                            0,
+                            new Constraints(Units.degreesToRadians(360),
+                                    Units.degreesToRadians(180))));
+
+
+            driverStadia.leftBumper().whileTrue(Commands.runEnd(() -> driveStadia.driveToPoseEnabled(true),
+                    () -> driveStadia.driveToPoseEnabled(false)));
+
+
 
             joystickDriver.button(11).onTrue((Commands.runOnce(drivebase::zeroGyro)));
             joystickDriver.button(12).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
@@ -322,6 +343,7 @@ public class RobotContainer {
             driverXbox.back().whileTrue(Commands.none());
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.rightBumper().onTrue(Commands.none());
+
         }
     }
 

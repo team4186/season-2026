@@ -58,7 +58,7 @@ public class Components {
         if(intakePickupMotor == null) {
             intakePickupMotor = customConfigs.applyIntakePickupSparkConfig(
                     new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
-                    new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
+                    //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
                     true
             );
         }
@@ -80,7 +80,6 @@ public class Components {
             spindexerRotateMotor = customConfigs.applySpindexerSparkConfig(
                     new SparkMax(0, SparkLowLevel.MotorType.kBrushless),
                     false);
-            );
         }
         return spindexerRotateMotor;
     }
@@ -90,7 +89,7 @@ public class Components {
             spindexerFeedMotor = customConfigs.applySpindexerSparkConfig(
                     new SparkMax(0, SparkLowLevel.MotorType.kBrushless),
                     false);
-            );
         }
         return spindexerFeedMotor;
+    }
 }
