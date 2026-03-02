@@ -72,14 +72,24 @@ public class TurretSubsystem extends SubsystemBase {
     public void reset(){}
 
 
-    private boolean getLeftBeamBreak(){ return false; }
+    private boolean getLeftLimitSwitch() { return false; }
+    // implement later, placeholder.
+    private boolean getRightLimitSwitch() {
+        // implement later, placeholder.
+        return false;
+    }
 
 
-    private boolean getRightBeamBreak(){ return false; }
+    public void updateTurretSetpoint(double setpoint) {
+        //Grab
+    }
 
+    public void updateHoodSetpoint(double setpoint) {
 
-    public void updateTurretSetpoint(double setpoint){}
+    }
 
-
-    public void updateShooterRpm(double rpm){}
+    public void updateShooterRpm(double rpm){
+        //Grab distance from apriltag, feed it to kinematics equation, calculate initial velocity
+        // in meters per second, convert to rpm, use that as PID set point.
+    }
 }
