@@ -14,6 +14,8 @@ public class Components {
     private SparkMax turretMotor;
     private SparkFlex shooterMotor;
     private SparkMax intakePickupMotor;
+    private SparkMax spindexerRotateMotor;
+    private SparkMax spindexerFeedMotor;
 
     // private constructor to prevent public class creation
     private Components() { }
@@ -72,6 +74,23 @@ public class Components {
     public SparkMax getClimbMotor(){ return null; }
 
 
-    // TODO: Create Motor instance and apply config
-    public SparkMax getSpindexerMotor(){ return null; }
+    // TODO: put in correct CAN ID's
+    public SparkMax getSpindexerRotateMotor(){
+        if (spindexerRotateMotor == null) {
+            spindexerRotateMotor = customConfigs.applySpindexerSparkConfig(
+                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless),
+                    false);
+            );
+        }
+        return spindexerRotateMotor;
+    }
+
+    public SparkMax getSpindexerFeedMotor(){
+        if (spindexerFeedMotor == null) {
+            spindexerFeedMotor = customConfigs.applySpindexerSparkConfig(
+                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless),
+                    false);
+            );
+        }
+        return spindexerFeedMotor;
 }

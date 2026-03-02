@@ -182,6 +182,37 @@ public final class Constants {
         public static final double DEPLOY_MIN_ANGLE = 0.00;
     }
 
+    public static final class SpindexerConstants {
+        //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
+        public static final int SPINDEXER_EXTENDED_LSChannel1 = 0;
+        public static final int SPINDEXER_EXTENDED_LSChannel2 = 0;
+        public static final int SPINDEXER_RETRACTED_LSChannel1 = 0;
+        public static final int SPINDEXER_RETRACTED_LSChannel2 = 0;
+
+        // NEO 550
+
+        public static final int SPINDEXER_CAN_ID = 50;
+        public static final int SPINDEXER_CURRENT_LIMIT = 50;
+        public static final double SPINDEXER_FREE_SPEED = 11000;
+        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final double GEAR_RATIO = 1.0; // probably a little different but who cares
+
+        // PID
+        public static final double SPINDEXER_PICKUP_P = 0.0075;
+        public static final double SPINDEXER_PICKUP_I = 0.0;
+        public static final double SPINDEXER_PICKUP_D = 0.002;
+
+        // FeedForward
+        public static final double SPINDEXER_PICKUP_KS = 0.185;
+        public static final double SPINDEXER_PICKUP_KV = NOMINAL_VOLTAGE / SPINDEXER_FREE_SPEED;
+
+        public static final double POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
+        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double MIN_OUTPUT = -0.75;
+        public static final double MAX_OUTPUT = 0.75;
+        public static final double MAX_SPEED = 0.75;
+    }
+
     // TODO: Update with Constants
     public static final class ClimbConstants {}
 }
