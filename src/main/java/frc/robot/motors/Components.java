@@ -56,6 +56,7 @@ public class Components {
         if(intakePickupMotor == null) {
             intakePickupMotor = customConfigs.applyIntakePickupSparkConfig(
                     new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
+                    new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
                     true
             );
         }

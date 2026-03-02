@@ -127,35 +127,59 @@ public final class Constants {
     }
 
 
-    // TODO: Update with Accurate Constants
+
     public static final class IntakeConstants {
         //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
-         public static final int INTAKE_EXTENDED_LSChannel1 = 0;
+         public static final int INTAKE_EXTENDED_LSChannel1 = 0; //TODO: set LSChannels
         public static final int INTAKE_EXTENDED_LSChannel2 = 0;
         public static final int INTAKE_RETRACTED_LSChannel1 = 0;
         public static final int INTAKE_RETRACTED_LSChannel2 = 0;
 
         // NEO 550
 
-        public static final int INTAKE_CAN_ID = 50;
+        public static final int INTAKE_CAN_ID = 0; //TODO: set values here
         public static final int INTAKE_CURRENT_LIMIT = 50;
-        public static final double INTAKE_PICKUP_FREE_SPEED = 11000;
+        public static final double INTAKE_FREE_SPEED = 11000;
         public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final double GEAR_RATIO = 1.0; // probably a little different but who cares
+        public static final double INTAKE_RATIO = 1.0; // slightly different in reality but who cares
 
         // PID
-        public static final double INTAKE_PICKUP_P = 0.0075;
-        public static final double INTAKE_PICKUP_I = 0.0;
-        public static final double INTAKE_PICKUP_D = 0.002;
+        public static final double INTAKE_P = 0.0; //TODO: set PID values
+        public static final double INTAKE_I = 0.0;
+        public static final double INTAKE_D = 0.0;
 
         // FeedForward
-        public static final double INTAKE_PICKUP_KS = 0.185;
-        public static final double INTAKE_PICKUP_KV = NOMINAL_VOLTAGE / INTAKE_PICKUP_FREE_SPEED;
+        public static final double INTAKE_KS = 0.0; //TODO: set feedforward values
+        public static final double INTAKE_KV = NOMINAL_VOLTAGE / INTAKE_FREE_SPEED;
 
-        public static final double POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
-        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double MIN_OUTPUT = -0.75;
-        public static final double MAX_OUTPUT = 0.75;
+
+        public static final double INTAKE_POSITION_CONVERSION_FACTOR = (1 / INTAKE_RATIO) * 360; // Convert to degrees
+        public static final double INTAKE_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double INTAKE_MIN_OUTPUT = -0.75;
+        public static final double INTAKE_MAX_OUTPUT = 0.75;
+        public static final double INTAKE_MAX_ANGLE = 0.00; //TODO: find angles
+        public static final double MIN_ANGLE = 0.00;
+
+
+
+        public static final int DEPLOY_CAN_ID = 0; //TODO: set values here
+        public static final int DEPLOY_CURRENT_LIMIT = 50;
+        public static final double DEPLOY_SPEED = 0; //still in rpm, might wanna change this
+        public static final double DEPLOY_RATIO = 1.0; // need to figure this out
+
+        public static final double DEPLOY_PICKUP_P = 0.0; //TODO: set PID values
+        public static final double DEPLOY_PICKUP_I = 0.0;
+        public static final double DEPLOY_PICKUP_D = 0.0;
+
+        // FeedForward
+        public static final double DEPLOY_PICKUP_KS = 0.0; //TODO: set feedforward values
+        public static final double DEPLOY_PICKUP_KV = NOMINAL_VOLTAGE / INTAKE_FREE_SPEED;
+
+
+        public static final double DEPLOY_MIN_OUTPUT = -0.75;
+        public static final double DEPLOY_MAX_OUTPUT = 0.75;
+        public static final double DEPLOY_MAX_ANGLE = 0.00; //TODO: find angles
+        public static final double DEPLOY_MIN_ANGLE = 0.00;
     }
 
     // TODO: Update with Constants
