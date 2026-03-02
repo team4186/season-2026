@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.SpindexerSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.motors.Components;
 import java.io.File;
@@ -69,7 +70,10 @@ public class RobotContainer {
 //
 //    );
 
-
+    private final SpindexerSubsystem spindexer = new SpindexerSubsystem(
+            motorComponents.getSpindexerRotateMotor(),
+            motorComponents.getSpindexerFeedMotor()
+    );
 
 
 
