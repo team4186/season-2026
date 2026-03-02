@@ -26,7 +26,7 @@ public class TurretSubsystem extends SubsystemBase {
     // min rotation (-170 degrees, with 20 degrees of dead zone in the back)
     private double minRotation = -Constants.TurretConstants.TURRET_MAX_ROTATION;
 
-    // zero limit switch
+    // zero limit switch (for turret)
     private final DigitalInput zeroLimitSwitch;
     // left limit switch
     private final DigitalInput leftLimitSwitch;
@@ -39,7 +39,7 @@ public class TurretSubsystem extends SubsystemBase {
     // Spindexer motor
     // Hood motor
     private final SparkMax hoodMotor;
-    // home limit switch (starting pos)
+    // home limit switch (starting pos for hood)
     private final DigitalInput homeLimitSwitch;
     // hard-stop max extended position
 
@@ -66,30 +66,46 @@ public class TurretSubsystem extends SubsystemBase {
     public void stopMotors(){
         shooterMotor.set(0);
         aimingMotor.set(0);
+        hoodMotor.set(0);
     }
 
 
-    public void reset(){}
+    public void reset() {
+        shooterMotor.set(0);
+        while (!homeLimitSwitch.get()) {
+            hoodMotor.set(-0.5);
+        }
+        while (!zeroLimitSwitch.get()) {
+            aimingMotor.set(aimingClosedLoopController.setSetpoint(0, ControlType.kPosition));
+        }
+    }
 
 
-    private boolean getLeftLimitSwitch() { return false; }
-    // implement later, placeholder.
+    private boolean getLeftLimitSwitch() {
+        return leftLimitSwitch.get();
+    }
+
     private boolean getRightLimitSwitch() {
-        // implement later, placeholder.
-        return false;
+        return rightLimitSwitch.get();
     }
 
 
     public void updateTurretSetpoint(double setpoint) {
-        //Grab
+        //Grab angle offset from april tag, use that as the current value and
+        // make PID set point 0.
+    }
+
+    public void getRegression(double distanceOffset) {
+        /**Create a regression function during testing of optimal hood angle
+        vs RPM at different distances. 
+        **/
     }
 
     public void updateHoodSetpoint(double setpoint) {
-
+        // setpoint
     }
 
-    public void updateShooterRpm(double rpm){
-        //Grab distance from apriltag, feed it to kinematics equation, calculate initial velocity
-        // in meters per second, convert to rpm, use that as PID set point.
+    public void updateShooterRpm(double setpoint){
+        // setpoint should ideally be from the regression table
     }
 }
