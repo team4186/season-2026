@@ -16,8 +16,9 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     }
 
-    public rotateSpindexer(){
-        rotateMotor.accept(SpindexerConstants.MAX_SPEED);
+    public void rotateSpindexer(){
+        rotateMotor.set(SpindexerConstants.MAX_SPEED);
+        feedMotor.set(SpindexerConstants.MAX_SPEED); //can create new constant that's different if needed
     }
 
     @Override

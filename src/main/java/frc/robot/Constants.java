@@ -210,7 +210,7 @@ public final class Constants {
         public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double MIN_OUTPUT = -0.75;
         public static final double MAX_OUTPUT = 0.75;
-        public static final double MAX_SPEED = 0.75;
+        public static final double MAX_SPEED = 0.75; // set between -1 to 1
     }
 
     // TODO: Update with Constants
