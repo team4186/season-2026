@@ -95,17 +95,43 @@ public class TurretSubsystem extends SubsystemBase {
         // make PID set point 0.
     }
 
-    public void getRegression(double distanceOffset) {
+    public void getRegression(double detectedDistance) {
         /**Create a regression function during testing of optimal hood angle
         vs RPM at different distances. 
+        
+        Feed limelight distance input into the regression function.
         **/
+
+        /** Why is this better than a kinematics equation?
+        To solve obtain the ideal shooting velocity for the updateShooterRPM function,
+        you need know the angle and the launch distance from the turret to the wall.
+
+        Getting the distance from the turret to the goal is simple enough, but getting the launch angle is tricky.
+        The launch angle is not the same as the hood angle, so there is no easy way for us to know that on the fly.
+
+        The kinematics equation outputs initial velocity in terms of m/s, but the robot takes velocity in RPM.
+        While you can convert m/s to RPM, the ideal initial launch velocity for the ball is not the same as
+        the initial velocity of the flywheel (which is roughly 2 times the speed).
+
+        Not only that, the velocity of the flywheel isn't the same as the rotational velocity of the shaft.
+        Meaning that you need to take that into account when calculating motor RPM.
+        Even with all of that in consideration, there are still gear boxes, which makes this process even more
+        complicated.
+
+        After all that, you still need another kinematics equation to solve for the ideal launch angle.
+        Which is just a pain to do for something that can be solved easily with regression.
+
+        TDLR: Regression is simpler because we can ignore unit conversions from M/S to RPM and all
+        the shenanigans that come with physics.
+        **/
+    
     }
 
     public void updateHoodSetpoint(double setpoint) {
-        // setpoint
+        // setpoint should ideally be from regression table.
     }
 
-    public void updateShooterRpm(double setpoint){
-        // setpoint should ideally be from the regression table
+    public void updateShooterRPM(double setpoint){
+        // setpoint should ideally be from the regression table.
     }
 }
