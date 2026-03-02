@@ -38,11 +38,15 @@ public class TurretSubsystem extends SubsystemBase {
     // Loader motor
     // Spindexer motor
     // Hood motor
+    private final SparkMax hoodMotor;
     // home limit switch (starting pos)
+    private final DigitalInput homeLimitSwitch;
     // hard-stop max extended position
 
 
-    public TurretSubsystem(SparkFlex shooterMotor, SparkMax aimingMotor, DigitalInput zeroLimitSwitch, DigitalInput leftLimitSwitch, DigitalInput rightLimitSwitch){
+    public TurretSubsystem(SparkFlex shooterMotor, SparkMax aimingMotor, SparkMax hoodMotor, DigitalInput zeroLimitSwitch,
+                           DigitalInput leftLimitSwitch, DigitalInput rightLimitSwitch,
+                           DigitalInput homeLimitSwitch){
         this.shooterMotor = shooterMotor;
         this.aimingMotor = aimingMotor;
         this.shooterClosedLoopController = shooterMotor.getClosedLoopController();
@@ -50,6 +54,8 @@ public class TurretSubsystem extends SubsystemBase {
         this.zeroLimitSwitch = zeroLimitSwitch;
         this.leftLimitSwitch = leftLimitSwitch;
         this.rightLimitSwitch = rightLimitSwitch;
+        this.homeLimitSwitch = homeLimitSwitch;
+        this.hoodMotor = hoodMotor;
     }
 
 
