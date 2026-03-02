@@ -1,13 +1,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.motors.MotorConfigs;
-import org.dyn4j.geometry.hull.GiftWrap;
 import com.revrobotics.RelativeEncoder;
+import frc.robot.Constants;
 import frc.robot.UnitsUtility;
+
+import java.lang.invoke.ConstantCallSite;
 
 public class IntakeSubsystem extends SubsystemBase {
     // pickup intake motor
@@ -19,65 +20,59 @@ public class IntakeSubsystem extends SubsystemBase {
     private final DigitalInput extendedSwitch2;
     private final DigitalInput retractedSwitch1;
     private final DigitalInput retractedSwitch2;
-    private final RelativeEncoder intakeRelativeEncoder;
+    private final RelativeEncoder extensionRelativeEncoder;
     private final SparkMax intakeMotor;
-    private final SparkMax deployMotor;
+    private final SparkMax extendMotor;
+    private final PIDController extensionPIDController;
 
     public IntakeSubsystem(SparkMax intakeMotor,
-                           SparkMax deployMotor,
+                           SparkMax extendMotor,
                            DigitalInput extendedSwitch1,
                            DigitalInput extendedSwitch2,
                            DigitalInput retractedSwitch1,
-                           DigitalInput retractedSwitch2
-                           ){
+                           DigitalInput retractedSwitch2,
+                           PIDController extensionPIDController
+    ) {
 
         this.intakeMotor = intakeMotor;
-        this.deployMotor = deployMotor;
+        this.extendMotor = extendMotor;
         this.extendedSwitch1 = extendedSwitch1;
         this.extendedSwitch2 = extendedSwitch2;
         this.retractedSwitch1 = retractedSwitch1;
         this.retractedSwitch2 = retractedSwitch2;
-
-        this.intakeRelativeEncoder = intakeMotor.getEncoder();
-
+        this.extensionPIDController = extensionPIDController;
+        this.extensionRelativeEncoder = intakeMotor.getEncoder();
 
 
     }
 
-//    public extendIntake() {
-//        if (!isIntakeExtended()){
-//
-//
-//        }
-//    }
-    private boolean intakeOneSwitch(){
-        return UnitsUtility.isBeamBroken(extendedSwitch1,false,"Intake Extension Switch 1");
+
+    private boolean intakeOneSwitch() {
+        return UnitsUtility.isBeamBroken(extendedSwitch1, false, "Intake Extension Switch 1");
     }
 
 
-    private boolean intaketTwoSwitch(){
-        return UnitsUtility.isBeamBroken(extendedSwitch2,false,"Intake Extension Switch 2");
+    private boolean intakeTwoSwitch() {
+        return UnitsUtility.isBeamBroken(extendedSwitch2, false, "Intake Extension Switch 2");
     }
 
 
-    private boolean isIntakeExtended(){
-        return intakeOneSwitch() && intaketTwoSwitch();
+    private boolean isIntakeExtended() {
+        return intakeOneSwitch() && intakeTwoSwitch();
     }
-
 
 
     @Override
     public void periodic() {}
 
 
-    public void updateIntakeSpeed(){}
+    public void updateIntakeSpeed() {}
 
 
-    public void stopIntake(){}
+    public void stopIntake() {}
 
 
-    public void resetIntake(){}
+    public void extendIntake() {}
 
-
-    public void shuffleIntake(){}
+    public void retractIntake() {}
 }

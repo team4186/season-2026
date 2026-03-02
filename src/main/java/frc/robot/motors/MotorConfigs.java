@@ -151,6 +151,8 @@ public final class MotorConfigs {
         return motorLeader;
     }
 
+    
+    
 
     // TODO: Setup SparkMax config
     public SparkMax applyIntakePickupSparkConfig(
@@ -165,28 +167,28 @@ public final class MotorConfigs {
                     .idleMode(IntakeConstants.IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(IntakeConstants.POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(IntakeConstants.VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(IntakeConstants.INTAKE_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(IntakeConstants.INTAKE_VELOCITY_CONVERSION_FACTOR);
 
             config.closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control. We don't need to pass a closed loop
                     // slot, as it will default to slot 0.
                     .pid(
-                            IntakeConstants.INTAKE_PICKUP_P,
-                            IntakeConstants.INTAKE_PICKUP_I,
-                            IntakeConstants.INTAKE_PICKUP_D,
+                            IntakeConstants.INTAKE_P,
+                            IntakeConstants.INTAKE_I,
+                            IntakeConstants.INTAKE_D,
                             ClosedLoopSlot.kSlot0)
                     .outputRange(
-                            IntakeConstants.MIN_OUTPUT,
-                            IntakeConstants.MAX_OUTPUT,
+                            IntakeConstants.INTAKE_MIN_OUTPUT,
+                            IntakeConstants.INTAKE_MAX_OUTPUT,
                             ClosedLoopSlot.kSlot0)
                     .feedForward
                     .kS(
-                            IntakeConstants.INTAKE_PICKUP_KS,
+                            IntakeConstants.INTAKE_KS,
                             ClosedLoopSlot.kSlot0)
                     .kV(
-                            IntakeConstants.INTAKE_PICKUP_KV,
+                            IntakeConstants.INTAKE_KV,
                             ClosedLoopSlot.kSlot0);
 
             motor.configure(
