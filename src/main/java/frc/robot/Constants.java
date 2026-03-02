@@ -80,6 +80,9 @@ public final class Constants {
         public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
         public static final double GEAR_RATIO = 1.0 / 20.0;
 
+        // Max rotation
+        public static final double TURRET_MAX_ROTATION = 170;
+
         // PID
         public static final double TURRET_P = 0.0075;
         public static final double TURRET_I = 0.0;
