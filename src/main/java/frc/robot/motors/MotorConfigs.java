@@ -6,8 +6,11 @@ import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.SpindexerConstants;
 
 
 // MotorConfigs Singleton for Subsystem Motors (Swerve Subsystem not included)
@@ -150,8 +153,49 @@ public final class MotorConfigs {
 
 
     // TODO: Setup SparkMax config
-    public SparkMax applyIntakePickupSparkConfig(){
-        return null;
+    public SparkMax applyIntakePickupSparkConfig(
+        SparkMax motor,
+        boolean inverse
+    ) {
+            SparkBaseConfig config = DefaultSparkMaxConfig;
+
+            config
+                    .inverted(inverse)
+                    .smartCurrentLimit(IntakeConstants.INTAKE_CURRENT_LIMIT)
+                    .idleMode(IntakeConstants.IDLE_MODE);
+
+            config.encoder
+                    .positionConversionFactor(IntakeConstants.INTAKE_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(IntakeConstants.INTAKE_VELOCITY_CONVERSION_FACTOR);
+
+            config.closedLoop
+                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // Set PID values for position control. We don't need to pass a closed loop
+                    // slot, as it will default to slot 0.
+                    .pid(
+                            IntakeConstants.INTAKE_P,
+                            IntakeConstants.INTAKE_I,
+                            IntakeConstants.INTAKE_D,
+                            ClosedLoopSlot.kSlot0)
+                    .outputRange(
+                            IntakeConstants.INTAKE_MIN_OUTPUT,
+                            IntakeConstants.INTAKE_MAX_OUTPUT,
+                            ClosedLoopSlot.kSlot0)
+                    .feedForward
+                    .kS(
+                            IntakeConstants.INTAKE_KS,
+                            ClosedLoopSlot.kSlot0)
+                    .kV(
+                            IntakeConstants.INTAKE_KV,
+                            ClosedLoopSlot.kSlot0);
+
+            motor.configure(
+                    config,
+                    ResetMode.kResetSafeParameters,
+                    PersistMode.kPersistParameters
+            );
+
+            return motor;
     }
 
     // TODO: Setup SparkMax config
@@ -173,7 +217,61 @@ public final class MotorConfigs {
 
 
     // TODO: Setup SparkMax config
-    public SparkMax applySpindexerSparkConfig(){
+    public SparkMax applySpindexerSparkConfig(
+        SparkMax motor,
+        boolean inverse
+    ) {
+            SparkBaseConfig config = DefaultSparkMaxConfig;
+
+            config
+                    .inverted(inverse)
+                    .smartCurrentLimit(SpindexerConstants.SPINDEXER_CURRENT_LIMIT)
+                    .idleMode(SpindexerConstants.IDLE_MODE);
+
+            config.encoder
+                    .positionConversionFactor(SpindexerConstants.POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(SpindexerConstants.VELOCITY_CONVERSION_FACTOR);
+
+            // Add if we decide to use PIDS for spindexer, instead of feeding a velocity - Shing
+//            config.closedLoop
+//                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+//                    // Set PID values for position control. We don't need to pass a closed loop
+//                    // slot, as it will default to slot 0.
+//                    .pid(
+//                            IntakeConstants.INTAKE_PICKUP_P,
+//                            IntakeConstants.INTAKE_PICKUP_I,
+//                            IntakeConstants.INTAKE_PICKUP_D,
+//                            ClosedLoopSlot.kSlot0)
+//                    .outputRange(
+//                            IntakeConstants.MIN_OUTPUT,
+//                            IntakeConstants.MAX_OUTPUT,
+//                            ClosedLoopSlot.kSlot0)
+//                    .feedForward
+//                    .kS(
+//                            IntakeConstants.INTAKE_PICKUP_KS,
+//                            ClosedLoopSlot.kSlot0)
+//                    .kV(
+//                            IntakeConstants.INTAKE_PICKUP_KV,
+//                            ClosedLoopSlot.kSlot0);
+
+            motor.configure(
+                    config,
+                    ResetMode.kResetSafeParameters,
+                    PersistMode.kPersistParameters
+            );
+
+            return motor;
+    }
+
+
+    // TODO: Implement for individual motor
+    public SparkMax applySpindexerFeedSparkConfig(SparkMax sparkMax, boolean inverse) {
+        return null;
+    }
+
+
+    // TODO: Implement for individual motor
+    public SparkMax applySpindexerRotateSparkConfig(SparkMax sparkMax, boolean inverse) {
         return null;
     }
 }

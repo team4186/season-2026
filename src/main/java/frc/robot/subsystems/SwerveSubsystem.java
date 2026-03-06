@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,6 +23,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -60,7 +62,8 @@ public class SwerveSubsystem extends SubsystemBase
    * @param directory Directory of swerve drive config files.
    */
    public SwerveSubsystem(File directory)
-  { 
+  {
+    // TODO: Decision -> change default setpoints for testing? / Also good example of how to set pose manually for testing auto later
     boolean blueAlliance = false;
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
                                                                       Meter.of(4)),
@@ -601,4 +604,26 @@ public class SwerveSubsystem extends SubsystemBase
     return swerveDrive;
   }
 
+
+  /**
+   * Setup autobuilder to drive to desired pose.
+   *
+   * @param pose desired end pose.
+   *
+   * @return The command to run
+   */
+  public Command driveToPose(Pose2d pose){
+    PathConstraints constraints = new PathConstraints(
+            swerveDrive.getMaximumChassisVelocity(),
+            4.0,
+            swerveDrive.getMaximumChassisAngularVelocity(),
+            Units.degreesToRadians(720)
+    );
+
+    return AutoBuilder.pathfindToPose(
+            pose,
+            constraints,
+            0.0
+    );
+  }
 }

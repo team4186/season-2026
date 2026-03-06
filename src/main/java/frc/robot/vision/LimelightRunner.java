@@ -21,35 +21,36 @@ public class LimelightRunner {
     public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(
         AprilTagFields.k2026RebuiltWelded);
 
-    private final DoubleSubscriber tvSub;
-    private final DoubleSubscriber txSub;
-    private final DoubleSubscriber tySub;
-    private final DoublePublisher ledPub;
+//    private final DoubleSubscriber tvSub;
+//    private final DoubleSubscriber txSub;
+//    private final DoubleSubscriber tySub;
+//    private final DoublePublisher ledPub;
 
 
     private LimelightRunner(){
-        NetworkTable turretTable = NetworkTableInstance.getDefault().getTable("limelight-turret");
-        NetworkTable robotTable = NetworkTableInstance.getDefault().getTable("limelight-robot");
-
-        // TODO: Set Limelight Positions programmatically
-
-        tvSub = turretTable.getDoubleTopic("tv").subscribe(0.0);
-        txSub = turretTable.getDoubleTopic("tx").subscribe(0.0);
-        tySub = turretTable.getDoubleTopic("ty").subscribe(0.0);
-        ledPub = turretTable.getDoubleTopic("ledMode").publish();
+//        NetworkTable turretTable = NetworkTableInstance.getDefault().getTable(Constants.LimelightConstants.LIMELIGHT_TURRET);
+//        NetworkTable robotTable = NetworkTableInstance.getDefault().getTable(Constants.LimelightConstants.LIMELIGHT_ROBOT);
+//
+//        // TODO: Set Limelight Positions programmatically
+//
+//        tvSub = turretTable.getDoubleTopic("tv").subscribe(0.0);
+//        txSub = turretTable.getDoubleTopic("tx").subscribe(0.0);
+//        tySub = turretTable.getDoubleTopic("ty").subscribe(0.0);
+//        ledPub = turretTable.getDoubleTopic("ledMode").publish();
     }
 
-
+//
     public static LimelightRunner getInstance(){ return instance; }
 
 
     public void update() {
-        boolean tagInView = hasTargetTag();
-        SmartDashboard.putBoolean("Has Target Tag?", tagInView);
-        ledPub.set( tagInView? 3.0 : 1.0 );
+//        boolean tagInView = hasTargetTag();
+//        SmartDashboard.putBoolean("Has Target Tag?", tagInView);
+//        ledPub.set( tagInView? 3.0 : 1.0 );
 
-        SmartDashboard.putNumber("tx", txSub.get());
-        SmartDashboard.putNumber("ty", tySub.get());
+        SmartDashboard.putBoolean("Has Target Tag?", LimelightHelpers.getTV(Constants.LimelightConstants.LIMELIGHT_TURRET));
+        SmartDashboard.putNumber("tx", LimelightHelpers.getTX(Constants.LimelightConstants.LIMELIGHT_TURRET));
+        SmartDashboard.putNumber("ty", LimelightHelpers.getTY(Constants.LimelightConstants.LIMELIGHT_TURRET));
 
 //        SmartDashboard.putNumber("X Offset", tagOffset)
 //        SmartDashboard.putNumber("Y Offset", yOffset)
@@ -82,7 +83,7 @@ public class LimelightRunner {
 //    LimelightHelpers.SetIMUAssistAlpha("", 0.001);  // Adjust correction strength
 */
 
-    private boolean hasTargetTag(){ return tvSub.get() > 0.0; }
+//    private boolean hasTargetTag(){ return tvSub.get() > 0.0; }
 
 
     /**
@@ -90,12 +91,18 @@ public class LimelightRunner {
      */
     public void updatePoseEstimate(SwerveDrive swerveDrive) {
         double robotYaw = swerveDrive.getYaw().getDegrees();
-        LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.LIMELIGHT_ROBOT, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+        // TODO: Change to limelight robot when installed on chassis
+        LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.LIMELIGHT_TURRET, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.LIMELIGHT_ROBOT);
-        if ( limelightMeasurement.tagCount != 0 &&
-            Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720.0) {
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.LIMELIGHT_TURRET);
+
+        SmartDashboard.putBoolean("Available Tag?", (limelightMeasurement.tagCount > 0));
+        SmartDashboard.putNumber("Angular Velocity Gyro", Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)));
+
+        if ( limelightMeasurement.tagCount > 0 &&
+            Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) < 720.0) {
             // Add vision measurement, StdDevs larger number is lower confidence (0.01 - 0.05)
+            SmartDashboard.putString("Pose Measurement:", limelightMeasurement.pose.toString());
             swerveDrive.addVisionMeasurement(
                 limelightMeasurement.pose,
                 limelightMeasurement.timestampSeconds,
@@ -109,9 +116,9 @@ public class LimelightRunner {
 
 
     public void close(){
-        tvSub.close();
-        txSub.close();
-        tySub.close();
-        ledPub.close();
+//        tvSub.close();
+//        txSub.close();
+//        tySub.close();
+//        ledPub.close();
     }
 }

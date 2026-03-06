@@ -3,6 +3,7 @@ package frc.robot.motors;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import frc.robot.Constants.IntakeConstants;
 
 
 // Flexible motor creation for fast testing between systems
@@ -10,8 +11,19 @@ public class Components {
     private static final Components instance = new Components();
     private final MotorConfigs customConfigs = MotorConfigs.getInstance();
 
-    private SparkMax turretMotor;
-    private SparkFlex shooterMotor;
+    private SparkMax turretRotateMotor;
+    private SparkFlex turretHoodMotor;
+    private SparkFlex turretShooterMotor;
+
+    private SparkMax intakePickupMotor;
+
+    // TODO: Decision --- pair of motors or independent that take same goal inputs
+    private SparkMax intakeDeployMotor;
+
+    private SparkMax spindexerRotateMotor;
+    private SparkMax spindexerFeedMotor;
+
+    private SparkMax climbMotor;
 
 
     // private constructor to prevent public class creation
@@ -21,48 +33,83 @@ public class Components {
     public static Components getInstance() { return instance; }
 
 
-    public SparkMax getTurretMotor(){
-        if ( turretMotor == null ) {
-            turretMotor = customConfigs.applyTurretSparkConfig(
-                new SparkMax(41, SparkLowLevel.MotorType.kBrushless),
+    public SparkMax getTurretRotateMotor(){
+        if ( turretRotateMotor == null ) {
+            turretRotateMotor = customConfigs.applyTurretSparkConfig(
+                new SparkMax(41, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                 false
             );
         }
 
-        return turretMotor;
+        return turretRotateMotor;
     }
 
 
-    public SparkFlex getShooterMotor(){
-        if (shooterMotor == null) {
-            shooterMotor = customConfigs.applyShooterSparkConfig(
-                new SparkFlex(21, SparkLowLevel.MotorType.kBrushless),
-                new SparkFlex(22, SparkLowLevel.MotorType.kBrushless),
+    public SparkFlex getTurretShooterMotor(){
+        if (turretShooterMotor == null) {
+            turretShooterMotor = customConfigs.applyShooterSparkConfig(
+                new SparkFlex(21, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                new SparkFlex(22, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                 true,
                 false
             );
         }
 
-        return shooterMotor;
+        return turretShooterMotor;
+    }
+
+
+    // TODO: Check Inverse Condition
+    public SparkMax getIntakePickupMotor(){
+        if(intakePickupMotor == null) {
+            intakePickupMotor = customConfigs.applyIntakePickupSparkConfig(
+                    new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
+                    true
+            );
+        }
+        return intakePickupMotor; //67 -S and R
+    }
+
+
+    // TODO: Create Motor instance and apply config AND leader/follower or two monitored closely
+    public SparkMax getIntakeDeployMotor(){
+        if (intakeDeployMotor == null) {
+            intakeDeployMotor  = customConfigs.applySpindexerSparkConfig(
+                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    false);
+        }
+        return intakeDeployMotor;
     }
 
 
     // TODO: Create Motor instance and apply config
-    public SparkMax getLoaderMotor(){ return null; }
+    public SparkMax getClimbMotor(){
+        if (climbMotor == null) {
+            climbMotor = customConfigs.applyClimbSparkConfig(
+                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    false);
+        }
+        return climbMotor;
+    }
 
 
-    // TODO: Create Motor instance and apply config
-    public SparkMax getIntakePickupMotor(){ return null; }
+    // TODO: put in correct CAN ID's
+    public SparkMax getSpindexerRotateMotor(){
+        if (spindexerRotateMotor == null) {
+            spindexerRotateMotor = customConfigs.applySpindexerRotateSparkConfig(
+                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    false);
+        }
+        return spindexerRotateMotor;
+    }
 
-
-    // TODO: Create Motor instance and apply config
-    public SparkMax getIntakeDeployMotor(){ return null; }
-
-
-    // TODO: Create Motor instance and apply config
-    public SparkMax getClimbMotor(){ return null; }
-
-
-    // TODO: Create Motor instance and apply config
-    public SparkMax getSpindexerMotor(){ return null; }
+    public SparkMax getSpindexerFeedMotor(){
+        if (spindexerFeedMotor == null) {
+            spindexerFeedMotor = customConfigs.applySpindexerFeedSparkConfig(
+                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    false);
+        }
+        return spindexerFeedMotor;
+    }
 }
