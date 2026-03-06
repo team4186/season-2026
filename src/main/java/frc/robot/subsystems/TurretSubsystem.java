@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkFlex;
 import frc.robot.Constants;
 
 public class TurretSubsystem extends SubsystemBase {
@@ -44,18 +42,26 @@ public class TurretSubsystem extends SubsystemBase {
     // hard-stop max extended position
 
 
-    public TurretSubsystem(SparkFlex shooterMotor, SparkMax aimingMotor, SparkMax hoodMotor, DigitalInput zeroLimitSwitch,
-                           DigitalInput leftLimitSwitch, DigitalInput rightLimitSwitch,
-                           DigitalInput homeLimitSwitch){
+    public TurretSubsystem(
+            SparkFlex shooterMotor,
+            SparkMax aimingMotor,
+            SparkMax hoodMotor,
+            DigitalInput zeroLimitSwitch,
+            DigitalInput leftLimitSwitch,
+            DigitalInput rightLimitSwitch,
+            DigitalInput homeLimitSwitch
+    ){
         this.shooterMotor = shooterMotor;
         this.aimingMotor = aimingMotor;
+        this.hoodMotor = hoodMotor;
+
         this.shooterClosedLoopController = shooterMotor.getClosedLoopController();
         this.aimingClosedLoopController = shooterMotor.getClosedLoopController();
+
         this.zeroLimitSwitch = zeroLimitSwitch;
         this.leftLimitSwitch = leftLimitSwitch;
         this.rightLimitSwitch = rightLimitSwitch;
         this.homeLimitSwitch = homeLimitSwitch;
-        this.hoodMotor = hoodMotor;
     }
 
 
@@ -64,37 +70,50 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     public void stopMotors(){
-        shooterMotor.set(0);
-        aimingMotor.set(0);
-        hoodMotor.set(0);
+        shooterMotor.stopMotor();
+        aimingMotor.stopMotor();
+        hoodMotor.stopMotor();
     }
 
 
     public void reset() {
-        shooterMotor.set(0);
-        while (!homeLimitSwitch.get()) {
+        shooterMotor.set(0); // TODO: update to set kVelocity using closed loop controller
+        while (!homeLimitSwitch.get()) { // TODO: Rewrite while loop to check state and update incrementally
             hoodMotor.set(-0.5);
         }
-        while (!zeroLimitSwitch.get()) {
-            aimingMotor.set(aimingClosedLoopController.setSetpoint(0, ControlType.kPosition));
+
+        while (!zeroLimitSwitch.get()) { // TODO: Rewrite while loop to check state and update incrementally
+            // Apply power to motor directly
+            // aimingMotor.set();
+
+            // Update desired position for motor controller
+            aimingClosedLoopController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
         }
     }
 
 
+    // TODO: What is the default case for each turret limit switch? Should we track and/or note this here?
     private boolean getLeftLimitSwitch() {
         return leftLimitSwitch.get();
     }
+
 
     private boolean getRightLimitSwitch() {
         return rightLimitSwitch.get();
     }
 
 
+    /*
+     TODO: Should we update our setpoint difference from where we are to where we want to be? 0 -> 0+20 or 15 -> 15-35
+     Where should we check for edge case if our desired location is past our hard stop?
+     */
     public void updateTurretSetpoint(double setpoint) {
         //Grab angle offset from april tag, use that as the current value and
         // make PID set point 0.
     }
 
+
+    // TODO: Simple table first then regression with enough data with high confidence
     public void getRegression(double detectedDistance) {
         /**Create a regression function during testing of optimal hood angle
         vs RPM at different distances. 
@@ -127,10 +146,13 @@ public class TurretSubsystem extends SubsystemBase {
     
     }
 
+
+    // TODO: Decision -> Should we include this in reset function? Should we have separate reset functions with one calling all of them in one case?
     public void updateHoodSetpoint(double setpoint) {
         // setpoint should ideally be from regression table.
     }
 
+    // TODO: Implement with closed loop controller and desired rpm or speed if using velocity conversion with encoder
     public void updateShooterRPM(double setpoint){
         // setpoint should ideally be from the regression table.
     }

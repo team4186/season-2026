@@ -60,7 +60,8 @@ public class SwerveSubsystem extends SubsystemBase
    * @param directory Directory of swerve drive config files.
    */
    public SwerveSubsystem(File directory)
-  { 
+  {
+    // TODO: Decision -> change default setpoints for testing? / Also good example of how to set pose manually for testing auto later
     boolean blueAlliance = false;
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
                                                                       Meter.of(4)),
