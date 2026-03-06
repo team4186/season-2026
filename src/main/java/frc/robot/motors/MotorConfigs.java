@@ -151,8 +151,6 @@ public final class MotorConfigs {
         return motorLeader;
     }
 
-    
-    
 
     // TODO: Setup SparkMax config
     public SparkMax applyIntakePickupSparkConfig(
@@ -263,5 +261,17 @@ public final class MotorConfigs {
             );
 
             return motor;
+    }
+
+
+    // TODO: Implement for individual motor
+    public SparkMax applySpindexerFeedSparkConfig(SparkMax sparkMax, boolean inverse) {
+        return null;
+    }
+
+
+    // TODO: Implement for individual motor
+    public SparkMax applySpindexerRotateSparkConfig(SparkMax sparkMax, boolean inverse) {
+        return null;
     }
 }
