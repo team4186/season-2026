@@ -46,10 +46,11 @@ import swervelib.SwerveInputStream;
 public class RobotContainer {
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    final CommandXboxController driverXbox = new CommandXboxController(3);
-    final CommandPS5Controller driverPS5 = new CommandPS5Controller(4);
-    final CommandStadiaController driverStadia = new CommandStadiaController(0);
-    final CommandJoystick joystickDriver = new CommandJoystick(1); //set port 0 for stadia/joystick, whichever is being used
+    private final CommandXboxController driverXbox = new CommandXboxController(3);
+    private final CommandPS5Controller driverPS5 = new CommandPS5Controller(4);
+    private final CommandStadiaController driverStadia = new CommandStadiaController(0);
+    private final CommandJoystick joystickDriver = new CommandJoystick(1); //set port 0 for stadia/joystick, whichever is being used
+
     private final Components motorComponents = Components.getInstance();
 
     // The robot's subsystems and commands are defined here...
@@ -300,6 +301,12 @@ public class RobotContainer {
             // Testing PS5 Controls in Sim, both work as intended
             driverPS5.L1().whileTrue( driveFieldOrientedPS5 );
             driverPS5.R1().whileTrue( driveFieldHeadingPS5 );
+
+            // TODO: Test with stadia controller on real robot, manual set pose might be helpful for testing?
+            // Create a target pose with destination, hold button to drive to pose
+            Pose2d targetPose = new Pose2d(new Translation2d(15, 4),
+                    Rotation2d.fromDegrees(180));
+            driverPS5.cross().whileTrue(drivebase.driveToPose(targetPose));
         }
 
         if (DriverStation.isTest()) {
@@ -312,25 +319,6 @@ public class RobotContainer {
         } else {
            //Teleop Command Keybinds
             // driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-
-            Pose2d targetPose = new Pose2d(new Translation2d(15, 4),
-                    Rotation2d.fromDegrees(180));
-
-            driveStadia.driveToPose(() -> targetPose,
-                    new ProfiledPIDController(5,
-                            0,
-                            0,
-                            new Constraints(5, 2)),
-                    new ProfiledPIDController(5,
-                            0,
-                            0,
-                            new Constraints(Units.degreesToRadians(360),
-                                    Units.degreesToRadians(180))));
-
-
-            driverStadia.leftBumper().whileTrue(Commands.runEnd(() -> driveStadia.driveToPoseEnabled(true),
-                    () -> driveStadia.driveToPoseEnabled(false)));
-
 
 
             joystickDriver.button(11).onTrue((Commands.runOnce(drivebase::zeroGyro)));
