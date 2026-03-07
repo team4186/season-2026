@@ -307,6 +307,7 @@ public class RobotContainer {
             Pose2d targetPose = new Pose2d(new Translation2d(15, 4),
                     Rotation2d.fromDegrees(180));
             driverPS5.cross().whileTrue(drivebase.driveToPose(targetPose));
+
         }
 
         if (DriverStation.isTest()) {
@@ -331,6 +332,10 @@ public class RobotContainer {
             driverXbox.back().whileTrue(Commands.none());
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.rightBumper().onTrue(Commands.none());
+
+            Pose2d targetPose = new Pose2d(new Translation2d(15, 4),
+                    Rotation2d.fromDegrees(180));
+            driverStadia.rightBumper().whileTrue(drivebase.driveToPose(targetPose));
 
         }
     }
