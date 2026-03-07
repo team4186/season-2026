@@ -205,7 +205,7 @@ public final class MotorConfigs {
 
 
     // TODO: Setup SparkMax config
-    public SparkMax applyClimbSparkConfig(){
+    public SparkMax applyClimbSparkConfig(SparkMax sparkMax, boolean inverse){
         return null;
     }
 
