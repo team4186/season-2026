@@ -256,15 +256,15 @@ public class RobotContainer {
         Command driveFieldOrientedAngularVelocityJoystick = drivebase.driveFieldOriented(driveAngularVelocityJoystick);
 
         Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
-        Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity); // SIM
+        Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity); // SIM
         Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
         Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
 
-        Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
-        Command driveFieldOrientedAnglularVelocityStadia = drivebase.driveFieldOriented(driveAngularVelocityStadia);
+        Command driveFieldOrientedAngularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
+        Command driveFieldOrientedAngularVelocityStadia = drivebase.driveFieldOriented(driveAngularVelocityStadia);
         Command driveFieldOrientedStadia = drivebase.driveFieldOriented(driveStadia);
 
-        Command driveFieldOrientedAnglularVelocityStadiaAngle = drivebase.driveFieldOriented(driveDirectAngleStadia);
+        Command driveFieldOrientedAngularVelocityStadiaAngle = drivebase.driveFieldOriented(driveDirectAngleStadia);
 
         Command driveFieldOrientedPS5 = drivebase.driveFieldOriented(driveFieldPS5);
         Command driveFieldHeadingPS5 = drivebase.driveFieldOriented(driveHeadingAxisPS5);
@@ -319,23 +319,24 @@ public class RobotContainer {
 
         } else {
            //Teleop Command Keybinds
-            // driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-
 
             joystickDriver.button(11).onTrue((Commands.runOnce(drivebase::zeroGyro)));
             joystickDriver.button(12).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-            driverStadia.leftBumper().whileTrue(driveFieldOrientedAnglularVelocityStadia);
+
+            driverStadia.leftTrigger().whileTrue(driveFieldOrientedAngularVelocityStadia);
+            Pose2d targetPose = new Pose2d(new Translation2d(15, 4),
+                    Rotation2d.fromDegrees(180));
+
+            driverStadia.leftBumper().onTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            driverStadia.a().whileTrue(drivebase.driveToPose(targetPose));
 
             driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
             driverXbox.start().whileTrue(Commands.none());
             driverXbox.back().whileTrue(Commands.none());
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.rightBumper().onTrue(Commands.none());
-
-            Pose2d targetPose = new Pose2d(new Translation2d(15, 4),
-                    Rotation2d.fromDegrees(180));
-            driverStadia.rightBumper().whileTrue(drivebase.driveToPose(targetPose));
 
         }
     }
