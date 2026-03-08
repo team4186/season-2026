@@ -34,8 +34,6 @@ public class TurretSubsystem extends SubsystemBase {
 
     private final LimelightRunner limelightRunner;
 
-    private double absoluteTurretAngle;
-
     // Leave unimplemented for now until it is designed
     // Loader motor
     // Spindexer motor
@@ -69,7 +67,6 @@ public class TurretSubsystem extends SubsystemBase {
         this.homeLimitSwitch = homeLimitSwitch;
 
         this.limelightRunner = limelightRunner;
-        this.absoluteTurretAngle = 0.0;
     }
 
 
@@ -117,10 +114,13 @@ public class TurretSubsystem extends SubsystemBase {
      TODO: Should we update our setpoint difference from where we are to where we want to be? 0 -> 0+20 or 15 -> 15-35
      Where should we check for edge case if our desired location is past our hard stop?
      */
+
     public void updateTurretSetpoint(double setpoint, boolean isBlueAlliance) {
-        //Grab angle offset from april tag, use that as the current value and
-        // make PID set point 0.
-//        aimingMotor.set(aimingClosedLoopController.setSetpoint());
+//        aimingClosedLoopController.setSetpoint(
+//                limelightRunner.getYawTargetPoseCameraSpace(
+//                        Constants.LimelightConstants.LIMELIGHT_TURRET),
+//                        SparkBase.ControlType.kPosition,
+//                        ClosedLoopSlot.kSlot0);
     }
 
 
@@ -181,7 +181,18 @@ public class TurretSubsystem extends SubsystemBase {
 
     }
 
-    public void filter(double req) {
-
+    // switch this to switch case
+    private double filter (double reqSetpoint) {
+        double actualSetpoint = 0;
+        if (reqSetpoint >= 170 && reqSetpoint < 190) {
+            actualSetpoint = 170;
+        } else if (reqSetpoint <= -170 && reqSetpoint > -190) {
+            actualSetpoint = -170;
+        } else if (reqSetpoint >= 190) {
+            actualSetpoint = reqSetpoint - 360;
+        } else if (reqSetpoint < -190) {
+            actualSetpoint = reqSetpoint + 360;
+        }
+        return actualSetpoint;
     }
 }

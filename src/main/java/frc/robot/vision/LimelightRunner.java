@@ -118,23 +118,23 @@ public class LimelightRunner {
     /**
      * Function to grab distance to tag from desired camera.
      *
-     * @param tablename name of limelight network table
+     * @param limelightName name of limelight network table
      * @return Distance in meters to target tag
      */
     // Below is robot pose
-    public double getDistanceToTag(String tablename){
-        return LimelightHelpers.getBotPose3d(tablename).getZ();
+    public double getDistanceToTag(String limelightName){
+        return LimelightHelpers.getBotPose3d(limelightName).getZ();
     }
 
     /**
      * Target pose camera space stuff
      */
-    public double getDistanceTargetPoseCameraSpace(String tablename) {
-        return LimelightHelpers.getTargetPose_CameraSpace(tablename)[2];
+    public double getDistanceTargetPoseCameraSpace(String turretLimelightName) {
+        return LimelightHelpers.getTargetPose_CameraSpace(turretLimelightName)[2];
     }
 
-    public double getYawTargetPoseCameraSpace(String tablename) {
-        return LimelightHelpers.getTargetPose_CameraSpace(tablename)[4];
+    public double getYawTargetPoseCameraSpace(String turretLimelightName) {
+        return LimelightHelpers.getTargetPose_CameraSpace(turretLimelightName)[4];
     }
 
     public void close(){
