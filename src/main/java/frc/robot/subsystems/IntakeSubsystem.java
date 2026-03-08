@@ -149,11 +149,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     private void pickupBallsFast(){
-        pickupMotor.set(IntakeConstants.INTAKE_PICKUP_FAST_SPEED);
+        pickupMotor.set(IntakeConstants.PICKUP_FAST_SPEED);
     }
 
     private void pickupBallsSlow(){
-        pickupMotor.set(IntakeConstants.INTAKE_PICKUP_SLOW_SPEED);
+        pickupMotor.set(IntakeConstants.PICKUP_SLOW_SPEED);
     }
 
     private void stopPickup(){
@@ -176,12 +176,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public double getStarboardPosition(){
         return extensionStarboardRelativeEncoder.getPosition()*
-                IntakeConstants.INTAKE_PICKUP_POSITION_CONVERSION_FACTOR;
+                IntakeConstants.PICKUP_POSITION_CONVERSION_FACTOR;
     }
 
     public double getPortPosition(){
         return extensionPortRelativeEncoder.getPosition()*
-                IntakeConstants.INTAKE_PICKUP_POSITION_CONVERSION_FACTOR;
+                IntakeConstants.PICKUP_POSITION_CONVERSION_FACTOR;
     }
 
 

@@ -1,24 +1,26 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.vision.LimelightRunner;
 import java.lang.Math.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurretSubsystem extends SubsystemBase {
     // Shooter motor
     private final SparkFlex shooterMotor;
 
     // Turret motor
-    private final SparkMax aimingMotor;
+    private final SparkMax turretMotor;
 
     // Shooter closed loop controller (slot 0: position, slot 1: velocity)
     private final SparkClosedLoopController shooterClosedLoopController;
 
     // aiming closed loop controller (slot 0: position, slot 1: velocity)
-    private final SparkClosedLoopController aimingClosedLoopController;
+    private final SparkClosedLoopController turretClosedLoopController;
 
     private final SparkClosedLoopController hoodClosedLoopController;
 
@@ -35,34 +37,32 @@ public class TurretSubsystem extends SubsystemBase {
     // right limit switch
     private final DigitalInput rightLimitSwitch;
 
-    private final LimelightRunner limelightRunner;
-
-    // Leave unimplemented for now until it is designed
-    // Loader motor
-    // Spindexer motor
-    // Hood motor
     private final SparkMax hoodMotor;
     // home limit switch (starting pos for hood)
     private final DigitalInput homeLimitSwitch;
-    // hard-stop max extended position
 
+    // Encoder stuff
+    private final RelativeEncoder turretRelativeEncoder;
+
+    private final RelativeEncoder hoodRelativeEncoder;
+
+    private final RelativeEncoder shooterRelativeEncoder;
 
     public TurretSubsystem(
             SparkFlex shooterMotor,
-            SparkMax aimingMotor,
+            SparkMax turretMotor,
             SparkMax hoodMotor,
             DigitalInput zeroLimitSwitch,
             DigitalInput leftLimitSwitch,
             DigitalInput rightLimitSwitch,
-            DigitalInput homeLimitSwitch,
-            LimelightRunner limelightRunner
+            DigitalInput homeLimitSwitch
     ){
         this.shooterMotor = shooterMotor;
-        this.aimingMotor = aimingMotor;
+        this.turretMotor = turretMotor;
         this.hoodMotor = hoodMotor;
 
         this.shooterClosedLoopController = shooterMotor.getClosedLoopController();
-        this.aimingClosedLoopController = aimingMotor.getClosedLoopController();
+        this.turretClosedLoopController = turretMotor.getClosedLoopController();
         this.hoodClosedLoopController = hoodMotor.getClosedLoopController();
 
         this.zeroLimitSwitch = zeroLimitSwitch;
@@ -70,17 +70,25 @@ public class TurretSubsystem extends SubsystemBase {
         this.rightLimitSwitch = rightLimitSwitch;
         this.homeLimitSwitch = homeLimitSwitch;
 
-        this.limelightRunner = limelightRunner;
+        this.turretRelativeEncoder = turretMotor.getEncoder();
+        this.shooterRelativeEncoder = shooterMotor.getEncoder();
+        this.hoodRelativeEncoder = hoodMotor.getEncoder();
     }
 
 
     @Override
-    public void periodic(){}
+    public void periodic(){
+        SmartDashboard.putBoolean("Turret Left Limit Switch: ", getLeftLimitSwitch());
+        SmartDashboard.putBoolean("Turret Right Limit Switch: ", getRightLimitSwitch());
+        SmartDashboard.putBoolean("Turret Zero Limit Switch: ", getZeroLimitSwitch());
+        SmartDashboard.putBoolean("Hood Home Limit Switch: ", getHomeLimitSwitch());
+//        SmartDashboard.putNumber("Shooter Encoder Info: ", );
+    }
 
 
     public void stopMotors(){
         shooterMotor.stopMotor();
-        aimingMotor.stopMotor();
+        turretMotor.stopMotor();
         hoodMotor.stopMotor();
     }
 
@@ -96,23 +104,23 @@ public class TurretSubsystem extends SubsystemBase {
             // aimingMotor.set();
 
             // Update desired position for motor controller
-            aimingClosedLoopController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+            turretClosedLoopController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
         }
     }
 
 
     // TODO: What is the default case for each turret limit switch? Should we track and/or note this here?
-    private boolean getLeftLimitSwitch() {
+    public boolean getLeftLimitSwitch() {
         return leftLimitSwitch.get();
     }
 
-    private boolean getRightLimitSwitch() {
+    public boolean getRightLimitSwitch() {
         return rightLimitSwitch.get();
     }
 
-    private boolean getZeroLimitSwitch() { return zeroLimitSwitch.get(); }
+    public boolean getZeroLimitSwitch() { return zeroLimitSwitch.get(); }
 
-    private boolean getHomeLimitSwitch() { return homeLimitSwitch.get(); }
+    public boolean getHomeLimitSwitch() { return homeLimitSwitch.get(); }
 
     /*
      TODO: Should we update our setpoint difference from where we are to where we want to be? 0 -> 0+20 or 15 -> 15-35
@@ -160,11 +168,11 @@ public class TurretSubsystem extends SubsystemBase {
     // TODO: Implement with closed loop controller and desired rpm or speed if using velocity conversion with encoder
 
     public void updateTurretRotation(double angle) {
-
+        turretClosedLoopController.setSetpoint(aimingFilter(angle), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     public void updateShooterSpeed(double rpm) {
-
+        shooterClosedLoopController.setSetpoint(rpm, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
     public void updateHoodAngle(double angle) {
@@ -172,16 +180,16 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     // switch this to switch case
-    private double filter (double reqSetpoint) {
+    private double aimingFilter (double reqSetpoint) {
         double actualSetpoint = 0;
-        if (reqSetpoint >= 170 && reqSetpoint < 190) {
-            actualSetpoint = 170;
-        } else if (reqSetpoint <= -170 && reqSetpoint > -190) {
-            actualSetpoint = -170;
+        if (reqSetpoint < -190) {
+            actualSetpoint = reqSetpoint + 360;
         } else if (reqSetpoint >= 190) {
             actualSetpoint = reqSetpoint - 360;
-        } else if (reqSetpoint < -190) {
-            actualSetpoint = reqSetpoint + 360;
+        } else if (reqSetpoint >= 170) {
+            actualSetpoint = 170;
+        } else if (reqSetpoint <= -170) {
+            actualSetpoint = -170;
         }
         return actualSetpoint;
     }

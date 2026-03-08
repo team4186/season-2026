@@ -205,32 +205,32 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(IntakeConstants.INTAKE_EXTENSION_CURRENT_LIMIT)
-                    .idleMode(IntakeConstants.IDLE_MODE);
+                    .smartCurrentLimit(IntakeConstants.EXTENSION_CURRENT_LIMIT)
+                    .idleMode(IntakeConstants.EXTENSION_IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(IntakeConstants.INTAKE_POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(IntakeConstants.INTAKE_VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(IntakeConstants.EXTENSION_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(IntakeConstants.EXTENSION_VELOCITY_CONVERSION_FACTOR);
 
             config.closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control. We don't need to pass a closed loop
                     // slot, as it will default to slot 0.
                     .pid(
-                            IntakeConstants.INTAKE_P,
-                            IntakeConstants.INTAKE_I,
-                            IntakeConstants.INTAKE_D,
+                            IntakeConstants.EXTENSION_P,
+                            IntakeConstants.EXTENSION_I,
+                            IntakeConstants.EXTENSION_D,
                             ClosedLoopSlot.kSlot0)
                     .outputRange(
-                            IntakeConstants.INTAKE_MIN_OUTPUT,
-                            IntakeConstants.INTAKE_MAX_OUTPUT,
+                            IntakeConstants.EXTENSION_MIN_OUTPUT,
+                            IntakeConstants.EXTENSION_MAX_OUTPUT,
                             ClosedLoopSlot.kSlot0)
                     .feedForward
                     .kS(
-                            IntakeConstants.INTAKE_KS,
+                            IntakeConstants.EXTENSION_KS,
                             ClosedLoopSlot.kSlot0)
                     .kV(
-                            IntakeConstants.INTAKE_KV,
+                            IntakeConstants.EXTENSION_KV,
                             ClosedLoopSlot.kSlot0);
 
             motor.configure(
@@ -251,12 +251,12 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(IntakeConstants.INTAKE_PICKUP_CURRENT_LIMIT)
-                    .idleMode(IntakeConstants.IDLE_MODE);
+                    .smartCurrentLimit(IntakeConstants.PICKUP_CURRENT_LIMIT)
+                    .idleMode(IntakeConstants.PICKUP_IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(IntakeConstants.INTAKE_PICKUP_POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(IntakeConstants.INTAKE_PICKUP_VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(IntakeConstants.PICKUP_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(IntakeConstants.PICKUP_VELOCITY_CONVERSION_FACTOR);
 
         //Add if we decide to use closed loop for the intake pickup - Shing
 //            config.closedLoop

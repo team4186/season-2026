@@ -136,49 +136,49 @@ public final class Constants {
 
     public static final class IntakeConstants {
         //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
-         public static final int INTAKE_EXTENDED_LSChannel1 = 0; //TODO: set LSChannels
-        public static final int INTAKE_EXTENDED_LSChannel2 = 0;
-        public static final int INTAKE_RETRACTED_LSChannel1 = 0;
-        public static final int INTAKE_RETRACTED_LSChannel2 = 0;
+         public static final int EXTENDED_LSChannel1 = 0; //TODO: set LSChannels
+        public static final int EXTENDED_LSChannel2 = 0;
+        public static final int RETRACTED_LSChannel1 = 0;
+        public static final int RETRACTED_LSChannel2 = 0;
 
         // NEO 550
-        public static final int INTAKE_EXTENSION_STARBOARD_CAN_ID = 0;
-        public static final int INTAKE_EXTENSION_PORT_CAN_ID = 0;//TODO: set values here
-        public static final int INTAKE_EXTENSION_CURRENT_LIMIT = 50;
-        public static final double INTAKE_FREE_SPEED = 11000;
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final double INTAKE_RATIO = 1.0; // slightly different in reality but who cares
+        public static final int STARBOARD_EXTENSION_CAN_ID = 0;
+        public static final int PORT_EXTENSION_CAN_ID = 0;//TODO: set values here
+        public static final int EXTENSION_CURRENT_LIMIT = 50;
+        public static final double EXTENSION_FREE_SPEED = 11000;
+        public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final double EXTENSION_RATIO = 1.0; // slightly different in reality but who cares
 
         // PID
-        public static final double INTAKE_P = 0.0; //TODO: set PID values
-        public static final double INTAKE_I = 0.0;
-        public static final double INTAKE_D = 0.0;
+        public static final double EXTENSION_P = 0.0; //TODO: set PID values
+        public static final double EXTENSION_I = 0.0;
+        public static final double EXTENSION_D = 0.0;
 
         // FeedForward
-        public static final double INTAKE_KS = 0.0; //TODO: set feedforward values
-        public static final double INTAKE_KV = NOMINAL_VOLTAGE / INTAKE_FREE_SPEED;
+        public static final double EXTENSION_KS = 0.0; //TODO: set feedforward values
+        public static final double EXTENSION_KV = NOMINAL_VOLTAGE / EXTENSION_FREE_SPEED;
 
-        public static final double INTAKE_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
-        public static final double INTAKE_VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double INTAKE_MIN_OUTPUT = -0.75;
-        public static final double INTAKE_MAX_OUTPUT = 0.75;
-        public static final double INTAKE_MAX_ANGLE = 0.00; //TODO: find angles
+        public static final double EXTENSION_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
+        public static final double EXTENSION_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double EXTENSION_MIN_OUTPUT = -0.75;
+        public static final double EXTENSION_MAX_OUTPUT = 0.75;
+        public static final double EXTENSION_MAX_ANGLE = 0.00; //TODO: find angles
         public static final double MIN_ANGLE = 0.00;
 
 
+        public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final int PICKUP_CAN_ID = 0; //TODO: set values here
+        public static final int PICKUP_CURRENT_LIMIT = 50;
+        public static final double PICKUP_FAST_SPEED = 2500; //in rpm, about half of max rpm for a neo brushless
+        public static final double PICKUP_SLOW_SPEED = 500; //about 10%
+        public static final double PICKUP_RATIO = 1.0; // need to figure this out
 
-        public static final int INTAKE_PICKUP_CAN_ID = 0; //TODO: set values here
-        public static final int INTAKE_PICKUP_CURRENT_LIMIT = 50;
-        public static final double INTAKE_PICKUP_FAST_SPEED = 2500; //in rpm, about half of max rpm for a neo brushless
-        public static final double INTAKE_PICKUP_SLOW_SPEED = 500; //about 10%
-        public static final double INTAKE_PICKUP_RATIO = 1.0; // need to figure this out
-
-        public static final double INTAKE_PICKUP_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
-        public static final double INTAKE_PICKUP_VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double INTAKE_PICKUP_MIN_OUTPUT = -0.75;
-        public static final double INTAKE_PICKUP_MAX_OUTPUT = 0.75;
-        public static final double INTAKE_PICKUP_MAX_ANGLE = 0.00; //TODO: find angles
-        public static final double INTAKE_PICKUP_MIN_ANGLE = 0.00;
+        public static final double PICKUP_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
+        public static final double PICKUP_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double PICKUP_MIN_OUTPUT = -0.75;
+        public static final double PICKUP_MAX_OUTPUT = 0.75;
+        public static final double PICKUP_MAX_ANGLE = 0.00; //TODO: find angles
+        public static final double PICKUP_MIN_ANGLE = 0.00;
     }
 
 
