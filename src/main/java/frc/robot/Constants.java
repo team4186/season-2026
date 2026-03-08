@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 
 
@@ -194,7 +193,8 @@ public final class Constants {
         public static final int CURRENT_LIMIT = 0;
         public static final double FREE_SPEED = 0;
         public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final double GEAR_RATIO = 0;
+        public static final double FEED_GEAR_RATIO = 0;
+        public static final double ROTATE_GEAR_RATIO = 0;
 
         //CAN ID'S
         public static final int ROTATE_CAN_ID = 0;
@@ -202,24 +202,27 @@ public final class Constants {
 
 
         // PID
-        public static final double SPINDEXER_P = 0.0075;
-        public static final double SPINDEXER_I = 0.0;
-        public static final double SPINDEXER_D = 0.002;
+        public static final double SPINDEXER_FEED_P = 0.0075;
+        public static final double SPINDEXER_FEED_I = 0.0;
+        public static final double SPINDEXER_FEED_D = 0.002;
 
         // FeedForward
-        public static final double SPINDEXER_KS = 0.185;
-        public static final double SPINDEXER_KV = NOMINAL_VOLTAGE / FREE_SPEED;
+        public static final double SPINDEXER_FEED_KS = 0.185;
+        public static final double SPINDEXER_FEED_KV = NOMINAL_VOLTAGE / FREE_SPEED;
 
-        public static final double POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
-        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double ROTATE_MIN_OUTPUT = -0.75;
-        public static final double ROTATE_MAX_OUTPUT = 0.75;
-        public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
-
+        public static final double FEED_POSITION_CONVERSION_FACTOR = (1 / FEED_GEAR_RATIO) * 360; // Convert to degrees
+        public static final double FEED_VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;
         public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
-    }
+
+
+        public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
+        public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double ROTATE_MIN_OUTPUT = -0.75;
+        public static final double ROTATE_MAX_OUTPUT = 0.75;
+        public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
+     }
 
 
     // TODO: Update with Constants
