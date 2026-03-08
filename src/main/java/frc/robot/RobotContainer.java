@@ -61,20 +61,23 @@ public class RobotContainer {
     // SmartDashboard, allowing selection of desired auto
     private final SendableChooser<Command> autoChooser;
 
-//    private final IntakeSubsystem intake = new IntakeSubsystem(
-//            motorComponents.getIntakePickupMotor(),
-//            motorComponents.getIntakeDeployMotor(),
-//            new DigitalInput(Constants.IntakeConstants.INTAKE_EXTENDED_LSChannel1),
-//            new DigitalInput(Constants.IntakeConstants.INTAKE_EXTENDED_LSChannel2),
-//            new DigitalInput(Constants.IntakeConstants.INTAKE_RETRACTED_LSChannel1),
-//            new DigitalInput(Constants.IntakeConstants.INTAKE_RETRACTED_LSChannel2)
-//
-//    );
 
-//    private final SpindexerSubsystem spindexer = new SpindexerSubsystem(
-//            motorComponents.getSpindexerRotateMotor(),
-//            motorComponents.getSpindexerFeedMotor()
-//    );
+
+
+    private final IntakeSubsystem intake = new IntakeSubsystem(
+            motorComponents.getIntakeExtensionStarboardMotor(),
+            motorComponents.getIntakeExtensionPortMotor(),
+            motorComponents.getIntakePickupMotor(),
+            new DigitalInput(Constants.IntakeConstants.INTAKE_EXTENDED_LSChannel1),
+            new DigitalInput(Constants.IntakeConstants.INTAKE_EXTENDED_LSChannel2),
+            new DigitalInput(Constants.IntakeConstants.INTAKE_RETRACTED_LSChannel1),
+            new DigitalInput(Constants.IntakeConstants.INTAKE_RETRACTED_LSChannel2)
+    );
+
+    private final SpindexerSubsystem spindexer = new SpindexerSubsystem(
+            motorComponents.getSpindexerRotateMotor(),
+            motorComponents.getSpindexerFeedMotor()
+    );
 
 
 
@@ -331,6 +334,8 @@ public class RobotContainer {
             driverStadia.leftBumper().onTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
             driverStadia.a().whileTrue(drivebase.driveToPose(targetPose));
+
+
 
             driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
             driverXbox.start().whileTrue(Commands.none());

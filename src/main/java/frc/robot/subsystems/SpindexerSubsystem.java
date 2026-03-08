@@ -24,6 +24,9 @@ public class SpindexerSubsystem extends SubsystemBase {
         feedMotor.set(SpindexerConstants.FEED_MAX_SPEED); //can create new constant that's different if needed
     }
 
+    public void feedSpindexer(){
+
+    }
 
     // TODO: What parts of the subsystem should we track and publish here?
     @Override
