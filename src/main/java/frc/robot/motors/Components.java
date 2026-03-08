@@ -6,7 +6,7 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
-
+import frc.robot.Constants.SpindexerConstants;
 
 // Flexible motor creation for fast testing between systems
 public class Components {
@@ -114,7 +114,7 @@ public class Components {
     public SparkMax getSpindexerRotateMotor(){
         if (spindexerRotateMotor == null) {
             spindexerRotateMotor = customConfigs.applySpindexerRotateSparkConfig(
-                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(SpindexerConstants.SPINDEXER_ROTATE_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return spindexerRotateMotor;
@@ -123,7 +123,7 @@ public class Components {
     public SparkMax getSpindexerFeedMotor(){
         if (spindexerFeedMotor == null) {
             spindexerFeedMotor = customConfigs.applySpindexerFeedSparkConfig(
-                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(SpindexerConstants.SPINDEXER_FEED_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return spindexerFeedMotor;

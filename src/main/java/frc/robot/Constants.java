@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -197,11 +196,16 @@ public final class Constants {
 
         // NEO 550
 
-        public static final int SPINDEXER_CAN_ID = 0;
         public static final int SPINDEXER_CURRENT_LIMIT = 0;
         public static final double SPINDEXER_FREE_SPEED = 0;
         public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
         public static final double GEAR_RATIO = 0;
+
+        //CAN ID'S
+        public static final int SPINDEXER_ROTATE_CAN_ID = 0;
+        public static final int SPINDEXER_FEED_CAN_ID = 0;
+
+
 
         // PID
         public static final double SPINDEXER_P = 0.0075;
