@@ -6,6 +6,7 @@ import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SpindexerConstants;
@@ -48,7 +49,7 @@ public final class MotorConfigs {
 
         config
             .inverted(inverse)
-            .smartCurrentLimit(TurretConstants.ROTATE_CURRENT_LIMIT)
+            .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_550)
             .idleMode(TurretConstants.ROTATE_IDLE_MODE);
 
         config.encoder
@@ -91,7 +92,7 @@ public final class MotorConfigs {
 
         config
                 .inverted(inverse)
-                .smartCurrentLimit(TurretConstants.ROTATE_CURRENT_LIMIT)
+                .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_550)
                 .idleMode(TurretConstants.ROTATE_IDLE_MODE);
 
         config.encoder
@@ -127,52 +128,6 @@ public final class MotorConfigs {
         return motor;
     }
 
-    public SparkMax applyTurretShooterSparkConfig(
-            SparkMax motor,
-            boolean inverse
-    ) {
-        SparkBaseConfig config = DefaultSparkMaxConfig;
-
-        config
-                .inverted(inverse)
-                .smartCurrentLimit(TurretConstants.SHOOTER_CURRENT_LIMIT)
-                .idleMode(TurretConstants.SHOOTER_IDLE_MODE);
-
-        config.encoder
-                .positionConversionFactor(TurretConstants.ROTATE_POSITION_CONVERSION_FACTOR)
-                .velocityConversionFactor(TurretConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
-
-        config.closedLoop
-                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                // Set PID values for position control. We don't need to pass a closed loop
-                // slot, as it will default to slot 0.
-                .pid(
-                        TurretConstants.ROTATE_P,
-                        TurretConstants.ROTATE_I,
-                        TurretConstants.ROTATE_D,
-                        ClosedLoopSlot.kSlot0)
-                .outputRange(
-                        TurretConstants.ROTATE_MIN_OUTPUT,
-                        TurretConstants.ROTATE_MAX_OUTPUT,
-                        ClosedLoopSlot.kSlot0)
-                .feedForward
-                .kS(
-                        TurretConstants.ROTATE_KS,
-                        ClosedLoopSlot.kSlot0)
-                .kV(
-                        TurretConstants.ROTATE_KV,
-                        ClosedLoopSlot.kSlot0);
-
-        motor.configure(
-                config,
-                ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters
-        );
-
-        return motor;
-    }
-
-
     public SparkFlex applyShooterSparkConfig(
         SparkFlex motorLeader,
         SparkFlex motorFollower,
@@ -182,7 +137,7 @@ public final class MotorConfigs {
         SparkBaseConfig baseConfig = DefaultSparkFlexConfig;
 
         baseConfig.inverted(inverse)
-            .smartCurrentLimit(TurretConstants.SHOOTER_CURRENT_LIMIT)
+            .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_VORTEX)
             .idleMode(TurretConstants.SHOOTER_IDLE_MODE);
 
         // Using Velocity
@@ -246,7 +201,7 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(IntakeConstants.EXTENSION_CURRENT_LIMIT)
+                    .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_550)
                     .idleMode(IntakeConstants.EXTENSION_IDLE_MODE);
 
             config.encoder
@@ -292,7 +247,7 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(IntakeConstants.PICKUP_CURRENT_LIMIT)
+                    .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_REGULAR)
                     .idleMode(IntakeConstants.PICKUP_IDLE_MODE);
 
             config.encoder
@@ -340,7 +295,7 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(ClimbConstants.CLIMB_CURRENT_LIMIT)
+                    .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_REGULAR)
                     .idleMode(ClimbConstants.IDLE_MODE);
 
 //            config.encoder  //not sur ehow encoder conversions work yet
@@ -393,7 +348,7 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(SpindexerConstants.CURRENT_LIMIT)
+                    .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_REGULAR)
                     .idleMode(SpindexerConstants.IDLE_MODE);
 
             config.encoder
