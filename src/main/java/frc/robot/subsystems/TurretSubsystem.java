@@ -82,7 +82,9 @@ public class TurretSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Turret Right Limit Switch: ", getRightLimitSwitch());
         SmartDashboard.putBoolean("Turret Zero Limit Switch: ", getZeroLimitSwitch());
         SmartDashboard.putBoolean("Hood Home Limit Switch: ", getHomeLimitSwitch());
-//        SmartDashboard.putNumber("Shooter Encoder Info: ", );
+        SmartDashboard.putNumber("Shooter Encoder Info: ", getShooterEncoderReading());
+        SmartDashboard.putNumber("Turret Encoder Info: ", getTurretEncoderReading());
+        SmartDashboard.putNumber("Hood Encoder Info: ", getHoodEncoderReading());
     }
 
 
@@ -122,6 +124,11 @@ public class TurretSubsystem extends SubsystemBase {
 
     public boolean getHomeLimitSwitch() { return homeLimitSwitch.get(); }
 
+    public double getTurretEncoderReading() { return turretRelativeEncoder.getPosition(); }
+
+    public double getShooterEncoderReading() { return shooterRelativeEncoder.getVelocity(); }
+
+    public double getHoodEncoderReading() { return hoodRelativeEncoder.getPosition(); }
     /*
      TODO: Should we update our setpoint difference from where we are to where we want to be? 0 -> 0+20 or 15 -> 15-35
      Where should we check for edge case if our desired location is past our hard stop?
