@@ -11,6 +11,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SpindexerConstants;
+import frc.robot.Constants.ClimbConstants;
 
 
 // MotorConfigs Singleton for Subsystem Motors (Swerve Subsystem not included)
@@ -205,8 +206,49 @@ public final class MotorConfigs {
 
 
     // TODO: Setup SparkMax config
-    public SparkMax applyClimbSparkConfig(SparkMax sparkMax, boolean inverse){
-        return null;
+    public SparkMax applyClimbSparkConfig(
+        SparkMax motor,
+        boolean inverse
+    ) {
+            SparkBaseConfig config = DefaultSparkMaxConfig;
+
+            config
+                    .inverted(inverse)
+                    .smartCurrentLimit(ClimbConstants.CLIMB_CURRENT_LIMIT)
+                    .idleMode(ClimbConstants.IDLE_MODE);
+
+//            config.encoder  //not sur ehow encoder conversions work yet
+//                    .positionConversionFactor(ClimbConstants.INTAKE_POSITION_CONVERSION_FACTOR)
+//                    .velocityConversionFactor(ClimbConstants.INTAKE_VELOCITY_CONVERSION_FACTOR);
+
+            config.closedLoop
+                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // Set PID values for position control. We don't need to pass a closed loop
+                    // slot, as it will default to slot 0.
+                    .pid(
+                            ClimbConstants.CLIMB_P,
+                            ClimbConstants.CLIMB_I,
+                            ClimbConstants.CLIMB_D,
+                            ClosedLoopSlot.kSlot0)
+                    .outputRange(
+                            ClimbConstants.CLIMB_MIN_OUTPUT,
+                            ClimbConstants.CLIMB_MAX_OUTPUT,
+                            ClosedLoopSlot.kSlot0)
+                    .feedForward
+                    .kS(
+                            ClimbConstants.CLIMB_KS,
+                            ClosedLoopSlot.kSlot0)
+                    .kV(
+                            ClimbConstants.CLIMB_KV,
+                            ClosedLoopSlot.kSlot0);
+
+            motor.configure(
+                    config,
+                    ResetMode.kResetSafeParameters,
+                    PersistMode.kPersistParameters
+            );
+
+            return motor;
     }
 
 
@@ -229,8 +271,8 @@ public final class MotorConfigs {
                     .idleMode(SpindexerConstants.IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(SpindexerConstants.POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(SpindexerConstants.VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(SpindexerConstants.SPINDEXER_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(SpindexerConstants.SPINDEXER_VELOCITY_CONVERSION_FACTOR);
 
             // Add if we decide to use PIDS for spindexer, instead of feeding a velocity - Shing
 //            config.closedLoop

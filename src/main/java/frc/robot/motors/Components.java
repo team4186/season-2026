@@ -1,5 +1,6 @@
 package frc.robot.motors;
 
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
@@ -15,7 +16,9 @@ public class Components {
     private SparkFlex turretHoodMotor;
     private SparkFlex turretShooterMotor;
 
-    private SparkMax intakePickupMotor;
+    private SparkMax intakeExtensionStarboardMotor;
+    private SparkMax intakeExtensionPortMotor;
+
 
     // TODO: Decision --- pair of motors or independent that take same goal inputs
     private SparkMax intakeDeployMotor;
@@ -60,15 +63,27 @@ public class Components {
 
 
     // TODO: Check Inverse Condition
-    public SparkMax getIntakePickupMotor(){
-        if(intakePickupMotor == null) {
-            intakePickupMotor = customConfigs.applyIntakePickupSparkConfig(
-                    new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+    public SparkMax intakeExtensionStarboardMotor(){
+        if(intakeExtensionStarboardMotor == null) {
+            intakeExtensionStarboardMotor = customConfigs.applyIntakePickupSparkConfig(
+                    new SparkMax(IntakeConstants.INTAKE_STARBOARD_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
                     //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
                     true
             );
         }
-        return intakePickupMotor; //67 -S and R
+
+        return intakeExtensionStarboardMotor; //67 -S and R
+    }
+
+    public SparkMax getIntakePickupPortMotor(){
+        if(intakeExtensionPortMotor == null) {
+            intakeExtensionPortMotor = customConfigs.applyIntakePickupSparkConfig(
+                    new SparkMax(IntakeConstants.INTAKE_PORT_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
+                    //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
+                    true
+            );
+        }
+        return intakeExtensionPortMotor; //67 -S and R
     }
 
 
