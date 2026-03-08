@@ -69,9 +69,18 @@ public class IntakeSubsystem extends SubsystemBase {
         //Encoder Values
         SmartDashboard.putNumber("Starboard Motor Value:", getStarboardPosition());
         SmartDashboard.putNumber("Port Motor Value:",getPortPosition());
+
+        SmartDashboard.putBoolean("Starboard at setpoint",starboardAtSetpoint());
+        SmartDashboard.putBoolean("Port at setpoint", portAtSetpoint());
     }
 
+    public boolean starboardAtSetpoint(){
+        return extensionStarboardController.isAtSetpoint();
+    }
 
+    public boolean portAtSetpoint(){
+        return extensionPortController.isAtSetpoint();
+    }
 
 
     private boolean isStarboardExtended() {
@@ -98,7 +107,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //TODO: MAKE SURE THE MOTORS ARE INVERTED,AND OPPOSITE CORRECTLY!!!!!! VERY IMPORTANT OR STUFF WILL BREAK!!!!! -Shing
     private void extendIntakeStarboard(){
         if(!isStarboardExtended()){
-            extensionStarboardController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+            extensionStarboardController.setSetpoint(IntakeConstants.RAIL_END, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
             // 31.0 is the length of the rail on the intake, in cm. It's the far end of the rail- Shing
         } else {
             extensionStarboardMotor.stopMotor();
@@ -108,7 +117,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void extendIntakePort(){
         if(!isPortExtended()){
-            extensionPortController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+            extensionPortController.setSetpoint(IntakeConstants.RAIL_END, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
         } else {
             extensionPortMotor.stopMotor();
         }
@@ -117,13 +126,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // \/\/\/\/\/Is this needed? Not sure how to feed one value into two controllers, to keep both sides in sync. If there's a better way, delete \/\/\/\/\/
     public void extendIntake() {
-        if(isStarboardExtended() && isPortExtended()){
-            extensionStarboardController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-            extensionPortController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-        }else{
-            extensionStarboardMotor.stopMotor();
-            extensionPortMotor.stopMotor();
-        }
+//        if(isStarboardExtended() && isPortExtended()){
+//            extensionStarboardController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+//            extensionPortController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+//        }else{
+//            extensionStarboardMotor.stopMotor();
+//            extensionPortMotor.stopMotor();
+//        }
+        extendIntakePort();
+        extendIntakeStarboard();
     }
 
 
@@ -132,7 +143,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void retractIntakeStarboard(){
         if(!isStarboardRetracted()){
-            extensionStarboardController.setSetpoint(0.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+            extensionStarboardController.setSetpoint(IntakeConstants.RAIL_START, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
             // 0 is the other end, the start - Shing
         }else{
             extensionStarboardMotor.stopMotor();
@@ -141,11 +152,16 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void retractIntakePort(){
         if(!isPortRetracted()){
-            extensionPortController.setSetpoint(0.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+            extensionPortController.setSetpoint(IntakeConstants.RAIL_START, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
             // 0 is the other end, the start - Shing
         }else{
             extensionPortMotor.stopMotor();
         }
+    }
+
+    public void retractIntake(){
+        retractIntakePort();
+        retractIntakeStarboard();
     }
 
     private void pickupBallsFast(){
@@ -160,11 +176,8 @@ public class IntakeSubsystem extends SubsystemBase {
         pickupMotor.stopMotor();
     }
 
-    // TODO: Decision -> closed loop kVelocity control? OR simple set power
+    // TODO: Possible Close Loop Implmentation for pickup. Low Priority
     public void updateIntakePickupSpeed() {}
-
-
-    // TODO: Decision -> closed loop kPosition control?
     public void updateIntakePosition() {}
 
 
@@ -175,13 +188,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public double getStarboardPosition(){
-        return extensionStarboardRelativeEncoder.getPosition()*
-                IntakeConstants.PICKUP_POSITION_CONVERSION_FACTOR;
+        return extensionStarboardRelativeEncoder.getPosition();
     }
 
     public double getPortPosition(){
-        return extensionPortRelativeEncoder.getPosition()*
-                IntakeConstants.PICKUP_POSITION_CONVERSION_FACTOR;
+        return extensionPortRelativeEncoder.getPosition();
     }
 
 

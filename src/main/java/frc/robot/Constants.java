@@ -183,6 +183,10 @@ public final class Constants {
         public static final double PICKUP_VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double PICKUP_MIN_OUTPUT = -0.75;
         public static final double PICKUP_MAX_OUTPUT = 0.75;
+
+        //End of Rail values
+        public static final double RAIL_END = 31.0;
+        public static final double RAIL_START = 0.0;
     }
 
 
