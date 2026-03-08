@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.vision.LimelightRunner;
 import java.lang.Math.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurretSubsystem extends SubsystemBase {
     // Shooter motor
@@ -75,7 +76,12 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     @Override
-    public void periodic(){}
+    public void periodic(){
+        SmartDashboard.putBoolean("Turret Left Limit Switch: ", getLeftLimitSwitch());
+        SmartDashboard.putBoolean("Turret Right Limit Switch: ", getRightLimitSwitch());
+        SmartDashboard.putBoolean("Turret Zero Limit Switch: ", getZeroLimitSwitch());
+        SmartDashboard.putBoolean("Hood Home Limit Switch: ", getHomeLimitSwitch());
+    }
 
 
     public void stopMotors(){
@@ -160,7 +166,7 @@ public class TurretSubsystem extends SubsystemBase {
     // TODO: Implement with closed loop controller and desired rpm or speed if using velocity conversion with encoder
 
     public void updateTurretRotation(double angle) {
-        aimingClosedLoopController.setSetpoint(filter(angle), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        aimingClosedLoopController.setSetpoint(aimingFilter(angle), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     public void updateShooterSpeed(double rpm) {
@@ -172,16 +178,16 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     // switch this to switch case
-    private double filter (double reqSetpoint) {
+    private double aimingFilter (double reqSetpoint) {
         double actualSetpoint = 0;
-        if (reqSetpoint >= 170 && reqSetpoint < 190) {
-            actualSetpoint = 170;
-        } else if (reqSetpoint <= -170 && reqSetpoint > -190) {
-            actualSetpoint = -170;
+        if (reqSetpoint < -190) {
+            actualSetpoint = reqSetpoint + 360;
         } else if (reqSetpoint >= 190) {
             actualSetpoint = reqSetpoint - 360;
-        } else if (reqSetpoint < -190) {
-            actualSetpoint = reqSetpoint + 360;
+        } else if (reqSetpoint >= 170) {
+            actualSetpoint = 170;
+        } else if (reqSetpoint <= -170) {
+            actualSetpoint = -170;
         }
         return actualSetpoint;
     }
