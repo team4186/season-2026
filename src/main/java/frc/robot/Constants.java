@@ -190,29 +190,47 @@ public final class Constants {
 
         // NEO 550
 
-        public static final int SPINDEXER_CAN_ID = 50;
-        public static final int SPINDEXER_CURRENT_LIMIT = 50;
-        public static final double SPINDEXER_FREE_SPEED = 11000;
+        public static final int SPINDEXER_CAN_ID = 0;
+        public static final int SPINDEXER_CURRENT_LIMIT = 0;
+        public static final double SPINDEXER_FREE_SPEED = 0;
         public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final double GEAR_RATIO = 1.0; // probably a little different but who cares
+        public static final double GEAR_RATIO = 0;
 
         // PID
-        public static final double SPINDEXER_PICKUP_P = 0.0075;
-        public static final double SPINDEXER_PICKUP_I = 0.0;
-        public static final double SPINDEXER_PICKUP_D = 0.002;
+        public static final double SPINDEXER_P = 0.0075;
+        public static final double SPINDEXER_I = 0.0;
+        public static final double SPINDEXER_D = 0.002;
 
         // FeedForward
-        public static final double SPINDEXER_PICKUP_KS = 0.185;
-        public static final double SPINDEXER_PICKUP_KV = NOMINAL_VOLTAGE / SPINDEXER_FREE_SPEED;
+        public static final double SPINDEXER_KS = 0.185;
+        public static final double SPINDEXER_KV = NOMINAL_VOLTAGE / SPINDEXER_FREE_SPEED;
 
-        public static final double POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
-        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double MIN_OUTPUT = -0.75;
-        public static final double MAX_OUTPUT = 0.75;
-        public static final double MAX_SPEED = 0.75; // set between -1 to 1
+        public static final double SPINDEXER_POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
+        public static final double SPINDEXER_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double SPINDEXER_MIN_OUTPUT = -0.75;
+        public static final double SPINDEXER_MAX_OUTPUT = 0.75;
+        public static final double SPINDEXER_MAX_SPEED = 0.75; // set between -1 to 1
     }
 
 
     // TODO: Update with Constants
-    public static final class ClimbConstants {}
+    public static final class ClimbConstants {
+
+         public static final double CLIMB_LSChannel = 0;
+         public static final int CLIMB_CURRENT_LIMIT = 0;
+         public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+
+        public static final double CLIMB_P = 0.0; //TODO: set PID values
+        public static final double CLIMB_I = 0.0;
+        public static final double CLIMB_D = 0.0;
+
+        public static final double CLIMB_KS = 0.0;
+        public static final double CLIMB_KV = 0.0;
+
+        public static final double CLIMB_MIN_OUTPUT = -0.75;
+        public static final double CLIMB_MAX_OUTPUT = 0.75;
+
+        public static final double CLIMB_MAX_SPEED = 0.0;
+
+    }
 }
