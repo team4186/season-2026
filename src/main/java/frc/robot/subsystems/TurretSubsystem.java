@@ -82,9 +82,11 @@ public class TurretSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Turret Right Limit Switch: ", getRightLimitSwitch());
         SmartDashboard.putBoolean("Turret Zero Limit Switch: ", getZeroLimitSwitch());
         SmartDashboard.putBoolean("Hood Home Limit Switch: ", getHomeLimitSwitch());
+
         SmartDashboard.putNumber("Shooter Encoder Info: ", getShooterEncoderReading());
         SmartDashboard.putNumber("Turret Encoder Info: ", getTurretEncoderReading());
         SmartDashboard.putNumber("Hood Encoder Info: ", getHoodEncoderReading());
+
         SmartDashboard.putBoolean("Is shooter at set speed: ", isShooterAtSetspeed());
         SmartDashboard.putBoolean("Is hood at set angle: ", isHoodAtSetangle());
         SmartDashboard.putBoolean("Is turret at set angle: ", isTurretAtSetpoint());
