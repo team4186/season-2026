@@ -6,7 +6,6 @@ import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.IntakeConstants;
@@ -29,7 +28,7 @@ public final class MotorConfigs {
 
 
     // private constructor to prevent public class creation
-    private MotorConfigs(){ }
+    private MotorConfigs() {}
 
 
     public static MotorConfigs getInstance() { return instance; }
@@ -316,4 +315,8 @@ public final class MotorConfigs {
     public SparkMax applySpindexerRotateSparkConfig(SparkMax sparkMax, boolean inverse) {
         return null;
     }
+
+
+    // TODO: Implement for individual motor
+    public SparkMax applyTurretHoodSparkConfig(SparkMax sparkMax, boolean inverse) { return null; }
 }
