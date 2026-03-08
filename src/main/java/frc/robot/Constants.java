@@ -73,59 +73,61 @@ public final class Constants {
 
 
     public static final class TurretConstants {
+
         // NEO 550
+        public static final int ROTATE_CURRENT_LIMIT = 50;
+        public static final double ROTATE_FREE_SPEED = 11000;
+        public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final double ROTATE_GEAR_RATIO = 1.0 / 20.0;
 
-        public static final int MOTOR_CURRENT_LIMIT = 50;
-        public static final double MOTOR_FREE_SPEED = 11000;
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final double GEAR_RATIO = 1.0 / 20.0;
 
-
-        // SparkMax
-        public static final int TURRET_ROTATE_MOTOR_ID = 41; // TODO: Add equivalent const values and replace in for Components
-        public static final int TURRET_SHOOTER_LEAD_MOTOR_ID = 31;
-        public static final int TURRET_SHOOTER_FOLLOWER_MOTOR_ID = 32;
-        public static final int TURRET_HOOD_MOTOR_ID = 22;
-
+        // CAN IDs
+        public static final int ROTATE_MOTOR_ID = 41; // TODO: Add equivalent const values and replace in for Components
+        public static final int SHOOTER_LEAD_MOTOR_ID = 31;
+        public static final int SHOOTER_FOLLOWER_MOTOR_ID = 32;
+        public static final int HOOD_MOTOR_ID = 22;
 
         // Max rotation
-        public static final double TURRET_MAX_ROTATION = 170.0; // Degrees
+        public static final double MAX_ROTATION = 170.0; // Degrees
 
         // PID // TODO: Update with full weighted system
-        public static final double TURRET_P = 0.0075;
-        public static final double TURRET_I = 0.0;
-        public static final double TURRET_D = 0.002;
+        public static final double ROTATE_P = 0.0075;
+        public static final double ROTATE_I = 0.0;
+        public static final double ROTATE_D = 0.002;
 
         // FeedForward
-        public static final double TURRET_KS = 0.185;
-        public static final double TURRET_KV = NOMINAL_VOLTAGE / TurretConstants.MOTOR_FREE_SPEED;
+        public static final double ROTATE_KS = 0.185;
+        public static final double ROTATE_KV = NOMINAL_VOLTAGE / TurretConstants.ROTATE_FREE_SPEED;
 
-        public static final double POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
-        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double MIN_OUTPUT = -0.75;
-        public static final double MAX_OUTPUT = 0.75;
+        public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
+        public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double ROTATE_MIN_OUTPUT = -0.75;
+        public static final double ROTATE_MAX_OUTPUT = 0.75;
 
 
-        // NEO Vortex
-        public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
-        public static final int SHOOTER_MOTOR_CURRENT_LIMIT = 80; // NEO VORTEX
-        public static final double SHOOTER_MOTOR_FREE_SPEED = 6784.0;
 
-        // PID
-        public static final double SHOOTER_P = 0.001;
+        // NEO 550
+        public static final int SHOOTER_CURRENT_LIMIT = 50;
+        public static final double SHOOTER_FREE_SPEED = 11000;
+        public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final double SHOOTER_GEAR_RATIO = 1.0 / 20.0;
+
+
+        // PID // TODO: Update with full weighted system
+        public static final double SHOOTER_P = 0.0075;
         public static final double SHOOTER_I = 0.0;
-        public static final double SHOOTER_D = 0.0;
+        public static final double SHOOTER_D = 0.002;
 
         // FeedForward
-        public static final double SHOOTER_KS = 0.10;
-        public static final double SHOOTER_KV = NOMINAL_VOLTAGE / ShooterConstants.MOTOR_FREE_SPEED;
+        public static final double SHOOTER_KS = 0.185;
+        public static final double SHOOTER_KV = NOMINAL_VOLTAGE / TurretConstants.SHOOTER_FREE_SPEED;
 
-        // CLOSED LOOP CONTROLLER
-        public static final ControlType CONTROL_TYPE = ControlType.kVelocity;
-        public static final double SHOOTER_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double SHOOTER_POSITION_CONVERSION_FACTOR = (1 / SHOOTER_GEAR_RATIO) * 360; // Convert to degrees
         public static final double SHOOTER_VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double SHOOTER_MIN_OUTPUT = -0.90;
-        public static final double SHOOTER_MAX_OUTPUT = 0.90;
+        public static final double SHOOTER_MIN_OUTPUT = -0.75;
+        public static final double SHOOTER_MAX_OUTPUT = 0.75;
+
+
 
         // Improving Velocity Based Control
         public static final int SHOOTER_AVERAGE_DEPTH = 5; // 5 Sample Count
