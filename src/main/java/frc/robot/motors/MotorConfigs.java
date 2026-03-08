@@ -86,7 +86,10 @@ public final class MotorConfigs {
     }
 
     // TODO: Implement for individual motor
-    public SparkMax applyTurretHoodSparkConfig(SparkMax motor, boolean inverse) {
+    public SparkMax applyTurretHoodSparkConfig(
+            SparkMax motor,
+            boolean inverse
+    ) {
         SparkBaseConfig config = DefaultSparkMaxConfig;
 
         config
@@ -123,6 +126,7 @@ public final class MotorConfigs {
                 config,
                 ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters
+        );
 
         return motor;
     }
