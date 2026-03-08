@@ -105,7 +105,7 @@ public class Components {
     public SparkMax getClimbMotor(){
         if (climbMotor == null) {
             climbMotor = customConfigs.applyClimbSparkConfig(
-                    new SparkMax(ClimbConstants.CLIMB_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return climbMotor;
