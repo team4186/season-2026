@@ -104,14 +104,12 @@ public final class Constants {
         public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double MIN_OUTPUT = -0.75;
         public static final double MAX_OUTPUT = 0.75;
-    }
 
 
-    public static final class ShooterConstants {
         // NEO Vortex
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
-        public static final int MOTOR_CURRENT_LIMIT = 80; // NEO VORTEX
-        public static final double MOTOR_FREE_SPEED = 6784.0;
+        public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final int SHOOTER_MOTOR_CURRENT_LIMIT = 80; // NEO VORTEX
+        public static final double SHOOTER_MOTOR_FREE_SPEED = 6784.0;
 
         // PID
         public static final double SHOOTER_P = 0.001;
@@ -124,16 +122,15 @@ public final class Constants {
 
         // CLOSED LOOP CONTROLLER
         public static final ControlType CONTROL_TYPE = ControlType.kVelocity;
-        public static final double POSITION_CONVERSION_FACTOR = 1.0;
-        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double MIN_OUTPUT = -0.90;
-        public static final double MAX_OUTPUT = 0.90;
+        public static final double SHOOTER_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double SHOOTER_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double SHOOTER_MIN_OUTPUT = -0.90;
+        public static final double SHOOTER_MAX_OUTPUT = 0.90;
 
         // Improving Velocity Based Control
-        public static final int AVERAGE_DEPTH = 5; // 5 Sample Count
-        public static final int MEASUREMENT_PERIOD = 1; // 1ms Moving Avg Window
+        public static final int SHOOTER_AVERAGE_DEPTH = 5; // 5 Sample Count
+        public static final int SHOOTER_MEASUREMENT_PERIOD = 1; // 1ms Moving Avg Window
     }
-
 
     public static final class IntakeConstants {
         //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it

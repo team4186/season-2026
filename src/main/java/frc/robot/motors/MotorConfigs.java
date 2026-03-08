@@ -6,7 +6,6 @@ import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SpindexerConstants;
@@ -96,34 +95,34 @@ public final class MotorConfigs {
         SparkBaseConfig baseConfig = DefaultSparkFlexConfig;
 
         baseConfig.inverted(inverse)
-            .smartCurrentLimit(ShooterConstants.MOTOR_CURRENT_LIMIT)
-            .idleMode(ShooterConstants.IDLE_MODE);
+            .smartCurrentLimit(TurretConstants.SHOOTER_MOTOR_CURRENT_LIMIT)
+            .idleMode(TurretConstants.SHOOTER_IDLE_MODE);
 
         // Using Velocity
         baseConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(
-                ShooterConstants.SHOOTER_P,
-                ShooterConstants.SHOOTER_I,
-                ShooterConstants.SHOOTER_D,
+                TurretConstants.SHOOTER_P,
+                TurretConstants.SHOOTER_I,
+                TurretConstants.SHOOTER_D,
                 ClosedLoopSlot.kSlot1)
             .outputRange(
-                ShooterConstants.MIN_OUTPUT,
-                ShooterConstants.MAX_OUTPUT,
+                TurretConstants.SHOOTER_MIN_OUTPUT,
+                TurretConstants.SHOOTER_MAX_OUTPUT,
                 ClosedLoopSlot.kSlot1) // Range of total voltage
             .feedForward
             // kV is now in Volts, so we multiply by the nominal voltage (12V)
-            .kS(ShooterConstants.SHOOTER_KS,
+            .kS(TurretConstants.SHOOTER_KS,
                 ClosedLoopSlot.kSlot1)
             .kV(
-                ShooterConstants.SHOOTER_KV,
+                TurretConstants.SHOOTER_KV,
                 ClosedLoopSlot.kSlot1);
 
         baseConfig.encoder
-            .positionConversionFactor(ShooterConstants.POSITION_CONVERSION_FACTOR)
-            .velocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR)
-            .quadratureAverageDepth(ShooterConstants.AVERAGE_DEPTH)
-            .quadratureMeasurementPeriod(ShooterConstants.MEASUREMENT_PERIOD); // NOTE TO SELF: DOUBLE CHECK
+            .positionConversionFactor(TurretConstants.SHOOTER_POSITION_CONVERSION_FACTOR)
+            .velocityConversionFactor(TurretConstants.SHOOTER_VELOCITY_CONVERSION_FACTOR)
+            .quadratureAverageDepth(TurretConstants.SHOOTER_AVERAGE_DEPTH)
+            .quadratureMeasurementPeriod(TurretConstants.SHOOTER_MEASUREMENT_PERIOD); // NOTE TO SELF: DOUBLE CHECK
 
         motorLeader.configure(
             baseConfig,

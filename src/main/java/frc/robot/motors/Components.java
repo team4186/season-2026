@@ -7,7 +7,6 @@ import com.revrobotics.spark.SparkMax;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.ClimbConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SpindexerConstants;
 
 // Flexible motor creation for fast testing between systems
@@ -38,7 +37,7 @@ public class Components {
     public SparkMax getTurretRotateMotor(){
         if ( turretRotateMotor == null ) {
             turretRotateMotor = customConfigs.applyTurretSparkConfig(
-                new SparkMax(41, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                new SparkMax(TurretConstants.TURRET_ROTATE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                 false
             );
         }
@@ -50,8 +49,8 @@ public class Components {
     public SparkFlex getTurretShooterMotor(){
         if (turretShooterMotor == null) {
             turretShooterMotor = customConfigs.applyShooterSparkConfig(
-                new SparkFlex(31, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
-                new SparkFlex(32, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                new SparkFlex(TurretConstants.TURRET_SHOOTER_LEAD_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                new SparkFlex(TurretConstants.TURRET_SHOOTER_FOLLOWER_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                 true,
                 false
             );
@@ -64,7 +63,7 @@ public class Components {
     public SparkMax getTurretHoodMotor(){
         if (turretHoodMotor == null) {
             turretHoodMotor = customConfigs.applyTurretHoodSparkConfig(
-                new SparkMax(22, SparkLowLevel.MotorType.kBrushless),
+                new SparkMax(TurretConstants.TURRET_HOOD_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
                 false
             );
         }
@@ -105,7 +104,7 @@ public class Components {
     public SparkMax getClimbMotor(){
         if (climbMotor == null) {
             climbMotor = customConfigs.applyClimbSparkConfig(
-                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(ClimbConstants.CLIMB_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return climbMotor;
@@ -116,7 +115,7 @@ public class Components {
     public SparkMax getSpindexerRotateMotor(){
         if (spindexerRotateMotor == null) {
             spindexerRotateMotor = customConfigs.applySpindexerRotateSparkConfig(
-                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(SpindexerConstants.SPINDEXER_ROTATE_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return spindexerRotateMotor;
@@ -125,7 +124,7 @@ public class Components {
     public SparkMax getSpindexerFeedMotor(){
         if (spindexerFeedMotor == null) {
             spindexerFeedMotor = customConfigs.applySpindexerFeedSparkConfig(
-                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(SpindexerConstants.SPINDEXER_FEED_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return spindexerFeedMotor;
