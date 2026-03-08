@@ -134,26 +134,40 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
-        //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
-         public static final int EXTENDED_LSChannel1 = 0; //TODO: set LSChannels
-        public static final int EXTENDED_LSChannel2 = 0;
-        public static final int RETRACTED_LSChannel1 = 0;
-        public static final int RETRACTED_LSChannel2 = 0;
 
         // NEO 550
         public static final int STARBOARD_EXTENSION_CAN_ID = 0;
         public static final int PORT_EXTENSION_CAN_ID = 0;//TODO: set values here
-        public static final int EXTENSION_CURRENT_LIMIT = 50;
-        public static final double EXTENSION_FREE_SPEED = 11000;
-        public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final double EXTENSION_RATIO = 1.0; // slightly different in reality but who cares
+        public static final int PICKUP_CAN_ID = 0; //TODO: set values here
 
-        // PID
+        //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
+        public static final int EXTENDED_LSChannel1 = 0; //TODO: set LSChannels
+        public static final int EXTENDED_LSChannel2 = 0;
+        public static final int RETRACTED_LSChannel1 = 0;
+        public static final int RETRACTED_LSChannel2 = 0;
+
+        // Extension current limits & Pickup current limits
+        public static final int EXTENSION_CURRENT_LIMIT = 50;
+        public static final int PICKUP_CURRENT_LIMIT = 50;
+
+        public static final double EXTENSION_RATIO = 1.0; // TODO: need ratios
+        public static final double PICKUP_RATIO = 1.0;
+
+        // Extension Speeds & Pickup Speeds
+        public static final double EXTENSION_FREE_SPEED = 11000;
+        public static final double PICKUP_FAST_SPEED = 2500; //in rpm, about half of max rpm for a neo brushless
+        public static final double PICKUP_SLOW_SPEED = 500; //about 10%
+
+        // Extension idle modes & Pickup idle modes
+        public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+
+        // Extension PID
         public static final double EXTENSION_P = 0.0; //TODO: set PID values
         public static final double EXTENSION_I = 0.0;
         public static final double EXTENSION_D = 0.0;
 
-        // FeedForward
+        // Extension FeedForward
         public static final double EXTENSION_KS = 0.0; //TODO: set feedforward values
         public static final double EXTENSION_KV = NOMINAL_VOLTAGE / EXTENSION_FREE_SPEED;
 
@@ -164,20 +178,11 @@ public final class Constants {
         public static final double EXTENSION_MAX_ANGLE = 0.00; //TODO: find angles
         public static final double MIN_ANGLE = 0.00;
 
-
-        public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final int PICKUP_CAN_ID = 0; //TODO: set values here
-        public static final int PICKUP_CURRENT_LIMIT = 50;
-        public static final double PICKUP_FAST_SPEED = 2500; //in rpm, about half of max rpm for a neo brushless
-        public static final double PICKUP_SLOW_SPEED = 500; //about 10%
-        public static final double PICKUP_RATIO = 1.0; // need to figure this out
-
+        // Pickup values
         public static final double PICKUP_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
         public static final double PICKUP_VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double PICKUP_MIN_OUTPUT = -0.75;
         public static final double PICKUP_MAX_OUTPUT = 0.75;
-        public static final double PICKUP_MAX_ANGLE = 0.00; //TODO: find angles
-        public static final double PICKUP_MIN_ANGLE = 0.00;
     }
 
 
@@ -188,27 +193,34 @@ public final class Constants {
         public static final int RETRACTED_LSChannel1 = 0;
         public static final int RETRACTED_LSChannel2 = 0;
 
-        // NEO 550
+        // NEO, Feed current limits & rotate current limits
+        public static final int FEED_CURRENT_LIMIT = 0;
+        public static final int ROTATE_CURRENT_LIMIT = 0;
 
-        public static final int CURRENT_LIMIT = 0;
-        public static final double FREE_SPEED = 0;
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        // Feed free speeds & Rotate free speeds
+        public static final double FEED_FREE_SPEED = 0;
+        public static final double ROTATE_FREE_SPEED = 0;
+
+        public static final SparkBaseConfig.IdleMode FEED_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+
+        // Feed gear ratios & Rotate gear ratios
         public static final double FEED_GEAR_RATIO = 0;
         public static final double ROTATE_GEAR_RATIO = 0;
 
-        //CAN ID'S
+        // CAN ID'S
         public static final int ROTATE_CAN_ID = 0;
         public static final int FEED_CAN_ID = 0;
 
 
-        // PID
-        public static final double SPINDEXER_FEED_P = 0.0075;
-        public static final double SPINDEXER_FEED_I = 0.0;
-        public static final double SPINDEXER_FEED_D = 0.002;
+        // Feed PID
+        public static final double FEED_P = 0.0075;
+        public static final double FEED_I = 0.0;
+        public static final double FEED_D = 0.002;
 
-        // FeedForward
-        public static final double SPINDEXER_FEED_KS = 0.185;
-        public static final double SPINDEXER_FEED_KV = NOMINAL_VOLTAGE / FREE_SPEED;
+        // Feed FeedForward
+        public static final double FEED_KS = 0.185;
+        public static final double FEED_KV = NOMINAL_VOLTAGE / FEED_FREE_SPEED;
 
         public static final double FEED_POSITION_CONVERSION_FACTOR = (1 / FEED_GEAR_RATIO) * 360; // Convert to degrees
         public static final double FEED_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -216,6 +228,16 @@ public final class Constants {
         public static final double FEED_MAX_OUTPUT = 0.75;
         public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
 
+
+
+        // Rotate PID
+        public static final double ROTATE_P = 0.0075;
+        public static final double ROTATE_I = 0.0;
+        public static final double ROTATE_D = 0.002;
+
+        // Rotate FeedForward
+        public static final double ROTATE_KS = 0.185;
+        public static final double ROTATE_KV = NOMINAL_VOLTAGE / FEED_FREE_SPEED;
 
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
         public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -229,9 +251,12 @@ public final class Constants {
     public static final class ClimbConstants {
 
         public static final int CLIMB_CAN_ID = 0;
-         public static final double CLIMB_LSChannel = 0;
-         public static final int CLIMB_CURRENT_LIMIT = 0;
-         public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+
+        public static final double CLIMB_LSChannel = 0;
+
+        public static final int CLIMB_CURRENT_LIMIT = 0;
+
+        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
 
         public static final double CLIMB_P = 0.0; //TODO: set PID values
         public static final double CLIMB_I = 0.0;

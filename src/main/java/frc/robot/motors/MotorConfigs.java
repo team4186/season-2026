@@ -87,7 +87,10 @@ public final class MotorConfigs {
     }
 
     // TODO: Implement for individual motor
-    public SparkMax applyTurretHoodSparkConfig(SparkMax motor, boolean inverse) {
+    public SparkMax applyTurretHoodSparkConfig(
+            SparkMax motor,
+            boolean inverse
+    ) {
         SparkBaseConfig config = DefaultSparkMaxConfig;
 
         config
@@ -124,9 +127,56 @@ public final class MotorConfigs {
                 config,
                 ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters
+        );
 
         return motor;
     }
+
+    public SparkMax applyTurretShooterSparkConfig(
+            SparkMax motor,
+            boolean inverse
+    ) {
+        SparkBaseConfig config = DefaultSparkMaxConfig;
+
+        config
+                .inverted(inverse)
+                .smartCurrentLimit(TurretConstants.SHOOTER_CURRENT_LIMIT)
+                .idleMode(TurretConstants.SHOOTER_IDLE_MODE);
+
+        config.encoder
+                .positionConversionFactor(TurretConstants.ROTATE_POSITION_CONVERSION_FACTOR)
+                .velocityConversionFactor(TurretConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
+
+        config.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                // Set PID values for position control. We don't need to pass a closed loop
+                // slot, as it will default to slot 0.
+                .pid(
+                        TurretConstants.ROTATE_P,
+                        TurretConstants.ROTATE_I,
+                        TurretConstants.ROTATE_D,
+                        ClosedLoopSlot.kSlot0)
+                .outputRange(
+                        TurretConstants.ROTATE_MIN_OUTPUT,
+                        TurretConstants.ROTATE_MAX_OUTPUT,
+                        ClosedLoopSlot.kSlot0)
+                .feedForward
+                .kS(
+                        TurretConstants.ROTATE_KS,
+                        ClosedLoopSlot.kSlot0)
+                .kV(
+                        TurretConstants.ROTATE_KV,
+                        ClosedLoopSlot.kSlot0);
+
+        motor.configure(
+                config,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters
+        );
+
+        return motor;
+    }
+
 
     public SparkFlex applyShooterSparkConfig(
         SparkFlex motorLeader,
@@ -339,8 +389,10 @@ public final class MotorConfigs {
     }
 
 
-    // TODO: Setup SparkMax config
-    public SparkMax applySpindexerSparkConfig(
+
+
+    // TODO: Implement for individual motor
+    public SparkMax applySpindexerFeedSparkConfig(
         SparkMax motor,
         boolean inverse
     ) {
@@ -352,8 +404,8 @@ public final class MotorConfigs {
                     .idleMode(SpindexerConstants.IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(SpindexerConstants.POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(SpindexerConstants.VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(SpindexerConstants.FEED_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(SpindexerConstants.FEED_VELOCITY_CONVERSION_FACTOR);
 
             // Add if we decide to use PIDS for spindexer, instead of feeding a velocity - Shing
 //            config.closedLoop
@@ -388,13 +440,48 @@ public final class MotorConfigs {
 
 
     // TODO: Implement for individual motor
-    public SparkMax applySpindexerFeedSparkConfig(SparkMax sparkMax, boolean inverse) {
-        return null;
-    }
+    public SparkMax applySpindexerRotateSparkConfig(
+        SparkMax motor,
+        boolean inverse
+    ) {
+            SparkBaseConfig config = DefaultSparkMaxConfig;
 
+            config
+                    .inverted(inverse)
+                    .smartCurrentLimit(SpindexerConstants.ROTATE_CURRENT_LIMIT)
+                    .idleMode(SpindexerConstants.ROTATE_IDLE_MODE);
 
-    // TODO: Implement for individual motor
-    public SparkMax applySpindexerRotateSparkConfig(SparkMax sparkMax, boolean inverse) {
-        return null;
+            config.encoder
+                    .positionConversionFactor(SpindexerConstants.ROTATE_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(SpindexerConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
+
+            config.closedLoop
+                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // Set PID values for position control. We don't need to pass a closed loop
+                    // slot, as it will default to slot 0.
+                    .pid(
+                            SpindexerConstants.ROTATE_P,
+                            SpindexerConstants.ROTATE_I,
+                            SpindexerConstants.ROTATE_D,
+                            ClosedLoopSlot.kSlot0)
+                    .outputRange(
+                            SpindexerConstants.ROTATE_MIN_OUTPUT,
+                            SpindexerConstants.ROTATE_MAX_OUTPUT,
+                            ClosedLoopSlot.kSlot0)
+                    .feedForward
+                    .kS(
+                            SpindexerConstants.ROTATE_KS,
+                            ClosedLoopSlot.kSlot0)
+                    .kV(
+                            SpindexerConstants.ROTATE_KV,
+                            ClosedLoopSlot.kSlot0);
+
+            motor.configure(
+                    config,
+                    ResetMode.kResetSafeParameters,
+                    PersistMode.kPersistParameters
+            );
+
+            return motor;
     }
 }
