@@ -160,11 +160,11 @@ public class TurretSubsystem extends SubsystemBase {
     // TODO: Implement with closed loop controller and desired rpm or speed if using velocity conversion with encoder
 
     public void updateTurretRotation(double angle) {
-
+        aimingClosedLoopController.setSetpoint(filter(angle), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     public void updateShooterSpeed(double rpm) {
-
+        shooterClosedLoopController.setSetpoint(rpm, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
     public void updateHoodAngle(double angle) {
