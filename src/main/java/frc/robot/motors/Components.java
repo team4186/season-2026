@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.TurretConstants;
 
 
 // Flexible motor creation for fast testing between systems
@@ -61,7 +62,7 @@ public class Components {
     public SparkMax getTurretHoodMotor(){
         if (turretHoodMotor == null) {
             turretHoodMotor = customConfigs.applyTurretHoodSparkConfig(
-                new SparkMax(31, SparkLowLevel.MotorType.kBrushless),
+                new SparkMax(22, SparkLowLevel.MotorType.kBrushless),
                 false
             );
         }
@@ -95,15 +96,7 @@ public class Components {
     }
 
 
-    // TODO: Create Motor instance and apply config AND leader/follower or two monitored closely
-    public SparkMax getIntakeDeployMotor(){
-        if (intakeDeployMotor == null) {
-            intakeDeployMotor  = customConfigs.applySpindexerSparkConfig(
-                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
-                    false);
-        }
-        return intakeDeployMotor;
-    }
+
 
 
     // TODO: Create Motor instance and apply config
