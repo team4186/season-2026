@@ -167,7 +167,8 @@ public final class Constants {
 
         public static final int INTAKE_PICKUP_CAN_ID = 0; //TODO: set values here
         public static final int INTAKE_PICKUP_CURRENT_LIMIT = 50;
-        public static final double INTAKE_PICKUP_SPEED = 0; //still in rpm, might wanna change this
+        public static final double INTAKE_PICKUP_FAST_SPEED = 2500; //in rpm, about half of max rpm for a neo brushless
+        public static final double INTAKE_PICKUP_SLOW_SPEED = 500; //about 10%
         public static final double INTAKE_PICKUP_RATIO = 1.0; // need to figure this out
 
         public static final double INTAKE_PICKUP_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm

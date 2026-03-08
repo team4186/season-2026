@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.RelativeEncoder;
 import frc.robot.UnitsUtility;
+import frc.robot.Constants.IntakeConstants;
 
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -104,6 +105,7 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+
     // \/\/\/\/\/Is this needed? Not sure how to feed one value into two controllers, to keep both sides in sync. If there's a better way, delete \/\/\/\/\/
     public void extendIntake() {
         if(isStarboardExtended() && isPortExtended()){
@@ -114,6 +116,10 @@ public class IntakeSubsystem extends SubsystemBase {
             extensionPortMotor.stopMotor();
         }
     }
+
+
+
+
 
     private void retractIntakeStarboard(){
         if(!isStarboardRetracted()){
@@ -131,6 +137,18 @@ public class IntakeSubsystem extends SubsystemBase {
         }else{
             extensionPortMotor.stopMotor();
         }
+    }
+
+    private void pickupBallsFast(){
+        pickupMotor.set(IntakeConstants.INTAKE_PICKUP_FAST_SPEED);
+    }
+
+    private void pickupBallsSlow(){
+        pickupMotor.set(IntakeConstants.INTAKE_PICKUP_SLOW_SPEED);
+    }
+
+    private void stopPickup(){
+        pickupMotor.stopMotor();
     }
 
     // TODO: Decision -> closed loop kVelocity control? OR simple set power
