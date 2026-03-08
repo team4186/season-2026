@@ -60,10 +60,15 @@ public class IntakeSubsystem extends SubsystemBase {
     // TODO: What can we publish from this subsystem for system checks and tracking the robot state
     @Override
     public void periodic() {
+        //Limit Switch's
         SmartDashboard.putBoolean("Starboard Extension Switch", isStarboardExtended());
         SmartDashboard.putBoolean("Port Extension Switch", isPortExtended());
         SmartDashboard.putBoolean("Starboard Retraction Switch", isStarboardRetracted());
         SmartDashboard.putBoolean("Port Retraction Switch", isPortRetracted());
+
+        //Encoder Values
+        SmartDashboard.putNumber("Starboard Motor Value:", getStarboardPosition());
+        SmartDashboard.putNumber("Port Motor Value:",getPortPosition());
     }
 
 
@@ -169,13 +174,15 @@ public class IntakeSubsystem extends SubsystemBase {
         pickupMotor.stopMotor();
     }
 
+    public double getStarboardPosition(){
+        return extensionStarboardRelativeEncoder.getPosition()*
+                IntakeConstants.INTAKE_PICKUP_POSITION_CONVERSION_FACTOR;
+    }
 
-
-
-    public void retractIntake() {}
-
-
-    public void resetIntake() {}
+    public double getPortPosition(){
+        return extensionPortRelativeEncoder.getPosition()*
+                IntakeConstants.INTAKE_PICKUP_POSITION_CONVERSION_FACTOR;
+    }
 
 
 
