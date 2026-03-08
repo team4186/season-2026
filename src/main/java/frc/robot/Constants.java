@@ -186,22 +186,21 @@ public final class Constants {
 
     public static final class SpindexerConstants {
         //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
-        public static final int SPINDEXER_EXTENDED_LSChannel1 = 0;
-        public static final int SPINDEXER_EXTENDED_LSChannel2 = 0;
-        public static final int SPINDEXER_RETRACTED_LSChannel1 = 0;
-        public static final int SPINDEXER_RETRACTED_LSChannel2 = 0;
+        public static final int EXTENDED_LSChannel1 = 0;
+        public static final int EXTENDED_LSChannel2 = 0;
+        public static final int RETRACTED_LSChannel1 = 0;
+        public static final int RETRACTED_LSChannel2 = 0;
 
         // NEO 550
 
-        public static final int SPINDEXER_CURRENT_LIMIT = 0;
-        public static final double SPINDEXER_FREE_SPEED = 0;
+        public static final int CURRENT_LIMIT = 0;
+        public static final double FREE_SPEED = 0;
         public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
         public static final double GEAR_RATIO = 0;
 
         //CAN ID'S
-        public static final int SPINDEXER_ROTATE_CAN_ID = 0;
-        public static final int SPINDEXER_FEED_CAN_ID = 0;
-
+        public static final int ROTATE_CAN_ID = 0;
+        public static final int FEED_CAN_ID = 0;
 
 
         // PID
@@ -211,13 +210,17 @@ public final class Constants {
 
         // FeedForward
         public static final double SPINDEXER_KS = 0.185;
-        public static final double SPINDEXER_KV = NOMINAL_VOLTAGE / SPINDEXER_FREE_SPEED;
+        public static final double SPINDEXER_KV = NOMINAL_VOLTAGE / FREE_SPEED;
 
-        public static final double SPINDEXER_POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
-        public static final double SPINDEXER_VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double SPINDEXER_MIN_OUTPUT = -0.75;
-        public static final double SPINDEXER_MAX_OUTPUT = 0.75;
-        public static final double SPINDEXER_MAX_SPEED = 0.75; // set between -1 to 1
+        public static final double POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
+        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double ROTATE_MIN_OUTPUT = -0.75;
+        public static final double ROTATE_MAX_OUTPUT = 0.75;
+        public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
+
+        public static final double FEED_MIN_OUTPUT = -0.75;
+        public static final double FEED_MAX_OUTPUT = 0.75;
+        public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
     }
 
 

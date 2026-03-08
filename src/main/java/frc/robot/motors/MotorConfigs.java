@@ -265,7 +265,7 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(SpindexerConstants.SPINDEXER_CURRENT_LIMIT)
+                    .smartCurrentLimit(SpindexerConstants.CURRENT_LIMIT)
                     .idleMode(SpindexerConstants.IDLE_MODE);
 
             config.encoder
