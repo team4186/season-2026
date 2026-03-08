@@ -85,6 +85,9 @@ public class TurretSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shooter Encoder Info: ", getShooterEncoderReading());
         SmartDashboard.putNumber("Turret Encoder Info: ", getTurretEncoderReading());
         SmartDashboard.putNumber("Hood Encoder Info: ", getHoodEncoderReading());
+        SmartDashboard.putBoolean("Is shooter at set speed: ", isShooterAtSetspeed());
+        SmartDashboard.putBoolean("Is hood at set angle: ", isHoodAtSetangle());
+        SmartDashboard.putBoolean("Is turret at set angle: ", isTurretAtSetpoint());
     }
 
 
@@ -129,6 +132,12 @@ public class TurretSubsystem extends SubsystemBase {
     public double getShooterEncoderReading() { return shooterRelativeEncoder.getVelocity(); }
 
     public double getHoodEncoderReading() { return hoodRelativeEncoder.getPosition(); }
+
+    public boolean isTurretAtSetpoint() { return turretClosedLoopController.isAtSetpoint(); }
+
+    public boolean isShooterAtSetspeed() { return shooterClosedLoopController.isAtSetpoint(); }
+
+    public boolean isHoodAtSetangle() { return hoodClosedLoopController.isAtSetpoint(); }
     /*
      TODO: Should we update our setpoint difference from where we are to where we want to be? 0 -> 0+20 or 15 -> 15-35
      Where should we check for edge case if our desired location is past our hard stop?
