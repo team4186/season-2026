@@ -11,6 +11,7 @@ import swervelib.math.Matter;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This
@@ -153,7 +154,7 @@ public final class Constants {
         public static final double INTAKE_KS = 0.0; //TODO: set feedforward values
         public static final double INTAKE_KV = NOMINAL_VOLTAGE / INTAKE_FREE_SPEED;
 
-        public static final double INTAKE_POSITION_CONVERSION_FACTOR = (1 / INTAKE_RATIO) * 360; // Convert to degrees
+        public static final double INTAKE_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
         public static final double INTAKE_VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double INTAKE_MIN_OUTPUT = -0.75;
         public static final double INTAKE_MAX_OUTPUT = 0.75;
