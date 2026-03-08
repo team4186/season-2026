@@ -105,7 +105,7 @@ public final class Constants {
 
 
 
-        // NEO 550
+        // NEO Vortex
         public static final int SHOOTER_CURRENT_LIMIT = 50;
         public static final double SHOOTER_FREE_SPEED = 11000;
         public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
@@ -245,5 +245,17 @@ public final class Constants {
 
         public static final double CLIMB_MAX_SPEED = 0.0;
 
+    }
+
+    public static final class NeoMotorConstants {
+        // NEO (REGULAR)
+        // SMART CURRENT LIMIT (50A - 60A)
+        public static final int SMART_CURRENT_LIMIT_REGULAR = 50;
+        // NEO 550
+        // SMART CURRENT LIMIT (20A - 40A)
+        public static final int SMART_CURRENT_LIMIT_550 = 30;
+        // NEO VORTEX
+        // SMART CURRENT LIMIT 80A
+        public static final int SMART_CURRENT_LIMIT_VORTEX = 80;
     }
 }
