@@ -20,11 +20,13 @@ public class TurretSubsystem extends SubsystemBase {
     // aiming closed loop controller (slot 0: position, slot 1: velocity)
     private final SparkClosedLoopController aimingClosedLoopController;
 
+    private final SparkClosedLoopController hoodClosedLoopController;
+
     // max rotation (170 degrees, with 20 degrees of dead zone in the back)
-    private double maxRotation = Constants.TurretConstants.TURRET_MAX_ROTATION;
+    private double maxRotation = Constants.TurretConstants.MAX_ROTATION;
 
     // min rotation (-170 degrees, with 20 degrees of dead zone in the back)
-    private double minRotation = -Constants.TurretConstants.TURRET_MAX_ROTATION;
+    private double minRotation = -Constants.TurretConstants.MAX_ROTATION;
 
     // zero limit switch (for turret)
     private final DigitalInput zeroLimitSwitch;
@@ -117,14 +119,6 @@ public class TurretSubsystem extends SubsystemBase {
      Where should we check for edge case if our desired location is past our hard stop?
      */
 
-    public void updateTurretSetpoint(double setpoint, boolean isBlueAlliance) {
-//        aimingClosedLoopController.setSetpoint(
-//                limelightRunner.getYawTargetPoseCameraSpace(
-//                        Constants.LimelightConstants.LIMELIGHT_TURRET),
-//                        SparkBase.ControlType.kPosition,
-//                        ClosedLoopSlot.kSlot0);
-    }
-
 
     // TODO: Simple table first then regression with enough data with high confidence
     public void getRegression(double detectedDistance) {
@@ -162,25 +156,19 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     // TODO: Decision -> Should we include this in reset function? Should we have separate reset functions with one calling all of them in one case?
-    public void updateHoodSetpoint(double setpoint) {
-        // setpoint should ideally be from regression table.
-    }
 
     // TODO: Implement with closed loop controller and desired rpm or speed if using velocity conversion with encoder
-    public void updateShooterRPM(double setpoint){
-        // setpoint should ideally be from the regression table.
-    }
 
-    public void manualTurretRotation(double angle) {
+    public void updateTurretRotation(double angle) {
 
     }
 
-    public void manualShooting(double rpm) {
+    public void updateShooterSpeed(double rpm) {
 
     }
 
-    public void manualHoodAdjustment(double angle) {
-        hoodClosedLoopController.setpoint(max(0, min(angle, 35)), ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    public void updateHoodAngle(double angle) {
+        hoodClosedLoopController.setSetpoint(Math.max(0, Math.min(angle, 35)), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     // switch this to switch case
