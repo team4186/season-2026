@@ -4,6 +4,7 @@ import com.revrobotics.spark.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.vision.LimelightRunner;
 
 public class TurretSubsystem extends SubsystemBase {
     // Shooter motor
@@ -31,6 +32,9 @@ public class TurretSubsystem extends SubsystemBase {
     // right limit switch
     private final DigitalInput rightLimitSwitch;
 
+    private final LimelightRunner limelightRunner;
+
+    private double absoluteTurretAngle;
 
     // Leave unimplemented for now until it is designed
     // Loader motor
@@ -49,7 +53,8 @@ public class TurretSubsystem extends SubsystemBase {
             DigitalInput zeroLimitSwitch,
             DigitalInput leftLimitSwitch,
             DigitalInput rightLimitSwitch,
-            DigitalInput homeLimitSwitch
+            DigitalInput homeLimitSwitch,
+            LimelightRunner limelightRunner
     ){
         this.shooterMotor = shooterMotor;
         this.aimingMotor = aimingMotor;
@@ -62,6 +67,9 @@ public class TurretSubsystem extends SubsystemBase {
         this.leftLimitSwitch = leftLimitSwitch;
         this.rightLimitSwitch = rightLimitSwitch;
         this.homeLimitSwitch = homeLimitSwitch;
+
+        this.limelightRunner = limelightRunner;
+        this.absoluteTurretAngle = 0.0;
     }
 
 
@@ -97,19 +105,22 @@ public class TurretSubsystem extends SubsystemBase {
         return leftLimitSwitch.get();
     }
 
-
     private boolean getRightLimitSwitch() {
         return rightLimitSwitch.get();
     }
 
+    private boolean getZeroLimitSwitch() { return zeroLimitSwitch.get(); }
+
+    private boolean getHomeLimitSwitch() { return homeLimitSwitch.get(); }
 
     /*
      TODO: Should we update our setpoint difference from where we are to where we want to be? 0 -> 0+20 or 15 -> 15-35
      Where should we check for edge case if our desired location is past our hard stop?
      */
-    public void updateTurretSetpoint(double setpoint) {
+    public void updateTurretSetpoint(double setpoint, boolean isBlueAlliance) {
         //Grab angle offset from april tag, use that as the current value and
         // make PID set point 0.
+//        aimingMotor.set(aimingClosedLoopController.setSetpoint());
     }
 
 
@@ -143,7 +154,8 @@ public class TurretSubsystem extends SubsystemBase {
         TDLR: Regression is simpler because we can ignore unit conversions from M/S to RPM and all
         the shenanigans that come with physics.
         **/
-    
+
+        /** Why is this worse than kinematics? Because I said so **/
     }
 
 
@@ -155,5 +167,21 @@ public class TurretSubsystem extends SubsystemBase {
     // TODO: Implement with closed loop controller and desired rpm or speed if using velocity conversion with encoder
     public void updateShooterRPM(double setpoint){
         // setpoint should ideally be from the regression table.
+    }
+
+    public void manualTurretRotation(double angle) {
+
+    }
+
+    public void manualShooting(double rpm) {
+
+    }
+
+    public void manualHoodAdjustment(double angle) {
+
+    }
+
+    public void filter(double req) {
+
     }
 }
