@@ -119,7 +119,7 @@ public class Components {
     public SparkMax getSpindexerRotateMotor(){
         if (spindexerRotateMotor == null) {
             spindexerRotateMotor = customConfigs.applySpindexerRotateSparkConfig(
-                    new SparkMax(SpindexerConstants.SPINDEXER_ROTATE_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(SpindexerConstants.ROTATE_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return spindexerRotateMotor;
@@ -128,7 +128,7 @@ public class Components {
     public SparkMax getSpindexerFeedMotor(){
         if (spindexerFeedMotor == null) {
             spindexerFeedMotor = customConfigs.applySpindexerFeedSparkConfig(
-                    new SparkMax(SpindexerConstants.SPINDEXER_FEED_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(SpindexerConstants.FEED_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return spindexerFeedMotor;
