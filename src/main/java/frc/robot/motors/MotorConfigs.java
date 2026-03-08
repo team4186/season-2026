@@ -6,6 +6,7 @@ import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SpindexerConstants;
@@ -48,7 +49,7 @@ public final class MotorConfigs {
 
         config
             .inverted(inverse)
-            .smartCurrentLimit(TurretConstants.ROTATE_CURRENT_LIMIT)
+            .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_550)
             .idleMode(TurretConstants.ROTATE_IDLE_MODE);
 
         config.encoder
@@ -94,7 +95,7 @@ public final class MotorConfigs {
 
         config
                 .inverted(inverse)
-                .smartCurrentLimit(TurretConstants.ROTATE_CURRENT_LIMIT)
+                .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_550)
                 .idleMode(TurretConstants.ROTATE_IDLE_MODE);
 
         config.encoder
@@ -186,7 +187,7 @@ public final class MotorConfigs {
         SparkBaseConfig baseConfig = DefaultSparkFlexConfig;
 
         baseConfig.inverted(inverse)
-            .smartCurrentLimit(TurretConstants.SHOOTER_CURRENT_LIMIT)
+            .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_VORTEX)
             .idleMode(TurretConstants.SHOOTER_IDLE_MODE);
 
         // Using Velocity
@@ -250,7 +251,7 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(IntakeConstants.EXTENSION_CURRENT_LIMIT)
+                    .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_550)
                     .idleMode(IntakeConstants.EXTENSION_IDLE_MODE);
 
             config.encoder
@@ -296,7 +297,7 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(IntakeConstants.PICKUP_CURRENT_LIMIT)
+                    .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_REGULAR)
                     .idleMode(IntakeConstants.PICKUP_IDLE_MODE);
 
             config.encoder
@@ -344,7 +345,7 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(ClimbConstants.CLIMB_CURRENT_LIMIT)
+                    .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_REGULAR)
                     .idleMode(ClimbConstants.IDLE_MODE);
 
 //            config.encoder  //not sur ehow encoder conversions work yet
@@ -391,7 +392,7 @@ public final class MotorConfigs {
 
 
     // TODO: Implement for individual motor
-    public SparkMax applySpindexerRotateSparkConfig(
+    public SparkMax applySpindexerFeedSparkConfig(
         SparkMax motor,
         boolean inverse
     ) {
@@ -399,12 +400,12 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(SpindexerConstants.ROTATE_CURRENT_LIMIT)
-                    .idleMode(SpindexerConstants.ROTATE_IDLE_MODE);
+                    .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_REGULAR)
+                    .idleMode(SpindexerConstants.IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(SpindexerConstants.ROTATE_POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(SpindexerConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(SpindexerConstants.FEED_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(SpindexerConstants.FEED_VELOCITY_CONVERSION_FACTOR);
 
             // Add if we decide to use PIDS for spindexer, instead of feeding a velocity - Shing
 //            config.closedLoop
@@ -439,7 +440,7 @@ public final class MotorConfigs {
 
 
     // TODO: Implement for individual motor
-    public SparkMax applySpindexerFeedSparkConfig(
+    public SparkMax applySpindexerRotateSparkConfig(
         SparkMax motor,
         boolean inverse
     ) {
@@ -447,33 +448,33 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(SpindexerConstants.FEED_CURRENT_LIMIT)
-                    .idleMode(SpindexerConstants.FEED_IDLE_MODE);
+                    .smartCurrentLimit(SpindexerConstants.ROTATE_CURRENT_LIMIT)
+                    .idleMode(SpindexerConstants.ROTATE_IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(SpindexerConstants.FEED_POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(SpindexerConstants.FEED_VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(SpindexerConstants.ROTATE_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(SpindexerConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
 
             config.closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control. We don't need to pass a closed loop
                     // slot, as it will default to slot 0.
                     .pid(
-                            SpindexerConstants.FEED_P,
-                            SpindexerConstants.FEED_I,
-                            SpindexerConstants.FEED_D,
-                            ClosedLoopSlot.kSlot1)
+                            SpindexerConstants.ROTATE_P,
+                            SpindexerConstants.ROTATE_I,
+                            SpindexerConstants.ROTATE_D,
+                            ClosedLoopSlot.kSlot0)
                     .outputRange(
                             SpindexerConstants.ROTATE_MIN_OUTPUT,
                             SpindexerConstants.ROTATE_MAX_OUTPUT,
-                            ClosedLoopSlot.kSlot1)
+                            ClosedLoopSlot.kSlot0)
                     .feedForward
                     .kS(
                             SpindexerConstants.ROTATE_KS,
-                            ClosedLoopSlot.kSlot1)
+                            ClosedLoopSlot.kSlot0)
                     .kV(
                             SpindexerConstants.ROTATE_KV,
-                            ClosedLoopSlot.kSlot1);
+                            ClosedLoopSlot.kSlot0);
 
             motor.configure(
                     config,
