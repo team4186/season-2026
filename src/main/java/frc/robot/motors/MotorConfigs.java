@@ -160,7 +160,7 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(IntakeConstants.INTAKE_CURRENT_LIMIT)
+                    .smartCurrentLimit(IntakeConstants.INTAKE_EXTENSION_CURRENT_LIMIT)
                     .idleMode(IntakeConstants.IDLE_MODE);
 
             config.encoder
@@ -198,7 +198,7 @@ public final class MotorConfigs {
     }
 
 
-    public SparkMax applyIntakePickipSparkConfig(
+    public SparkMax applyIntakePickupSparkConfig(
         SparkMax motor,
         boolean inverse
     ) {
@@ -206,12 +206,12 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(IntakeConstants.INTAKE_CURRENT_LIMIT)
+                    .smartCurrentLimit(IntakeConstants.INTAKE_PICKUP_CURRENT_LIMIT)
                     .idleMode(IntakeConstants.IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(IntakeConstants.INTAKE_POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(IntakeConstants.INTAKE_VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(IntakeConstants.INTAKE_PICKUP_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(IntakeConstants.INTAKE_PICKUP_VELOCITY_CONVERSION_FACTOR);
 
         //Add if we decide to use closed loop for the intake pickup - Shing
 //            config.closedLoop

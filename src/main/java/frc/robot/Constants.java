@@ -141,8 +141,8 @@ public final class Constants {
 
         // NEO 550
         public static final int INTAKE_EXTENSION_STARBOARD_CAN_ID = 0;
-        public static final int INTAKE_PORT_CAN_ID = 0;//TODO: set values here
-        public static final int INTAKE_CURRENT_LIMIT = 50;
+        public static final int INTAKE_EXTENSION_PORT_CAN_ID = 0;//TODO: set values here
+        public static final int INTAKE_EXTENSION_CURRENT_LIMIT = 50;
         public static final double INTAKE_FREE_SPEED = 11000;
         public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
         public static final double INTAKE_RATIO = 1.0; // slightly different in reality but who cares
@@ -163,24 +163,19 @@ public final class Constants {
         public static final double INTAKE_MAX_ANGLE = 0.00; //TODO: find angles
         public static final double MIN_ANGLE = 0.00;
 
-        public static final int DEPLOY_CAN_ID = 0; //TODO: set values here
-        public static final int DEPLOY_CURRENT_LIMIT = 50;
-        public static final double DEPLOY_SPEED = 0; //still in rpm, might wanna change this
-        public static final double DEPLOY_RATIO = 1.0; // need to figure this out
-
-        public static final double DEPLOY_PICKUP_P = 0.0; //TODO: set PID values
-        public static final double DEPLOY_PICKUP_I = 0.0;
-        public static final double DEPLOY_PICKUP_D = 0.0;
-
-        // FeedForward
-        public static final double DEPLOY_PICKUP_KS = 0.0; //TODO: set feedforward values
-        public static final double DEPLOY_PICKUP_KV = NOMINAL_VOLTAGE / INTAKE_FREE_SPEED;
 
 
-        public static final double DEPLOY_MIN_OUTPUT = -0.75;
-        public static final double DEPLOY_MAX_OUTPUT = 0.75;
-        public static final double DEPLOY_MAX_ANGLE = 0.00; //TODO: find angles
-        public static final double DEPLOY_MIN_ANGLE = 0.00;
+        public static final int INTAKE_PICKUP_CAN_ID = 0; //TODO: set values here
+        public static final int INTAKE_PICKUP_CURRENT_LIMIT = 50;
+        public static final double INTAKE_PICKUP_SPEED = 0; //still in rpm, might wanna change this
+        public static final double INTAKE_PICKUP_RATIO = 1.0; // need to figure this out
+
+        public static final double INTAKE_PICKUP_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
+        public static final double INTAKE_PICKUP_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double INTAKE_PICKUP_MIN_OUTPUT = -0.75;
+        public static final double INTAKE_PICKUP_MAX_OUTPUT = 0.75;
+        public static final double INTAKE_PICKUP_MAX_ANGLE = 0.00; //TODO: find angles
+        public static final double INTAKE_PICKUP_MIN_ANGLE = 0.00;
     }
 
 

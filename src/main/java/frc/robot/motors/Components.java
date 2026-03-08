@@ -88,7 +88,7 @@ public class Components {
     public SparkMax getIntakeExtensionPortMotor(){
         if(intakeExtensionPortMotor == null) {
             intakeExtensionPortMotor = customConfigs.applyIntakeExtensionSparkConfig(
-                    new SparkMax(IntakeConstants.INTAKE_PORT_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
+                    new SparkMax(IntakeConstants.INTAKE_EXTENSION_PORT_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
                     //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
                     true
             );
@@ -98,9 +98,15 @@ public class Components {
 
     public SparkMax getIntakePickupMotor(){
         if(intakePickupMotor == null){
-            intakePickupMotor = customConfigs.applyIntakeExtensionSparkConfig()
+            intakePickupMotor = customConfigs.applyIntakePickupSparkConfig(
+                    new SparkMax(IntakeConstants.INTAKE_PICKUP_CAN_ID,
+                            SparkLowLevel.MotorType.kBrushless),
+                    true
+            );
         }
+        return intakePickupMotor;
     }
+
 
 
 
