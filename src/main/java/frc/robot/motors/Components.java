@@ -13,15 +13,11 @@ public class Components {
     private final MotorConfigs customConfigs = MotorConfigs.getInstance();
 
     private SparkMax turretRotateMotor;
-    private SparkFlex turretHoodMotor;
+    private SparkMax turretHoodMotor;
     private SparkFlex turretShooterMotor;
 
     private SparkMax intakeExtensionStarboardMotor;
     private SparkMax intakeExtensionPortMotor;
-
-
-    // TODO: Decision --- pair of motors or independent that take same goal inputs
-    private SparkMax intakeDeployMotor;
 
     private SparkMax spindexerRotateMotor;
     private SparkMax spindexerFeedMotor;
@@ -51,14 +47,26 @@ public class Components {
     public SparkFlex getTurretShooterMotor(){
         if (turretShooterMotor == null) {
             turretShooterMotor = customConfigs.applyShooterSparkConfig(
-                new SparkFlex(21, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
-                new SparkFlex(22, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                new SparkFlex(31, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                new SparkFlex(32, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                 true,
                 false
             );
         }
 
         return turretShooterMotor;
+    }
+
+
+    public SparkMax getTurretHoodMotor(){
+        if (turretHoodMotor == null) {
+            turretHoodMotor = customConfigs.applyTurretHoodSparkConfig(
+                new SparkMax(31, SparkLowLevel.MotorType.kBrushless),
+                false
+            );
+        }
+
+        return turretHoodMotor;
     }
 
 
