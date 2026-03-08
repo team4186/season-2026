@@ -74,7 +74,7 @@ public class Components {
 
 
     // TODO: Check Inverse Condition
-    public SparkMax intakeExtensionStarboardMotor(){
+    public SparkMax getIntakeExtensionStarboardMotor(){
         if(intakeExtensionStarboardMotor == null) {
             intakeExtensionStarboardMotor = customConfigs.applyIntakeExtensionSparkConfig(
                     new SparkMax(IntakeConstants.STARBOARD_EXTENSION_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
