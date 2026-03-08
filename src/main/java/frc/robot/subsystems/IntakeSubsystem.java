@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.RelativeEncoder;
 import frc.robot.UnitsUtility;
@@ -59,7 +60,10 @@ public class IntakeSubsystem extends SubsystemBase {
     // TODO: What can we publish from this subsystem for system checks and tracking the robot state
     @Override
     public void periodic() {
-
+        SmartDashboard.putBoolean("Starboard Extension Switch", isStarboardExtended());
+        SmartDashboard.putBoolean("Port Extension Switch", isPortExtended());
+        SmartDashboard.putBoolean("Starboard Retraction Switch", isStarboardRetracted());
+        SmartDashboard.putBoolean("Port Retraction Switch", isPortRetracted());
     }
 
 
