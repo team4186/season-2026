@@ -221,6 +221,7 @@ public final class Constants {
     // TODO: Update with Constants
     public static final class ClimbConstants {
 
+        public static final int CLIMB_CAN_ID = 0;
          public static final double CLIMB_LSChannel = 0;
          public static final int CLIMB_CURRENT_LIMIT = 0;
          public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;

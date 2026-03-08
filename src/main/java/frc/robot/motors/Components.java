@@ -6,7 +6,9 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
-
+import frc.robot.Constants.ClimbConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.SpindexerConstants;
 
 // Flexible motor creation for fast testing between systems
 public class Components {
@@ -103,7 +105,7 @@ public class Components {
     public SparkMax getClimbMotor(){
         if (climbMotor == null) {
             climbMotor = customConfigs.applyClimbSparkConfig(
-                    new SparkMax(0, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(ClimbConstants.CLIMB_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return climbMotor;
