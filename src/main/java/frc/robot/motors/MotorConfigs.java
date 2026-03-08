@@ -152,7 +152,7 @@ public final class MotorConfigs {
 
 
     // TODO: Setup SparkMax config
-    public SparkMax applyIntakePickupSparkConfig(
+    public SparkMax applyIntakeExtensionSparkConfig(
         SparkMax motor,
         boolean inverse
     ) {
@@ -197,10 +197,52 @@ public final class MotorConfigs {
             return motor;
     }
 
-    // TODO: Setup SparkMax config
-    public SparkMax applyIntakeDeployerSparkConfig(){
-        return null;
+
+    public SparkMax applyIntakePickipSparkConfig(
+        SparkMax motor,
+        boolean inverse
+    ) {
+            SparkBaseConfig config = DefaultSparkMaxConfig;
+
+            config
+                    .inverted(inverse)
+                    .smartCurrentLimit(IntakeConstants.INTAKE_CURRENT_LIMIT)
+                    .idleMode(IntakeConstants.IDLE_MODE);
+
+            config.encoder
+                    .positionConversionFactor(IntakeConstants.INTAKE_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(IntakeConstants.INTAKE_VELOCITY_CONVERSION_FACTOR);
+
+        //Add if we decide to use closed loop for the intake pickup - Shing
+//            config.closedLoop
+//                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+//                    // Set PID values for position control. We don't need to pass a closed loop
+//                    // slot, as it will default to slot 0.
+//                    .pid(
+//                            IntakeConstants.INTAKE_P,
+//                            IntakeConstants.INTAKE_I,
+//                            IntakeConstants.INTAKE_D,
+//                            ClosedLoopSlot.kSlot0)
+//                    .outputRange(
+//                            IntakeConstants.INTAKE_MIN_OUTPUT,
+//                            IntakeConstants.INTAKE_MAX_OUTPUT,
+//                            ClosedLoopSlot.kSlot0)
+//                    .feedForward
+//                    .kS(
+//                            IntakeConstants.INTAKE_KS,
+//                            ClosedLoopSlot.kSlot0)
+//                    .kV(
+//                            IntakeConstants.INTAKE_KV,
+//                            ClosedLoopSlot.kSlot0);
+
+            motor.configure(
+                    config,
+                    ResetMode.kResetSafeParameters,
+                    PersistMode.kPersistParameters
+            );
+            return motor;
     }
+
 
 
     // TODO: Setup SparkMax config

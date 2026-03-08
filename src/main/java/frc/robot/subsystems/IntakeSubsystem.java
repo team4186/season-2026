@@ -30,7 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(
             SparkMax intakeExtensionStarboardMotor,
             SparkMax intakeExtensionPortMotor,
-            SparkMax extendMotor,
+            SparkMax pickupMotor,
             DigitalInput extendedSwitch1,
             DigitalInput extendedSwitch2,
             DigitalInput retractedSwitch1,
@@ -39,7 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
     ) {
         this.extensionStarboardMotor = intakeExtensionStarboardMotor;
         this.extensionPortMotor = intakeExtensionPortMotor;
-        this.pickupMotor = extendMotor;
+        this.pickupMotor = pickupMotor;
 
         this.extendedSwitchStarboard = extendedSwitch1;
         this.extendedSwitchPort = extendedSwitch2;
@@ -141,7 +141,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public void updateIntakePosition() {}
 
 
-    public void stopIntakeMotors() {}
+    public void stopIntakeMotors(){
+        extensionPortMotor.stopMotor();
+        extensionStarboardMotor.stopMotor();
+        pickupMotor.stopMotor();
+    }
 
 
 

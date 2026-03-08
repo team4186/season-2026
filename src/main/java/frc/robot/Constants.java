@@ -140,7 +140,7 @@ public final class Constants {
         public static final int INTAKE_RETRACTED_LSChannel2 = 0;
 
         // NEO 550
-        public static final int INTAKE_STARBOARD_CAN_ID = 0;
+        public static final int INTAKE_EXTENSION_STARBOARD_CAN_ID = 0;
         public static final int INTAKE_PORT_CAN_ID = 0;//TODO: set values here
         public static final int INTAKE_CURRENT_LIMIT = 50;
         public static final double INTAKE_FREE_SPEED = 11000;

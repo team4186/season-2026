@@ -20,6 +20,7 @@ public class Components {
 
     private SparkMax intakeExtensionStarboardMotor;
     private SparkMax intakeExtensionPortMotor;
+    private SparkMax intakePickupMotor;
 
     private SparkMax spindexerRotateMotor;
     private SparkMax spindexerFeedMotor;
@@ -75,19 +76,18 @@ public class Components {
     // TODO: Check Inverse Condition
     public SparkMax intakeExtensionStarboardMotor(){
         if(intakeExtensionStarboardMotor == null) {
-            intakeExtensionStarboardMotor = customConfigs.applyIntakePickupSparkConfig(
-                    new SparkMax(IntakeConstants.INTAKE_STARBOARD_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
+            intakeExtensionStarboardMotor = customConfigs.applyIntakeExtensionSparkConfig(
+                    new SparkMax(IntakeConstants.INTAKE_EXTENSION_STARBOARD_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
                     //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
                     true
             );
         }
-
         return intakeExtensionStarboardMotor; //67 -S and R
     }
 
-    public SparkMax getIntakePickupPortMotor(){
+    public SparkMax getIntakeExtensionPortMotor(){
         if(intakeExtensionPortMotor == null) {
-            intakeExtensionPortMotor = customConfigs.applyIntakePickupSparkConfig(
+            intakeExtensionPortMotor = customConfigs.applyIntakeExtensionSparkConfig(
                     new SparkMax(IntakeConstants.INTAKE_PORT_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
                     //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
                     true
@@ -96,7 +96,11 @@ public class Components {
         return intakeExtensionPortMotor; //67 -S and R
     }
 
-
+    public SparkMax getIntakePickupMotor(){
+        if(intakePickupMotor == null){
+            intakePickupMotor = customConfigs.applyIntakeExtensionSparkConfig()
+        }
+    }
 
 
 
