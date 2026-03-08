@@ -52,7 +52,6 @@ public class LimelightRunner {
         SmartDashboard.putNumber("tx", LimelightHelpers.getTX(LimelightConstants.LIMELIGHT_TURRET));
         SmartDashboard.putNumber("ty", LimelightHelpers.getTY(LimelightConstants.LIMELIGHT_TURRET));
         SmartDashboard.putNumber("Distance to turret tag", getDistanceToTag(LimelightConstants.LIMELIGHT_TURRET));
-
 //        SmartDashboard.putNumber("X Offset", tagOffset)
 //        SmartDashboard.putNumber("Y Offset", yOffset)
 //        SmartDashboard.putNumber("% of Image", tagArea)
@@ -122,10 +121,21 @@ public class LimelightRunner {
      * @param tablename name of limelight network table
      * @return Distance in meters to target tag
      */
+    // Below is robot pose
     public double getDistanceToTag(String tablename){
         return LimelightHelpers.getBotPose3d(tablename).getZ();
     }
 
+    /**
+     * Target pose camera space stuff
+     */
+    public double getDistanceTargetPoseCameraSpace(String tablename) {
+        return LimelightHelpers.getTargetPose_CameraSpace(tablename)[2];
+    }
+
+    public double getYawTargetPoseCameraSpace(String tablename) {
+        return LimelightHelpers.getTargetPose_CameraSpace(tablename)[4];
+    }
 
     public void close(){
 //        tvSub.close();
