@@ -85,6 +85,8 @@ public final class Constants {
         // SparkMax
         public static final int TURRET_ROTATE_MOTOR_ID = 41; // TODO: Add equivalent const values and replace in for Components
         public static final int TURRET_SHOOTER_LEAD_MOTOR_ID = 31;
+        public static final int TURRET_SHOOTER_FOLLOWER_MOTOR_ID = 32;
+        public static final int TURRET_HOOD_MOTOR_ID = 22;
 
 
         // Max rotation

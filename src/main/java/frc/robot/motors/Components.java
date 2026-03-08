@@ -36,7 +36,7 @@ public class Components {
     public SparkMax getTurretRotateMotor(){
         if ( turretRotateMotor == null ) {
             turretRotateMotor = customConfigs.applyTurretSparkConfig(
-                new SparkMax(41, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                new SparkMax(TurretConstants.TURRET_ROTATE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                 false
             );
         }
@@ -48,8 +48,8 @@ public class Components {
     public SparkFlex getTurretShooterMotor(){
         if (turretShooterMotor == null) {
             turretShooterMotor = customConfigs.applyShooterSparkConfig(
-                new SparkFlex(31, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
-                new SparkFlex(32, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                new SparkFlex(TurretConstants.TURRET_SHOOTER_LEAD_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                new SparkFlex(TurretConstants.TURRET_SHOOTER_FOLLOWER_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                 true,
                 false
             );
@@ -62,7 +62,7 @@ public class Components {
     public SparkMax getTurretHoodMotor(){
         if (turretHoodMotor == null) {
             turretHoodMotor = customConfigs.applyTurretHoodSparkConfig(
-                new SparkMax(22, SparkLowLevel.MotorType.kBrushless),
+                new SparkMax(TurretConstants.TURRET_HOOD_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
                 false
             );
         }
