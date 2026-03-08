@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.vision.LimelightRunner;
+import java.lang.Math.*;
 
 public class TurretSubsystem extends SubsystemBase {
     // Shooter motor
@@ -59,7 +60,8 @@ public class TurretSubsystem extends SubsystemBase {
         this.hoodMotor = hoodMotor;
 
         this.shooterClosedLoopController = shooterMotor.getClosedLoopController();
-        this.aimingClosedLoopController = shooterMotor.getClosedLoopController();
+        this.aimingClosedLoopController = aimingMotor.getClosedLoopController();
+        this.hoodClosedLoopController = hoodMotor.getClosedLoopController();
 
         this.zeroLimitSwitch = zeroLimitSwitch;
         this.leftLimitSwitch = leftLimitSwitch;
@@ -178,7 +180,7 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public void manualHoodAdjustment(double angle) {
-
+        hoodClosedLoopController.setpoint(max(0, min(angle, 35)), ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     // switch this to switch case
