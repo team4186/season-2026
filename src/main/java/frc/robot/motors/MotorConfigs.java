@@ -392,7 +392,7 @@ public final class MotorConfigs {
 
 
     // TODO: Implement for individual motor
-    public SparkMax applySpindexerFeedSparkConfig(
+    public SparkMax applySpindexerRotateSparkConfig(
         SparkMax motor,
         boolean inverse
     ) {
@@ -401,11 +401,11 @@ public final class MotorConfigs {
             config
                     .inverted(inverse)
                     .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_REGULAR)
-                    .idleMode(SpindexerConstants.IDLE_MODE);
+                    .idleMode(SpindexerConstants.ROTATE_IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(SpindexerConstants.FEED_POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(SpindexerConstants.FEED_VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(SpindexerConstants.ROTATE_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(SpindexerConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
 
             // Add if we decide to use PIDS for spindexer, instead of feeding a velocity - Shing
 //            config.closedLoop
@@ -440,7 +440,7 @@ public final class MotorConfigs {
 
 
     // TODO: Implement for individual motor
-    public SparkMax applySpindexerRotateSparkConfig(
+    public SparkMax applySpindexerFeedSparkConfig(
         SparkMax motor,
         boolean inverse
     ) {
@@ -448,32 +448,32 @@ public final class MotorConfigs {
 
             config
                     .inverted(inverse)
-                    .smartCurrentLimit(SpindexerConstants.ROTATE_CURRENT_LIMIT)
-                    .idleMode(SpindexerConstants.ROTATE_IDLE_MODE);
+                    .smartCurrentLimit(SpindexerConstants.FEED_CURRENT_LIMIT)
+                    .idleMode(SpindexerConstants.FEED_IDLE_MODE);
 
             config.encoder
-                    .positionConversionFactor(SpindexerConstants.ROTATE_POSITION_CONVERSION_FACTOR)
-                    .velocityConversionFactor(SpindexerConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
+                    .positionConversionFactor(SpindexerConstants.FEED_POSITION_CONVERSION_FACTOR)
+                    .velocityConversionFactor(SpindexerConstants.FEED_VELOCITY_CONVERSION_FACTOR);
 
             config.closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for position control. We don't need to pass a closed loop
                     // slot, as it will default to slot 0.
                     .pid(
-                            SpindexerConstants.ROTATE_P,
-                            SpindexerConstants.ROTATE_I,
-                            SpindexerConstants.ROTATE_D,
+                            SpindexerConstants.FEED_P,
+                            SpindexerConstants.FEED_I,
+                            SpindexerConstants.FEED_D,
                             ClosedLoopSlot.kSlot0)
                     .outputRange(
-                            SpindexerConstants.ROTATE_MIN_OUTPUT,
-                            SpindexerConstants.ROTATE_MAX_OUTPUT,
+                            SpindexerConstants.FEED_MIN_OUTPUT,
+                            SpindexerConstants.FEED_MAX_OUTPUT,
                             ClosedLoopSlot.kSlot0)
                     .feedForward
                     .kS(
-                            SpindexerConstants.ROTATE_KS,
+                            SpindexerConstants.FEED_KS,
                             ClosedLoopSlot.kSlot0)
                     .kV(
-                            SpindexerConstants.ROTATE_KV,
+                            SpindexerConstants.FEED_KV,
                             ClosedLoopSlot.kSlot0);
 
             motor.configure(
