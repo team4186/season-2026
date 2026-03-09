@@ -204,8 +204,8 @@ public final class Constants {
         // Feed FeedForward
         public static final double FEED_KS = 0.185;
 
-        public static final double FEED_POSITION_CONVERSION_FACTOR = (1 / FEED_GEAR_RATIO) * 360; // Convert to degrees
-        public static final double FEED_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double FEED_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double FEED_VELOCITY_CONVERSION_FACTOR = 1.0; // Convert from rpm
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;
         public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
@@ -223,7 +223,6 @@ public final class Constants {
         public static final double ROTATE_MIN_OUTPUT = -0.75;
         public static final double ROTATE_MAX_OUTPUT = 0.75;
         public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
-     }
 
 
     // TODO: Update with Constants
