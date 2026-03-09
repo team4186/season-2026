@@ -90,7 +90,7 @@ public class Components {
             intakeExtensionPortMotor = customConfigs.applyIntakeExtensionSparkConfig(
                     new SparkMax(IntakeConstants.PORT_EXTENSION_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
                     //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
-                    true
+                    false
             );
         }
         return intakeExtensionPortMotor; //67 -S and R
