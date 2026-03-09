@@ -77,7 +77,7 @@ public class Components {
     public SparkMax getIntakeExtensionStarboardMotor(){
         if(intakeExtensionStarboardMotor == null) {
             intakeExtensionStarboardMotor = customConfigs.applyIntakeExtensionSparkConfig(
-                    new SparkMax(IntakeConstants.STARBOARD_EXTENSION_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
+                    new SparkMax(IntakeConstants.STARBOARD_EXTENSION_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
                     //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
                     true
             );
@@ -88,7 +88,7 @@ public class Components {
     public SparkMax getIntakeExtensionPortMotor(){
         if(intakeExtensionPortMotor == null) {
             intakeExtensionPortMotor = customConfigs.applyIntakeExtensionSparkConfig(
-                    new SparkMax(IntakeConstants.PORT_EXTENSION_CAN_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
+                    new SparkMax(IntakeConstants.PORT_EXTENSION_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
                     //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
                     false
             );
@@ -99,7 +99,7 @@ public class Components {
     public SparkMax getIntakePickupMotor(){
         if(intakePickupMotor == null){
             intakePickupMotor = customConfigs.applyIntakePickupSparkConfig(
-                    new SparkMax(IntakeConstants.PICKUP_CAN_ID,
+                    new SparkMax(IntakeConstants.PICKUP_MOTOR_ID,
                             SparkLowLevel.MotorType.kBrushless),
                     true
             );
@@ -114,7 +114,7 @@ public class Components {
     public SparkMax getClimbMotor(){
         if (climbMotor == null) {
             climbMotor = customConfigs.applyClimbSparkConfig(
-                    new SparkMax(ClimbConstants.CLIMB_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(ClimbConstants.CLIMB_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return climbMotor;
@@ -125,7 +125,7 @@ public class Components {
     public SparkMax getSpindexerRotateMotor(){
         if (spindexerRotateMotor == null) {
             spindexerRotateMotor = customConfigs.applySpindexerRotateSparkConfig(
-                    new SparkMax(SpindexerConstants.ROTATE_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(SpindexerConstants.ROTATE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return spindexerRotateMotor;
@@ -134,7 +134,7 @@ public class Components {
     public SparkMax getSpindexerFeedMotor(){
         if (spindexerFeedMotor == null) {
             spindexerFeedMotor = customConfigs.applySpindexerFeedSparkConfig(
-                    new SparkMax(SpindexerConstants.FEED_CAN_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
+                    new SparkMax(SpindexerConstants.FEED_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
                     false);
         }
         return spindexerFeedMotor;
