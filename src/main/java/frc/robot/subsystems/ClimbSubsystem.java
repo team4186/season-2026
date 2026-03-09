@@ -57,7 +57,17 @@ public class ClimbSubsystem extends SubsystemBase {
         return climbEncoder.getPosition();
     }
 
-    public void resetEncoder(){
+    public void resetClimb() {
+        if (!getLimitSwitch()) {
+            climbMotorController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        } else {
+
+            climbStop();
+            resetEncoder();
+        }
+    }
+
+    public void resetEncoder() {
         climbEncoder.setPosition(0);
     }
 
