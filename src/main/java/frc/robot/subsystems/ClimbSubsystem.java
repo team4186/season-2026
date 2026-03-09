@@ -39,7 +39,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public void periodic(){
         SmartDashboard.putBoolean("Climb Limit Switch: ", getLimitSwitch());
         SmartDashboard.putNumber("Climb Encoder Readings: ", readEncoder());
-        SmartDashboard.putBoolean("Is climb at set point: ", climbMotorController.isAtSetpoint());
+        SmartDashboard.putBoolean("Is climb at set point: ", isClimbAtSetpoint());
     }
 
 
@@ -61,10 +61,13 @@ public class ClimbSubsystem extends SubsystemBase {
         if (!getLimitSwitch()) {
             climbMotorController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
         } else {
-
             climbStop();
             resetEncoder();
         }
+    }
+
+    public boolean isClimbAtSetpoint() {
+        return climbMotorController.isAtSetpoint();
     }
 
     public void resetEncoder() {

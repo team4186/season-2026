@@ -7,11 +7,12 @@ import frc.robot.Constants;
 public class ClimbCommand extends Command {
     private final ClimbSubsystem climbSubsystem;
     private boolean isClimbFinished;
+    private int buttonCount;
 
     public ClimbCommand(ClimbSubsystem climbSubsystem) {
         this.climbSubsystem = climbSubsystem;
         this.isClimbFinished = false;
-
+        this.buttonCount = 0;
         addRequirements(climbSubsystem);
     }
 
@@ -20,9 +21,20 @@ public class ClimbCommand extends Command {
 
     @Override
     public void execute() {
-        // Deploys climb
+        if (buttonCount == 0) {
+            // Deploys climb (according to chris, about 178 degrees to starting angle)
 //        climbSubsystem.updateClimb();
+            buttonCount+=1;
+        } else if (buttonCount == 1) {
+            // Climb up & hold (uses the liftAngle from constants)
+//        climbSubsystem.updateClimb();
+            if (climbSubsystem.isClimbAtSetpoint()){
+                climbSubsystem.climbStop();
+                buttonCount+=1;
+            }
+        } else if (buttonCount == 2) {
 
+        }
         //
     }
 
