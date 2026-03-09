@@ -182,7 +182,7 @@ public final class Constants {
         public static final int ROTATE_MOTOR_ID = 25;
         public static final int FEED_MOTOR_ID = 26;
 
-         //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
+        //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
         public static final int EXTENDED_LSChannel1 = 0;
         public static final int EXTENDED_LSChannel2 = 0;
         public static final int RETRACTED_LSChannel1 = 0;
@@ -223,7 +223,7 @@ public final class Constants {
         public static final double ROTATE_MIN_OUTPUT = -0.75;
         public static final double ROTATE_MAX_OUTPUT = 0.75;
         public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
-
+    }
 
     // TODO: Update with Constants
     public static final class ClimbConstants {
