@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
 
@@ -39,9 +40,9 @@ public class ClimbSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putBoolean("Climb Limit Switch: ", getLimitSwitch());
-        SmartDashboard.putNumber("Climb Encoder Readings: ", readEncoder());
-        SmartDashboard.putBoolean("Is climb at set point: ", isClimbAtSetpoint());
+        SmartDashboard.putBoolean("Climb_Home_Limit_Switch: ", getLimitSwitch());
+        SmartDashboard.putNumber("Climb_Current_Position: ", getPosition());
+        SmartDashboard.putBoolean("Climb_is_at_Setpoint: ", isClimbAtSetpoint());
     }
 
 
@@ -55,7 +56,7 @@ public class ClimbSubsystem extends SubsystemBase {
         climbMotor.stopMotor();
     }
 
-    public double readEncoder(){
+    public double getPosition(){
         return climbEncoder.getPosition();
     }
 
@@ -68,17 +69,21 @@ public class ClimbSubsystem extends SubsystemBase {
         }
     }
 
+
     public boolean isClimbAtSetpoint() {
         return climbMotorController.isAtSetpoint();
     }
+
 
     public void resetEncoder() {
         climbEncoder.setPosition(0);
     }
 
+
     public boolean getLimitSwitch(){
         return homeSwitch.get();
     }
+
 
     public Command deployClimbCommand() {
         updateClimb(Constants.ClimbConstants.CLIMB_DEPLOY_ANGLE);

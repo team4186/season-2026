@@ -78,18 +78,18 @@ public class TurretSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putBoolean("Turret Left Limit Switch: ", getLeftLimitSwitch());
-        SmartDashboard.putBoolean("Turret Right Limit Switch: ", getRightLimitSwitch());
-        SmartDashboard.putBoolean("Turret Zero Limit Switch: ", getZeroLimitSwitch());
-        SmartDashboard.putBoolean("Hood Home Limit Switch: ", getHomeLimitSwitch());
+        SmartDashboard.putBoolean("Turret_Left_Limit_Switch: ", getLeftLimitSwitch());
+        SmartDashboard.putBoolean("Turret_Right_Limit_Switch: ", getRightLimitSwitch());
+        SmartDashboard.putBoolean("Turret_Zero Limit_Switch: ", getZeroLimitSwitch());
+        SmartDashboard.putBoolean("Hood_Home_Limit_Switch: ", getHomeLimitSwitch());
 
-        SmartDashboard.putNumber("Shooter Encoder Info: ", getShooterEncoderReading());
-        SmartDashboard.putNumber("Turret Encoder Info: ", getTurretEncoderReading());
-        SmartDashboard.putNumber("Hood Encoder Info: ", getHoodEncoderReading());
+        SmartDashboard.putNumber("Shooter_Velocity: ", getShooterVelocity());
+        SmartDashboard.putNumber("Turret_Position: ", getTurretPosition());
+        SmartDashboard.putNumber("Hood_Position", getHoodPosition());
 
-        SmartDashboard.putBoolean("Is shooter at set speed: ", isShooterAtSetspeed());
-        SmartDashboard.putBoolean("Is hood at set angle: ", isHoodAtSetangle());
-        SmartDashboard.putBoolean("Is turret at set angle: ", isTurretAtSetpoint());
+        SmartDashboard.putBoolean("Shooter_is_at_set_speed", isShooterAtSetspeed());
+        SmartDashboard.putBoolean("Hood_is_at_set_angle", isHoodAtSetangle());
+        SmartDashboard.putBoolean("Turret_is_at_target_position", isTurretAtSetpoint());
     }
 
 
@@ -121,23 +121,32 @@ public class TurretSubsystem extends SubsystemBase {
         return leftLimitSwitch.get();
     }
 
+
     public boolean getRightLimitSwitch() {
         return rightLimitSwitch.get();
     }
 
+
     public boolean getZeroLimitSwitch() { return zeroLimitSwitch.get(); }
+
 
     public boolean getHomeLimitSwitch() { return homeLimitSwitch.get(); }
 
-    public double getTurretEncoderReading() { return turretRelativeEncoder.getPosition(); }
 
-    public double getShooterEncoderReading() { return shooterRelativeEncoder.getVelocity(); }
+    public double getTurretPosition() { return turretRelativeEncoder.getPosition(); }
 
-    public double getHoodEncoderReading() { return hoodRelativeEncoder.getPosition(); }
+
+    public double getShooterVelocity() { return shooterRelativeEncoder.getVelocity(); }
+
+
+    public double getHoodPosition() { return hoodRelativeEncoder.getPosition(); }
+
 
     public boolean isTurretAtSetpoint() { return turretClosedLoopController.isAtSetpoint(); }
 
+
     public boolean isShooterAtSetspeed() { return shooterClosedLoopController.isAtSetpoint(); }
+
 
     public boolean isHoodAtSetangle() { return hoodClosedLoopController.isAtSetpoint(); }
     /*
@@ -183,19 +192,23 @@ public class TurretSubsystem extends SubsystemBase {
 
     // TODO: Decision -> Should we include this in reset function? Should we have separate reset functions with one calling all of them in one case?
 
+
     // TODO: Implement with closed loop controller and desired rpm or speed if using velocity conversion with encoder
 
     public void updateTurretRotation(double angle) {
         turretClosedLoopController.setSetpoint(aimingFilter(angle), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
+
     public void updateShooterSpeed(double rpm) {
         shooterClosedLoopController.setSetpoint(rpm, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
+
     public void updateHoodAngle(double angle) {
         hoodClosedLoopController.setSetpoint(Math.max(0, Math.min(angle, 35)), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
+
 
     // switch this to switch case
     private double aimingFilter (double reqSetpoint) {

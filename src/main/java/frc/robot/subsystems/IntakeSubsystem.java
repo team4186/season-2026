@@ -61,17 +61,17 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         //Limit Switch's
-        SmartDashboard.putBoolean("Starboard Extension Switch", isStarboardExtended());
-        SmartDashboard.putBoolean("Port Extension Switch", isPortExtended());
-        SmartDashboard.putBoolean("Starboard Retraction Switch", isStarboardRetracted());
-        SmartDashboard.putBoolean("Port Retraction Switch", isPortRetracted());
+        SmartDashboard.putBoolean("Intake_Starboard_Extend_Switch", isStarboardExtended());
+        SmartDashboard.putBoolean("Intake_Port_Extend_Switch", isPortExtended());
+        SmartDashboard.putBoolean("Intake_Starboard_Retract_Switch", isStarboardRetracted());
+        SmartDashboard.putBoolean("Port_Retract_Switch", isPortRetracted());
 
         //Encoder Values
-        SmartDashboard.putNumber("Starboard Motor Value:", getStarboardPosition());
-        SmartDashboard.putNumber("Port Motor Value:",getPortPosition());
+        SmartDashboard.putNumber("Intake_Starboard_Position:", getStarboardPosition());
+        SmartDashboard.putNumber("Intake_Port_Position:",getPortPosition());
 
-        SmartDashboard.putBoolean("Starboard at setpoint",starboardAtSetpoint());
-        SmartDashboard.putBoolean("Port at setpoint", portAtSetpoint());
+        SmartDashboard.putBoolean("Intake_Starboard_is_at_setpoint",starboardAtSetpoint());
+        SmartDashboard.putBoolean("Intake_Port_is_at_setpoint", portAtSetpoint());
     }
 
     public boolean starboardAtSetpoint(){
