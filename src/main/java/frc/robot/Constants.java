@@ -253,6 +253,8 @@ public final class Constants {
         public static final double CLIMB_MIN_ANGLE = 0.0;
         public static final double CLIMB_MAX_ANGLE = 0.0;
         public static final double CLIMB_DEPLOY_ANGLE = 178.0;
+        public static final double CLIMB_UP_ANGLE = 0.0; // Placeholder, please change.
+        public static final double CLIMB_DOWN_ANGLE = 0.0; // Placeholder, please change.
         public static final double CLIMB_L1_ANGLE = 0.0;
     }
 

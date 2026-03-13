@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
+
+import frc.robot.Constants;
 import frc.robot.Constants.ClimbConstants;
 
 
@@ -77,4 +79,26 @@ public class ClimbSubsystem extends SubsystemBase {
     public boolean getLimitSwitch(){
         return homeSwitch.get();
     }
+
+    public Command deployClimbCommand() {
+        updateClimb(Constants.ClimbConstants.CLIMB_DEPLOY_ANGLE);
+    }
+
+    // Technically climb up and hold
+    public Command climbUpCommand() {
+        // CHANGE CLIMB UP ANGLE, IT IS CURRENTLY SET TO 0.
+        updateClimb(Constants.ClimbConstants.CLIMB_UP_ANGLE);
+             if (isClimbAtSetpoint()) {
+                climbStop();
+             }
+    }
+
+    public Command climbDownCommand() {
+        updateClimb(Constants.ClimbConstants.CLIMB_DOWN_ANGLE);
+        if (isClimbAtSetpoint()) {
+            climbStop();
+        }
+    }
+
+
 }
