@@ -92,9 +92,9 @@ public class LimelightRunner {
     public void updatePoseEstimate(SwerveDrive swerveDrive) {
         double robotYaw = swerveDrive.getYaw().getDegrees();
         // TODO: Change to limelight robot when installed on chassis
-        LimelightHelpers.SetRobotOrientation(LimelightConstants.LIMELIGHT_TURRET, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+        LimelightHelpers.SetRobotOrientation(LimelightConstants.LIMELIGHT_ROBOT, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimelightConstants.LIMELIGHT_TURRET);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimelightConstants.LIMELIGHT_ROBOT);
 
         SmartDashboard.putBoolean("Available Tag?", (limelightMeasurement.tagCount > 0));
         SmartDashboard.putNumber("Angular Velocity Gyro", Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)));

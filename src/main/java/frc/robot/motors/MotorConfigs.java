@@ -11,6 +11,8 @@ import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.SpindexerConstants;
 import frc.robot.Constants.ClimbConstants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 
 
 // MotorConfigs Singleton for Subsystem Motors (Swerve Subsystem not included)
@@ -40,7 +42,14 @@ public final class MotorConfigs {
     public SparkBaseConfig applyDefaultSparkFlexConfig() { return DefaultSparkFlexConfig; }
 
 
-    // build and return custom config
+    /**
+     * Use this apply config to motor in {@link Components} class.
+     *
+     * @param motor a
+     * @param inverse a
+     *
+     * @return SparkMax motor with applied config
+     */
     public SparkMax applyTurretRotateSparkConfig(
         SparkMax motor,
         boolean inverse
@@ -213,8 +222,8 @@ public final class MotorConfigs {
         baseConfig.encoder
             .positionConversionFactor(TurretConstants.SHOOTER_POSITION_CONVERSION_FACTOR)
             .velocityConversionFactor(TurretConstants.SHOOTER_VELOCITY_CONVERSION_FACTOR)
-            .quadratureAverageDepth(TurretConstants.SHOOTER_AVERAGE_DEPTH)
-            .quadratureMeasurementPeriod(TurretConstants.SHOOTER_MEASUREMENT_PERIOD); // NOTE TO SELF: DOUBLE CHECK
+            .quadratureAverageDepth(Constants.VELOCITY_AVERAGE_DEPTH)
+            .quadratureMeasurementPeriod(Constants.VELOCITY_MEASUREMENT_PERIOD);
 
         motorLeader.configure(
             baseConfig,
