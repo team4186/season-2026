@@ -24,14 +24,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SpindexerSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.motors.Components;
 import java.io.File;
-
-import frc.robot.vision.LimelightHelpers;
-import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
 
 
@@ -63,21 +61,22 @@ public class RobotContainer {
 
 
 
+// TODO: Test and uncomment subsystems
 
-    private final IntakeSubsystem intake = new IntakeSubsystem(
-            motorComponents.getIntakeExtensionStarboardMotor(),
-            motorComponents.getIntakeExtensionPortMotor(),
-            motorComponents.getIntakePickupMotor(),
-            new DigitalInput(Constants.IntakeConstants.EXTENDED_LSChannel1),
-            new DigitalInput(Constants.IntakeConstants.EXTENDED_LSChannel2),
-            new DigitalInput(Constants.IntakeConstants.RETRACTED_LSChannel1),
-            new DigitalInput(Constants.IntakeConstants.RETRACTED_LSChannel2)
-    );
-
-    private final SpindexerSubsystem spindexer = new SpindexerSubsystem(
-            motorComponents.getSpindexerRotateMotor(),
-            motorComponents.getSpindexerFeedMotor()
-    );
+//    private final IntakeSubsystem intake = new IntakeSubsystem(
+//            motorComponents.getIntakeExtensionStarboardMotor(),
+//            motorComponents.getIntakeExtensionPortMotor(),
+//            motorComponents.getIntakePickupMotor(),
+//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
+//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
+//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
+//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
+//    );
+//
+//    private final SpindexerSubsystem spindexer = new SpindexerSubsystem(
+//            motorComponents.getSpindexerRotateMotor(),
+//            motorComponents.getSpindexerFeedMotor()
+//    );
 
 
 
