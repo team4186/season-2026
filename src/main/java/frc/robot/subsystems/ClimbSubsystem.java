@@ -84,26 +84,26 @@ public class ClimbSubsystem extends SubsystemBase {
         return homeSwitch.get();
     }
 
-
-    public Command deployClimbCommand() {
-        updateClimb(Constants.ClimbConstants.CLIMB_DEPLOY_ANGLE);
-    }
-
-    // Technically climb up and hold
-    public Command climbUpCommand() {
-        // CHANGE CLIMB UP ANGLE, IT IS CURRENTLY SET TO 0.
-        updateClimb(Constants.ClimbConstants.CLIMB_UP_ANGLE);
-             if (isClimbAtSetpoint()) {
-                climbStop();
-             }
-    }
-
-    public Command climbDownCommand() {
-        updateClimb(Constants.ClimbConstants.CLIMB_DOWN_ANGLE);
-        if (isClimbAtSetpoint()) {
-            climbStop();
-        }
-    }
-
+//commented out for push, uncomment if needed ziyao. - Shing and Rishab
+//    public Command deployClimbCommand() {
+//        updateClimb(Constants.ClimbConstants.CLIMB_DEPLOY_ANGLE);
+//    }
+//
+//    // Technically climb up and hold
+//    public Command climbUpCommand() {
+//        // CHANGE CLIMB UP ANGLE, IT IS CURRENTLY SET TO 0.
+//        updateClimb(Constants.ClimbConstants.CLIMB_UP_ANGLE);
+//             if (isClimbAtSetpoint()) {
+//                climbStop();
+//             }
+//    }
+//
+//    public Command climbDownCommand() {
+//        updateClimb(Constants.ClimbConstants.CLIMB_DOWN_ANGLE);
+//        if (isClimbAtSetpoint()) {
+//            climbStop();
+//        }
+//    }
+//
 
 }

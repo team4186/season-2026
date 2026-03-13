@@ -101,9 +101,12 @@ public final class Constants {
         public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
         public static final SparkBaseConfig.IdleMode HOOD_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
 
-        // CAN ID's
         public static final int ROTATE_MOTOR_ID = 38; // TODO: Add equivalent const values and replace in for Components
         public static final int SHOOTER_LEAD_MOTOR_ID = 31; // TODO
+
+        // CAN ID's
+        public static final int SHOOTER_CURRENT_LIMIT = 0;
+        public static final int ROTATE_CURRENT_LIMIT = 0;
         public static final int SHOOTER_FOLLOWER_MOTOR_ID = 32;
         public static final int HOOD_MOTOR_ID = 22;
 
@@ -133,9 +136,14 @@ public final class Constants {
         public static final double HOOD_D = 0.002;
 
         // FeedForward // TODO: update
+
         public static final double ROTATE_KS = 0.185;
         public static final double SHOOTER_KS = 0.185;
         public static final double HOOD_KS = 0;
+
+        public static final double ROTATE_KV = 0;
+        public static final double SHOOTER_KV = 0;
+        public static final double HOOD_KV = 0;
 
         // Conversion factors and expected measured limits
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
@@ -217,6 +225,11 @@ public final class Constants {
         public static final SparkBaseConfig.IdleMode FEED_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
         public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
+        //TODO: change current limit to lower?
+        public static final int FEED_CURRENT_LIMIT = 50;
+        public static final int ROTATE_CURRENT_LIMIT = 50;
+
+
         // Spark ID'S
         public static final int ROTATE_MOTOR_ID = 25;
         public static final int FEED_MOTOR_ID = 26;
@@ -235,6 +248,8 @@ public final class Constants {
         public static final double ROTATE_D = 0.0;
 
         // FeedForward // TODO: UPDATE
+        public static final double FEED_KV = 0;
+        public static final double ROTATE_KV = 0;
         public static final double FEED_KS = 0.185;
         public static final double ROTATE_KS = 0.185;
 

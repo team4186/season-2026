@@ -26,6 +26,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final SparkMax extensionPortMotor;
     private final SparkMax pickupMotor;
 
+    private final SparkMax testMotor;
+
     private final SparkClosedLoopController extensionStarboardController;
     private final SparkClosedLoopController extensionPortController;
 
@@ -33,6 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
             SparkMax intakeExtensionStarboardMotor,
             SparkMax intakeExtensionPortMotor,
             SparkMax pickupMotor,
+            SparkMax intakeTestMotor,
             DigitalInput extendedSwitch1,
             DigitalInput extendedSwitch2,
             DigitalInput retractedSwitch1,
@@ -42,6 +45,8 @@ public class IntakeSubsystem extends SubsystemBase {
         this.extensionStarboardMotor = intakeExtensionStarboardMotor;
         this.extensionPortMotor = intakeExtensionPortMotor;
         this.pickupMotor = pickupMotor;
+
+        this.testMotor = intakeTestMotor;
 
         this.extendedSwitchStarboard = extendedSwitch1;
         this.extendedSwitchPort = extendedSwitch2;
@@ -99,6 +104,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private boolean isPortRetracted(){
         return UnitsUtility.isBeamBroken(retractedSwitchPort, false, "Retracted Extension Switch Port");
+    }
+
+    public boolean isIntakeExtended(){
+        return isStarboardExtended() && isPortExtended();
+    }
+
+    public boolean isIntakeRetracted(){
+        return isPortRetracted() && isStarboardRetracted();
     }
 
 
@@ -164,28 +177,51 @@ public class IntakeSubsystem extends SubsystemBase {
         retractIntakeStarboard();
     }
 
-    private void pickupBallsFast(){
+//Testing basic leader-follower pair
+    public void simplePairExtension(){
+        if(!isStarboardExtended() && !isPortExtended()){
+            testMotor.set(0.1);
+        }
+    }
+
+    public void simplePairRetraction(){
+        if(!isStarboardRetracted() && !isPortRetracted()){
+            testMotor.set(-0.1);
+        }
+    }
+
+
+
+
+    public void pickupBallsFast(){
         pickupMotor.set(IntakeConstants.PICKUP_FAST_SPEED);
     }
 
-    private void pickupBallsSlow(){
+    public void pickupBallsSlow(){
         pickupMotor.set(IntakeConstants.PICKUP_SLOW_SPEED);
     }
 
-    private void stopPickup(){
-        pickupMotor.stopMotor();
-    }
+
 
     // TODO: Possible Close Loop Implmentation for pickup. Low Priority
     public void updateIntakePickupSpeed() {}
     public void updateIntakePosition() {}
 
+    public void stopTranslation() {
+        testMotor.stopMotor();
+    }
 
-    public void stopIntakeMotors(){
+    public void stopPickup(){
+        pickupMotor.stopMotor();
+    }
+
+    public void stop(){
         extensionPortMotor.stopMotor();
         extensionStarboardMotor.stopMotor();
         pickupMotor.stopMotor();
     }
+
+
 
     public double getStarboardPosition(){
         return extensionStarboardRelativeEncoder.getPosition();

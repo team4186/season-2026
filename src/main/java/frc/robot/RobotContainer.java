@@ -25,13 +25,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.commands.intakecommands.ExtendIntakeCommand;
+import frc.robot.commands.intakecommands.RetractIntakeCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SpindexerSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.motors.Components;
 import java.io.File;
 import swervelib.SwerveInputStream;
-
+import frc.robot.commands.intakecommands.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -63,15 +65,16 @@ public class RobotContainer {
 
 // TODO: Test and uncomment subsystems
 
-//    private final IntakeSubsystem intake = new IntakeSubsystem(
-//            motorComponents.getIntakeExtensionStarboardMotor(),
-//            motorComponents.getIntakeExtensionPortMotor(),
-//            motorComponents.getIntakePickupMotor(),
-//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
-//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
-//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
-//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
-//    );
+    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
+            motorComponents.getIntakeExtensionStarboardMotor(),
+            motorComponents.getIntakeExtensionPortMotor(),
+            motorComponents.getIntakePickupMotor(),
+            motorComponents.getIntakeExtensionMotorPair(),
+            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
+            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
+            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
+            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
+    );
 //
 //    private final SpindexerSubsystem spindexer = new SpindexerSubsystem(
 //            motorComponents.getSpindexerRotateMotor(),
@@ -272,6 +275,14 @@ public class RobotContainer {
         Command driveFieldHeadingPS5 = drivebase.driveFieldOriented(driveHeadingAxisPS5);
 
 
+        //Intake Commands
+        ExtendIntakeCommand extendIntakeCommand = new ExtendIntakeCommand(intakeSubsystem);
+        RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
+        PickupIntakeCommand pickupIntakeCommand = new PickupIntakeCommand(intakeSubsystem);
+
+
+
+
         if (RobotBase.isSimulation()) {
             // drivebase.setDefaultCommand(driveFieldOrientedPS5);
             drivebase.setDefaultCommand(driveFieldHeadingPS5);
@@ -324,6 +335,11 @@ public class RobotContainer {
 
             joystickDriver.button(11).onTrue((Commands.runOnce(drivebase::zeroGyro)));
             joystickDriver.button(12).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            joystickDriver.button(5).onTrue(extendIntakeCommand);
+            joystickDriver.button(3).onTrue(retractIntakeCommand);
+            joystickDriver.button(2).onTrue(pickupIntakeCommand);
+
+
 
 
             driverStadia.leftTrigger().whileTrue(driveFieldOrientedAngularVelocityStadia);
