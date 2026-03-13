@@ -25,10 +25,10 @@ public class TurretSubsystem extends SubsystemBase {
     private final SparkClosedLoopController hoodClosedLoopController;
 
     // max rotation (170 degrees, with 20 degrees of dead zone in the back)
-    private double maxRotation = Constants.TurretConstants.MAX_ROTATION;
+    private double maxRotation = Constants.TurretConstants.TURRET_MAX_ROTATION;
 
     // min rotation (-170 degrees, with 20 degrees of dead zone in the back)
-    private double minRotation = -Constants.TurretConstants.MAX_ROTATION;
+    private double minRotation = -Constants.TurretConstants.TURRET_MAX_ROTATION;
 
     // zero limit switch (for turret)
     private final DigitalInput zeroLimitSwitch;
