@@ -77,24 +77,24 @@ public class Components {
     public SparkMax getIntakeExtensionStarboardMotor(){
         if(intakeExtensionStarboardMotor == null) {
             intakeExtensionStarboardMotor = customConfigs.applyIntakeExtensionSparkConfig(
-                    new SparkMax(IntakeConstants.STARBOARD_EXTENSION_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
-                    //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
+                    new SparkMax(IntakeConstants.STARBOARD_EXTENSION_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
                     true
             );
         }
         return intakeExtensionStarboardMotor; //67 -S and R
     }
 
+
     public SparkMax getIntakeExtensionPortMotor(){
         if(intakeExtensionPortMotor == null) {
             intakeExtensionPortMotor = customConfigs.applyIntakeExtensionSparkConfig(
-                    new SparkMax(IntakeConstants.PORT_EXTENSION_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),// TODO: Move id to Constants
-                    //new SparkMax(IntakeConstants.INTAKE_CAN_ID, SparkLowLevel.MotorType.kBrushless),
+                    new SparkMax(IntakeConstants.PORT_EXTENSION_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
                     false
             );
         }
         return intakeExtensionPortMotor; //67 -S and R
     }
+
 
     public SparkMax getIntakePickupMotor(){
         if(intakePickupMotor == null){
@@ -108,9 +108,6 @@ public class Components {
     }
 
 
-
-
-    // TODO: Create Motor instance and apply config
     public SparkMax getClimbMotor(){
         if (climbMotor == null) {
             climbMotor = customConfigs.applyClimbSparkConfig(
@@ -121,7 +118,6 @@ public class Components {
     }
 
 
-    // TODO: put in correct CAN ID's
     public SparkMax getSpindexerRotateMotor(){
         if (spindexerRotateMotor == null) {
             spindexerRotateMotor = customConfigs.applySpindexerRotateSparkConfig(
@@ -130,6 +126,7 @@ public class Components {
         }
         return spindexerRotateMotor;
     }
+
 
     public SparkMax getSpindexerFeedMotor(){
         if (spindexerFeedMotor == null) {
