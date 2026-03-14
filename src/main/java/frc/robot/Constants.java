@@ -104,6 +104,11 @@ public final class Constants {
         public static final int ROTATE_MOTOR_ID = 38; // TODO: Add equivalent const values and replace in for Components
         public static final int SHOOTER_LEAD_MOTOR_ID = 31; // TODO
 
+        public static final int TURRET_ZERO__LIMIT_SWITCH = 0;
+        public static final int TURRET_LEFT_LIMIT_SWITCH = 0;
+        public static final int TURRET_RIGHT_LIMIT_SWITCH = 0;
+        public static final int HOOD_LIMIT_SWITCH = 0;
+
         // CAN ID's
         public static final int SHOOTER_CURRENT_LIMIT = 0;
         public static final int ROTATE_CURRENT_LIMIT = 0;
@@ -182,7 +187,7 @@ public final class Constants {
         // Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
         public static final int EXTENDED_LSChannel_PORT = 0; //TODO: set LSChannels
         public static final int EXTENDED_LSChannel_STARBOARD = 0;
-        public static final int RETRACTED_LSChannel_PORT = 0;
+        public static final int RETRACTED_LSChannel_PORT = 6;
         public static final int RETRACTED_LSChannel_STARBOARD = 0;
 
         public static final double EXTENSION_GEAR_RATIO = 1.0;

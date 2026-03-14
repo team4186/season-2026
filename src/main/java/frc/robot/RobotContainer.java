@@ -27,10 +27,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.commands.intakecommands.ExtendIntakeCommand;
 import frc.robot.commands.intakecommands.RetractIntakeCommand;
-import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.SpindexerSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.motors.Components;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -87,6 +84,27 @@ public class RobotContainer {
             motorComponents.getClimbMotor(),
             new DigitalInput(Constants.ClimbConstants.CLIMB_LSChannel)
     );
+
+    private final TurretSubsystem turretSubsystem = new TurretSubsystem(
+            motorComponents.getTurretShooterMotor(),
+            motorComponents.getTurretRotateMotor(),
+            motorComponents.getTurretHoodMotor(),
+            new DigitalInput(Constants.TurretConstants.TURRET_ZERO__LIMIT_SWITCH),
+            new DigitalInput(Constants.TurretConstants.TURRET_LEFT_LIMIT_SWITCH),
+            new DigitalInput(Constants.TurretConstants.TURRET_RIGHT_LIMIT_SWITCH),
+            new DigitalInput(Constants.TurretConstants.HOOD_LIMIT_SWITCH)
+    );
+
+    /** public TurretSubsystem(
+     SparkFlex shooterMotor,
+     SparkMax turretMotor,
+     SparkMax hoodMotor,
+     DigitalInput zeroLimitSwitch,
+     DigitalInput leftLimitSwitch,
+     DigitalInput rightLimitSwitch,
+     DigitalInput homeLimitSwitch
+     ){ **/
+
 
     /**
      * Converts driver input into a field-relative ChassisSpeeds that is controlled
