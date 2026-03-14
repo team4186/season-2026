@@ -24,7 +24,8 @@ import com.revrobotics.spark.config.SparkBaseConfig;
  */
 public final class Constants {
 
-    public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
+    // public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
+    public static final double ROBOT_MASS = (109.2) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag // TODO: Modify?
     public static final double MAX_SPEED = Units.feetToMeters(18.0); //orig value 14.5
@@ -103,22 +104,18 @@ public final class Constants {
 
         public static final int ROTATE_MOTOR_ID = 38; // TODO: Add equivalent const values and replace in for Components
         public static final int SHOOTER_LEAD_MOTOR_ID = 31; // TODO
+        public static final int SHOOTER_FOLLOWER_MOTOR_ID = 32;
+        public static final int HOOD_MOTOR_ID = 22;
 
         //LimitSwitch DIO Ports
         public static final int HOOD_LIMIT_SWITCH = 0;
         public static final int TURRET_LEFT_LIMIT_SWITCH = 2;
         public static final int TURRET_RIGHT_LIMIT_SWITCH = 3;
 
-        // CAN ID's
-        public static final int SHOOTER_CURRENT_LIMIT = 0;
-        public static final int ROTATE_CURRENT_LIMIT = 0;
-        public static final int SHOOTER_FOLLOWER_MOTOR_ID = 32;
-        public static final int HOOD_MOTOR_ID = 22;
-
         // Max rotation
-        public static final double TURRET_MAX_ROTATION = 170.0; // Degrees
-        public static final double TURRET_MIN_ROTATION = -170.0;
-        public static final double TURRET_ROTATION_DEAD_ZONE = 20;
+        public static final double TURRET_MAX_ROTATION = 100.0; // Degrees
+        public static final double TURRET_MIN_ROTATION = -100.0;
+        public static final double TURRET_ROTATION_DEAD_ZONE = Math.max(0.0, 360 - (TURRET_MAX_ROTATION - TURRET_MIN_ROTATION));
 
         public static final double HOOD_MAX_ROTATION = 35.0; // Degrees
         public static final double HOOD_MIN_ROTATION = 0.0;
@@ -185,7 +182,7 @@ public final class Constants {
         public static final int PICKUP_MOTOR_ID = 21; //TODO: set values here
 
         // Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
-        public static final int EXTENDED_LSChannel_PORT = 6; //TODO: set LSChannels
+        public static final int EXTENDED_LSChannel_PORT = 6;
         public static final int EXTENDED_LSChannel_STARBOARD = 9;
         public static final int RETRACTED_LSChannel_PORT = 7;
         public static final int RETRACTED_LSChannel_STARBOARD = 8;
