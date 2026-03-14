@@ -36,12 +36,10 @@ public class IntakeSubsystem extends SubsystemBase {
             SparkMax intakeExtensionStarboardMotor,
             SparkMax intakeExtensionPortMotor,
             SparkMax pickupMotor,
-//            SparkMax intakeTestMotor,
-            DigitalInput extendedSwitch1,
-            DigitalInput extendedSwitch2,
-            DigitalInput retractedSwitch1,
-            DigitalInput retractedSwitch2
-
+            DigitalInput extendedSwitchStarboard,
+            DigitalInput extendedSwitchPort,
+            DigitalInput retractedSwitchStarboard,
+            DigitalInput retractedSwitchPort
     ) {
         this.extensionStarboardMotor = intakeExtensionStarboardMotor;
         this.extensionPortMotor = intakeExtensionPortMotor;
@@ -49,10 +47,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
 //        this.testMotor = intakeTestMotor;
 
-        this.extendedSwitchStarboard = extendedSwitch1;
-        this.extendedSwitchPort = extendedSwitch2;
-        this.retractedSwitchStarboard = retractedSwitch1;
-        this.retractedSwitchPort = retractedSwitch2;
+        this.extendedSwitchStarboard = extendedSwitchStarboard;
+        this.extendedSwitchPort = extendedSwitchPort;
+        this.retractedSwitchStarboard = retractedSwitchStarboard;
+        this.retractedSwitchPort = retractedSwitchPort;
 
 
         this.extensionStarboardRelativeEncoder = intakeExtensionStarboardMotor.getEncoder();
