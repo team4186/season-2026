@@ -139,20 +139,17 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     // \/\/\/\/\/Is this needed? Not sure how to feed one value into two controllers, to keep both sides in sync. If there's a better way, delete \/\/\/\/\/
-    public void extendIntake() {
-//        if(isStarboardExtended() && isPortExtended()){
-//            extensionStarboardController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-//            extensionPortController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-//        }else{
-//            extensionStarboardMotor.stopMotor();
-//            extensionPortMotor.stopMotor();
-//        }
-        extendIntakePort();
-        extendIntakeStarboard();
-    }
-
-
-
+//    public void extendIntake() {
+////        if(isStarboardExtended() && isPortExtended()){
+////            extensionStarboardController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+////            extensionPortController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+////        }else{
+////            extensionStarboardMotor.stopMotor();
+////            extensionPortMotor.stopMotor();
+////        }
+//        extendIntakePort();
+//        extendIntakeStarboard();
+//    }
 
 
     private void retractIntakeStarboard(){
@@ -173,12 +170,15 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
-    public void retractIntake(){
-        retractIntakePort();
-        retractIntakeStarboard();
-    }
 
-//just feeding a velocity
+    // TODO: intake using CLOSED LOOP
+//    public void retractIntake(){
+//        retractIntakePort();
+//        retractIntakeStarboard();
+//    }
+
+
+    //just feeding a velocity
     public void simplePairExtension(){
         if(!isStarboardExtended() && !isPortExtended()){
             extensionPortMotor.set(0.1);
@@ -186,14 +186,13 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+
     public void simplePairRetraction(){
         if(!isStarboardRetracted() && !isPortRetracted()){
             extensionPortMotor.set(-0.1);
             extensionStarboardMotor.set(-0.1);
         }
     }
-
-
 
 
     public void pickupBallsFast(){
