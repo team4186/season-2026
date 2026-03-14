@@ -4,10 +4,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.vision.LimelightRunner;
+import frc.robot.Constants.TurretConstants;
 import java.lang.Math.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class TurretSubsystem extends SubsystemBase {
     // Shooter motor
@@ -25,10 +25,14 @@ public class TurretSubsystem extends SubsystemBase {
     private final SparkClosedLoopController hoodClosedLoopController;
 
     // max rotation (170 degrees, with 20 degrees of dead zone in the back)
-    private double maxRotation = Constants.TurretConstants.TURRET_MAX_ROTATION;
+    private final double maxRotation = TurretConstants.TURRET_MAX_ROTATION;
 
     // min rotation (-170 degrees, with 20 degrees of dead zone in the back)
-    private double minRotation = -Constants.TurretConstants.TURRET_MAX_ROTATION;
+    private final double minRotation = TurretConstants.TURRET_MIN_ROTATION;
+
+    private final double deadZone = TurretConstants.TURRET_ROTATION_DEAD_ZONE;
+
+
 
     // zero limit switch (for turret)
     private final DigitalInput hoodLimitSwitch;
@@ -84,8 +88,8 @@ public class TurretSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Turret_Position: ", getTurretPosition());
         SmartDashboard.putNumber("Hood_Position", getHoodPosition());
 
-        SmartDashboard.putBoolean("Shooter_is_at_set_speed", isShooterAtSetspeed());
-        SmartDashboard.putBoolean("Hood_is_at_set_angle", isHoodAtSetangle());
+        SmartDashboard.putBoolean("Shooter_is_at_set_speed", isShooterAtSetpoint());
+        SmartDashboard.putBoolean("Hood_is_at_set_angle", isHoodAtSetpoint());
         SmartDashboard.putBoolean("Turret_is_at_target_position", isTurretAtSetpoint());
     }
 
@@ -111,42 +115,6 @@ public class TurretSubsystem extends SubsystemBase {
 //            turretClosedLoopController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
 //        }
 //    }
-
-
-    // TODO: What is the default case for each turret limit switch? Should we track and/or note this here?
-    public boolean getLeftLimitSwitch() {
-        return leftLimitSwitch.get();
-    }
-
-
-    public boolean getRightLimitSwitch() {
-        return rightLimitSwitch.get();
-    }
-
-
-    public boolean getHoodLimitSwitch() { return hoodLimitSwitch.get(); }
-
-
-    public double getTurretPosition() { return turretRelativeEncoder.getPosition(); }
-
-
-    public double getShooterVelocity() { return shooterRelativeEncoder.getVelocity(); }
-
-
-    public double getHoodPosition() { return hoodRelativeEncoder.getPosition(); }
-
-
-    public boolean isTurretAtSetpoint() { return turretClosedLoopController.isAtSetpoint(); }
-
-
-    public boolean isShooterAtSetspeed() { return shooterClosedLoopController.isAtSetpoint(); }
-
-
-    public boolean isHoodAtSetangle() { return hoodClosedLoopController.isAtSetpoint(); }
-    /*
-     TODO: Should we update our setpoint difference from where we are to where we want to be? 0 -> 0+20 or 15 -> 15-35
-     Where should we check for edge case if our desired location is past our hard stop?
-     */
 
 
     // TODO: Simple table first then regression with enough data with high confidence
@@ -206,16 +174,49 @@ public class TurretSubsystem extends SubsystemBase {
 
     // switch this to switch case
     private double aimingFilter (double reqSetpoint) {
-        double actualSetpoint = 0;
-        if (reqSetpoint < -190) {
-            actualSetpoint = reqSetpoint + 360;
-        } else if (reqSetpoint >= 190) {
-            actualSetpoint = reqSetpoint - 360;
-        } else if (reqSetpoint >= 170) {
-            actualSetpoint = 170;
-        } else if (reqSetpoint <= -170) {
-            actualSetpoint = -170;
+        double adjustedSetpoint = 0.0;
+
+        if (reqSetpoint > maxRotation + deadZone ) {
+            adjustedSetpoint = Math.max( reqSetpoint - 360, minRotation);
+        } else if (reqSetpoint < minRotation - deadZone) {
+            adjustedSetpoint = Math.max( reqSetpoint + 360, maxRotation);
+        } else if (reqSetpoint >= maxRotation) {
+            adjustedSetpoint = maxRotation;
+        } else if (reqSetpoint <= minRotation) {
+            adjustedSetpoint = minRotation;
         }
-        return actualSetpoint;
+
+        return adjustedSetpoint;
     }
+
+    // TODO: What is the default case for each turret limit switch? Should we track and/or note this here?
+    public boolean getLeftLimitSwitch() {
+        return leftLimitSwitch.get();
+    }
+
+
+    public boolean getRightLimitSwitch() {
+        return rightLimitSwitch.get();
+    }
+
+
+    public boolean getHoodLimitSwitch() { return hoodLimitSwitch.get(); }
+
+
+    public double getTurretPosition() { return turretRelativeEncoder.getPosition(); }
+
+
+    public double getShooterVelocity() { return shooterRelativeEncoder.getVelocity(); }
+
+
+    public double getHoodPosition() { return hoodRelativeEncoder.getPosition(); }
+
+
+    public boolean isTurretAtSetpoint() { return turretClosedLoopController.isAtSetpoint(); }
+
+
+    public boolean isShooterAtSetpoint() { return shooterClosedLoopController.isAtSetpoint(); }
+
+
+    public boolean isHoodAtSetpoint() { return hoodClosedLoopController.isAtSetpoint(); }
 }
