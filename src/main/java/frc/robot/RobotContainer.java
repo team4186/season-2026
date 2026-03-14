@@ -110,13 +110,55 @@ public class RobotContainer {
      * Converts driver input into a field-relative ChassisSpeeds that is controlled
      * by angular velocity.
      */
-    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-            () -> driverXbox.getLeftY() * -1,
-            () -> driverXbox.getLeftX() * -1)
-            .withControllerRotationAxis(driverXbox::getRightX)
+
+
+    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(
+                    drivebase.getSwerveDrive(),
+                    () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * -1,
+                    () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * -1)
+            .withControllerRotationAxis(
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
-            .scaleTranslation(0.8)
             .allianceRelativeControl(true);
+
+    // Copy of above but with x, y flipped for red side alliance
+    SwerveInputStream driveAngularVelocityRedAlliance = SwerveInputStream.of(
+                    drivebase.getSwerveDrive(),
+                    () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * 1,
+                    () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * 1)
+            .withControllerRotationAxis(
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
+            .deadband(OperatorConstants.DEADBAND)
+            .allianceRelativeControl(true);
+
+    SwerveInputStream driveAngularVelocitySlow = SwerveInputStream.of(
+                    drivebase.getSwerveDrive(),
+                    () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * -1,
+                    () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * -1)
+            .withControllerRotationAxis(
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.375 ) * 1)
+            .deadband(OperatorConstants.DEADBAND)
+            .allianceRelativeControl(true);
+
+    // Copy of above but with x, y flipped for red side alliance
+    SwerveInputStream driveAngularVelocitySlowRedAlliance = SwerveInputStream.of(
+                    drivebase.getSwerveDrive(),
+                    () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * 1,
+                    () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * 1)
+            .withControllerRotationAxis(
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.375 ) * 1)
+            .deadband(OperatorConstants.DEADBAND)
+            .allianceRelativeControl(true);
+
+    SwerveInputStream driveRobotRelativeSlow = SwerveInputStream.of(
+                    drivebase.getSwerveDrive(),
+                    () -> attenuated( joystickDriver.getY(), 2, 0.25 ) * 1,
+                    () -> attenuated( joystickDriver.getX(), 2, 0.25 ) * 1)
+            .withControllerRotationAxis(
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.25 ) * 1)
+            .deadband(OperatorConstants.DEADBAND)
+            .robotRelative(true);
+
 
 //    SwerveInputStream driveAngularVelocityPS5 = SwerveInputStream.of(drivebase.getSwerveDrive(),
 //                    () -> driverPS5.getLeftY() * -1,
@@ -281,10 +323,15 @@ public class RobotContainer {
      * Flight joysticks}.
      */
     private void configureBindings() {
+
+        Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+        Command driveFieldOrientedAngularVelocitySlow = drivebase.driveFieldOriented(driveAngularVelocitySlow);
+        Command driveRobotOrientedSlow = drivebase.driveFieldOriented(driveRobotRelativeSlow);
+
+
         Command driveFieldOrientedAngularVelocityJoystick = drivebase.driveFieldOriented(driveAngularVelocityJoystick);
 
         Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
-        Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity); // SIM
         Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
         Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
 
@@ -313,7 +360,7 @@ public class RobotContainer {
             drivebase.setDefaultCommand(driveFieldHeadingPS5);
         } else {
             // drivebase.setDefaultCommand(driveFieldOrientedAngularVelocityJoystick);
-            drivebase.setDefaultCommand(driveFieldOrientedStadia);
+            updateDriverAllianceControls();
         }
 
         if (Robot.isSimulation()) {
@@ -358,18 +405,19 @@ public class RobotContainer {
         } else {
            //Teleop Command Keybinds
 
-            joystickDriver.button(11).onTrue((Commands.runOnce(drivebase::zeroGyro)));
-            joystickDriver.button(12).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
+            joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-            //Intake Command keybind
-            joystickDriver.button(5).onTrue(extendIntakeCommand);
-            joystickDriver.button(3).onTrue(retractIntakeCommand);
-            joystickOperator.button(2).onTrue(intakeSubsystem.setSlowPickup(IntakeConstants.PICKUP_SLOW_SPEED));
-            joystickOperator.button(7).onTrue(intakeSubsystem.stopPickupMotor());
-
-            //Climb Command keybinds
-            joystickOperator.button(6).onTrue(deployClimbCommand);
-            joystickOperator.button(4).onTrue(retractClimbCommand);
+            //TODO: Uncomment for drive team after subsystem testing
+//            //Intake Command keybind
+//            joystickDriver.button(5).onTrue(extendIntakeCommand);
+//            joystickDriver.button(3).onTrue(retractIntakeCommand);
+//            joystickOperator.button(2).onTrue(intakeSubsystem.setSlowPickup(IntakeConstants.PICKUP_SLOW_SPEED));
+//            joystickOperator.button(7).onTrue(intakeSubsystem.stopPickupMotor());
+//
+//            //Climb Command keybinds
+//            joystickOperator.button(6).onTrue(deployClimbCommand);
+//            joystickOperator.button(4).onTrue(retractClimbCommand);
 
 
 
@@ -394,6 +442,23 @@ public class RobotContainer {
         }
     }
 
+    public void updateDriverAllianceControls(){
+        var alliance = DriverStation.getAlliance();
+
+        if( alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red ) {
+            Command driveFieldOrientedRedAlliance = drivebase.driveFieldOriented(driveAngularVelocityRedAlliance);
+            Command driveFieldOrientedSlowRedAlliance = drivebase.driveFieldOriented(driveAngularVelocitySlowRedAlliance);
+
+            drivebase.setDefaultCommand(driveFieldOrientedRedAlliance);
+            joystickDriver.button(11).whileTrue(driveFieldOrientedSlowRedAlliance);
+        } else {
+            Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+            Command driveFieldOrientedAngularVelocitySlow = drivebase.driveFieldOriented(driveAngularVelocitySlow);
+
+            drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+            joystickDriver.button(11).whileTrue(driveFieldOrientedAngularVelocitySlow);
+        }
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
