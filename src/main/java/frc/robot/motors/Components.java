@@ -80,7 +80,7 @@ public class Components {
         if(intakeExtensionStarboardMotor == null) {
             intakeExtensionStarboardMotor = customConfigs.applyIntakeExtensionSparkConfig(
                     new SparkMax(IntakeConstants.STARBOARD_EXTENSION_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
-                    true
+                    false
             );
         }
         return intakeExtensionStarboardMotor; //67 -S and R
@@ -91,23 +91,12 @@ public class Components {
         if(intakeExtensionPortMotor == null) {
             intakeExtensionPortMotor = customConfigs.applyIntakeExtensionSparkConfig(
                     new SparkMax(IntakeConstants.PORT_EXTENSION_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
-                    false
+                    true
             );
         }
         return intakeExtensionPortMotor; //67 -S and R
     }
 
-    public SparkMax getIntakeExtensionMotorPair(){
-        if(intakeTestMotor == null){
-            intakeTestMotor = customConfigs.applyIntakePairSparkConfig(
-                    new SparkMax(IntakeConstants.STARBOARD_EXTENSION_MOTOR_ID,SparkLowLevel.MotorType.kBrushless),
-                    new SparkMax(IntakeConstants.PORT_EXTENSION_MOTOR_ID,SparkLowLevel.MotorType.kBrushless),
-                    true,
-                    true //might need to be swapped to false: test
-            );
-        }
-        return intakeTestMotor;
-    }
 
     public SparkMax getIntakePickupMotor(){
         if(intakePickupMotor == null){
