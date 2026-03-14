@@ -12,22 +12,28 @@ import frc.robot.Constants.SpindexerConstants;
 
 public class SpindexerSubsystem extends SubsystemBase {
     private final SparkMax rotateMotor;
-    private final SparkMax feedMotor;
-    private final RelativeEncoder feedEncoder;
+    //private final SparkMax feedMotor;
+    //private final RelativeEncoder feedEncoder;
     private final RelativeEncoder rotateEncoder;
 
-    public SpindexerSubsystem(SparkMax rotateMotor, SparkMax feedMotor){
-        this.rotateMotor = rotateMotor;
-        this.feedMotor = feedMotor;
+//    public SpindexerSubsystem(SparkMax rotateMotor, SparkMax feedMotor){
+//        this.rotateMotor = rotateMotor;
+//        this.feedMotor = feedMotor;
+//
+//        this.feedEncoder = feedMotor.getEncoder();
+//        this.rotateEncoder = rotateMotor.getEncoder();
+//    }
 
-        this.feedEncoder = feedMotor.getEncoder();
+
+    public SpindexerSubsystem(SparkMax rotateMotor){
+        this.rotateMotor = rotateMotor;
         this.rotateEncoder = rotateMotor.getEncoder();
     }
 
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber( "Spin_Feed_Velocity", feedEncoder.getVelocity() );
+        // SmartDashboard.putNumber( "Spin_Feed_Velocity", feedEncoder.getVelocity() );
         SmartDashboard.putNumber( "Spin_Rotate_Velocity", rotateEncoder.getVelocity() );
     }
 
@@ -38,9 +44,9 @@ public class SpindexerSubsystem extends SubsystemBase {
          //can create new constant that's different if needed
     }
 
-    public void feedSpindexerSlow(){
-        feedMotor.set(SpindexerConstants.ROTATE_SLOW_SPEED);
-    }
+//    public void feedSpindexerSlow(){
+//        feedMotor.set(SpindexerConstants.ROTATE_SLOW_SPEED);
+//    }
 
 
 
@@ -50,19 +56,19 @@ public class SpindexerSubsystem extends SubsystemBase {
         //can create new constant that's different if needed
     }
 
-    public void feedSpindexerFast(){
-        feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
-    }
+//    public void feedSpindexerFast(){
+//        feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
+//    }
 
 
-    private void feed(){
-        feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
+    public void feed(){
+        //feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
         rotateMotor.set(SpindexerConstants.ROTATE_MAX_SPEED);
     }
 
 
     public void stopMotors(){
-        feedMotor.stopMotor();
+        //feedMotor.stopMotor();
         rotateMotor.stopMotor();
     }
 

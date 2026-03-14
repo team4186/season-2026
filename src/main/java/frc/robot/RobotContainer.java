@@ -76,10 +76,10 @@ public class RobotContainer {
             new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
     );
 //
-//    private final SpindexerSubsystem spindexer = new SpindexerSubsystem(
-//            motorComponents.getSpindexerRotateMotor(),
-//            motorComponents.getSpindexerFeedMotor()
-//    );
+    private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
+            motorComponents.getSpindexerRotateMotor()
+            //motorComponents.getSpindexerFeedMotor()
+    );
 
     private final ClimbSubsystem climbSubsystem = new ClimbSubsystem(
             motorComponents.getClimbMotor(),
@@ -402,8 +402,10 @@ public class RobotContainer {
             driverXbox.leftBumper().onTrue(Commands.none());
             driverXbox.rightBumper().onTrue(Commands.none());
 
-            joystickDriver.button(7).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(0.1), climbSubsystem).repeatedly());
-            joystickDriver.button(8).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-0.1), climbSubsystem).repeatedly());
+            joystickOperator.button(7).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(0.1), climbSubsystem).repeatedly());
+            joystickOperator.button(8).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-0.1), climbSubsystem).repeatedly());
+
+            joystickOperator.trigger().whileTrue(Commands.runOnce(spindexerSubsystem::feed, spindexerSubsystem).repeatedly());
 
         } else {
            //Teleop Command Keybinds
