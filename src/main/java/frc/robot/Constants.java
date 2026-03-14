@@ -104,10 +104,10 @@ public final class Constants {
         public static final int ROTATE_MOTOR_ID = 38; // TODO: Add equivalent const values and replace in for Components
         public static final int SHOOTER_LEAD_MOTOR_ID = 31; // TODO
 
+        //LimitSwitch DIO Ports
         public static final int TURRET_ZERO__LIMIT_SWITCH = 0;
         public static final int TURRET_LEFT_LIMIT_SWITCH = 0;
         public static final int TURRET_RIGHT_LIMIT_SWITCH = 0;
-        public static final int HOOD_LIMIT_SWITCH = 0;
 
         // CAN ID's
         public static final int SHOOTER_CURRENT_LIMIT = 0;

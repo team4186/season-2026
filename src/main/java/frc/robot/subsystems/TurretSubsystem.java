@@ -39,7 +39,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     private final SparkMax hoodMotor;
     // home limit switch (starting pos for hood)
-    private final DigitalInput homeLimitSwitch;
+
 
     // Encoder stuff
     private final RelativeEncoder turretRelativeEncoder;
@@ -54,8 +54,7 @@ public class TurretSubsystem extends SubsystemBase {
             SparkMax hoodMotor,
             DigitalInput zeroLimitSwitch,
             DigitalInput leftLimitSwitch,
-            DigitalInput rightLimitSwitch,
-            DigitalInput homeLimitSwitch
+            DigitalInput rightLimitSwitch
     ){
         this.shooterMotor = shooterMotor;
         this.turretMotor = turretMotor;
@@ -68,7 +67,6 @@ public class TurretSubsystem extends SubsystemBase {
         this.zeroLimitSwitch = zeroLimitSwitch;
         this.leftLimitSwitch = leftLimitSwitch;
         this.rightLimitSwitch = rightLimitSwitch;
-        this.homeLimitSwitch = homeLimitSwitch;
 
         this.turretRelativeEncoder = turretMotor.getEncoder();
         this.shooterRelativeEncoder = shooterMotor.getEncoder();
@@ -81,7 +79,7 @@ public class TurretSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Turret_Left_Limit_Switch: ", getLeftLimitSwitch());
         SmartDashboard.putBoolean("Turret_Right_Limit_Switch: ", getRightLimitSwitch());
         SmartDashboard.putBoolean("Turret_Zero Limit_Switch: ", getZeroLimitSwitch());
-        SmartDashboard.putBoolean("Hood_Home_Limit_Switch: ", getHomeLimitSwitch());
+//        SmartDashboard.putBoolean("Hood_Home_Limit_Switch: ", getHomeLimitSwitch());
 
         SmartDashboard.putNumber("Shooter_Velocity: ", getShooterVelocity());
         SmartDashboard.putNumber("Turret_Position: ", getTurretPosition());
@@ -100,20 +98,20 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
 
-    public void reset() {
-        shooterMotor.set(0); // TODO: update to set kVelocity using closed loop controller
-        while (!homeLimitSwitch.get()) { // TODO: Rewrite while loop to check state and update incrementally
-            hoodMotor.set(-0.5);
-        }
-
-        while (!zeroLimitSwitch.get()) { // TODO: Rewrite while loop to check state and update incrementally
-            // Apply power to motor directly
-            // aimingMotor.set();
-
-            // Update desired position for motor controller
-            turretClosedLoopController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-        }
-    }
+//    public void reset() {
+//        shooterMotor.set(0); // TODO: update to set kVelocity using closed loop controller
+//        while (!homeLimitSwitch.get()) { // TODO: Rewrite while loop to check state and update incrementally
+//            hoodMotor.set(-0.5);
+//        }
+//
+//        while (!zeroLimitSwitch.get()) { // TODO: Rewrite while loop to check state and update incrementally
+//            // Apply power to motor directly
+//            // aimingMotor.set();
+//
+//            // Update desired position for motor controller
+//            turretClosedLoopController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+//        }
+//    }
 
 
     // TODO: What is the default case for each turret limit switch? Should we track and/or note this here?
@@ -130,7 +128,7 @@ public class TurretSubsystem extends SubsystemBase {
     public boolean getZeroLimitSwitch() { return zeroLimitSwitch.get(); }
 
 
-    public boolean getHomeLimitSwitch() { return homeLimitSwitch.get(); }
+//    public boolean getHomeLimitSwitch() { return homeLimitSwitch.get(); }
 
 
     public double getTurretPosition() { return turretRelativeEncoder.getPosition(); }

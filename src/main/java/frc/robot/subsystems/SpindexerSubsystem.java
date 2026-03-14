@@ -31,14 +31,28 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     // TODO: Should we rename function? Also do we want to set power manually or leverage closed loop controller
     // (Hint) How much do we care about maintaining consistent feeding and rotation speed?
-    public void rotateSpindexer(){
+    public void rotateSpindexerSlow(){
+        rotateMotor.set(SpindexerConstants.ROTATE_SLOW_SPEED);
+         //can create new constant that's different if needed
+    }
+
+    public void feedSpindexerSlow(){
+        feedMotor.set(SpindexerConstants.ROTATE_SLOW_SPEED);
+    }
+
+
+
+
+    public void rotateSpindexerFast(){
         rotateMotor.set(SpindexerConstants.ROTATE_MAX_SPEED);
-        feedMotor.set(SpindexerConstants.FEED_MAX_SPEED); //can create new constant that's different if needed
+        //can create new constant that's different if needed
     }
 
-    public void feedSpindexer(){
-
+    public void feedSpindexerFast(){
+        feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
     }
+
+
 
 
     public void spin(){}
