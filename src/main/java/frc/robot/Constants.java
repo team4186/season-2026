@@ -281,7 +281,7 @@ public final class Constants {
 
         // IDS
         public static final int CLIMB_MOTOR_ID = 35;
-        public static final int CLIMB_LSChannel = 0;
+        public static final int CLIMB_LSChannel = 5;
 
         public static final double CLIMB_GEAR_RATIO = 20; // 20:1
 
