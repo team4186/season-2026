@@ -27,6 +27,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.commands.intakecommands.ExtendIntakeCommand;
 import frc.robot.commands.intakecommands.RetractIntakeCommand;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SpindexerSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -34,6 +35,7 @@ import frc.robot.motors.Components;
 import java.io.File;
 import swervelib.SwerveInputStream;
 import frc.robot.commands.intakecommands.*;
+import frc.robot.commands.climbCommand.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -69,7 +71,7 @@ public class RobotContainer {
             motorComponents.getIntakeExtensionStarboardMotor(),
             motorComponents.getIntakeExtensionPortMotor(),
             motorComponents.getIntakePickupMotor(),
-            motorComponents.getIntakeExtensionMotorPair(),
+//            motorComponents.getIntakeExtensionMotorPair(),
             new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
             new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
             new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
@@ -81,7 +83,10 @@ public class RobotContainer {
 //            motorComponents.getSpindexerFeedMotor()
 //    );
 
-
+    private final ClimbSubsystem climbSubsystem = new ClimbSubsystem(
+            motorComponents.getClimbMotor(),
+            new DigitalInput(Constants.ClimbConstants.CLIMB_LSChannel)
+    );
 
     /**
      * Converts driver input into a field-relative ChassisSpeeds that is controlled
@@ -280,6 +285,9 @@ public class RobotContainer {
         RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
         PickupIntakeCommand pickupIntakeCommand = new PickupIntakeCommand(intakeSubsystem);
 
+        //Climb Commands
+        DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem);
+        RetractClimbCommand retractClimbCommand = new RetractClimbCommand(climbSubsystem);
 
 
 
@@ -335,9 +343,16 @@ public class RobotContainer {
 
             joystickDriver.button(11).onTrue((Commands.runOnce(drivebase::zeroGyro)));
             joystickDriver.button(12).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+
+            //Intake Command keybind
             joystickDriver.button(5).onTrue(extendIntakeCommand);
             joystickDriver.button(3).onTrue(retractIntakeCommand);
             joystickDriver.button(2).onTrue(pickupIntakeCommand);
+
+            //Climb Command keybinds
+            joystickDriver.button(6).onTrue(deployClimbCommand);
+            joystickDriver.button(4).onTrue(retractClimbCommand);
+
 
 
 

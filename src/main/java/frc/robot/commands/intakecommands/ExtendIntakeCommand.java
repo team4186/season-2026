@@ -14,10 +14,10 @@ public class ExtendIntakeCommand extends Command {
         this.intakeSubsystem = intakeSubsystem;
         addRequirements(this.intakeSubsystem);
     }
-
+    @Override
     public void initialize(){
     }
-
+    @Override
     public void execute(){
         if(intakeSubsystem.isIntakeExtended()){
             isFinished = true;

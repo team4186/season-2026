@@ -275,7 +275,7 @@ public final class Constants {
 
         // IDS
         public static final int CLIMB_MOTOR_ID = 35;
-        public static final double CLIMB_LSChannel = 0;
+        public static final int CLIMB_LSChannel = 0;
 
         public static final double CLIMB_GEAR_RATIO = 20; // 20:1
 
@@ -296,9 +296,10 @@ public final class Constants {
         // TODO: Update with real world values
         public static final double CLIMB_MIN_ANGLE = 0.0;
         public static final double CLIMB_MAX_ANGLE = 0.0;
-        public static final double CLIMB_DEPLOY_ANGLE = 178.0;
+        public static final double CLIMB_DEPLOY_ANGLE = 150.0;
         public static final double CLIMB_UP_ANGLE = 0.0; // Placeholder, please change.
         public static final double CLIMB_DOWN_ANGLE = 0.0; // Placeholder, please change.
         public static final double CLIMB_L1_ANGLE = 0.0;
+
     }
 }

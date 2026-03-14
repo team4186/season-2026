@@ -69,6 +69,11 @@ public class ClimbSubsystem extends SubsystemBase {
         }
     }
 
+    public void simpleClimbDeploy(double speed){
+        climbMotor.set(speed);
+    }
+
+
 
     public boolean isClimbAtSetpoint() {
         return climbMotorController.isAtSetpoint();
@@ -84,6 +89,11 @@ public class ClimbSubsystem extends SubsystemBase {
         return homeSwitch.get();
     }
 
+    public void zeroAtSwitch(){
+        if(getLimitSwitch()){
+            resetEncoder();
+        }
+    }
 //commented out for push, uncomment if needed ziyao. - Shing and Rishab
 //    public Command deployClimbCommand() {
 //        updateClimb(Constants.ClimbConstants.CLIMB_DEPLOY_ANGLE);

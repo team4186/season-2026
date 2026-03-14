@@ -13,10 +13,10 @@ public class PickupIntakeCommand extends Command {
         this.intakeSubsystem = intakeSubsystem;
         addRequirements(this.intakeSubsystem);
     }
-
+    @Override
     public void initialize(){
     }
-
+    @Override
     public void execute(){
         if(buttonCounts%2 == 0){
             intakeSubsystem.pickupBallsSlow();

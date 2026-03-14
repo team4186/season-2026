@@ -26,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final SparkMax extensionPortMotor;
     private final SparkMax pickupMotor;
 
-    private final SparkMax testMotor;
+//    private final SparkMax testMotor;
 
     private final SparkClosedLoopController extensionStarboardController;
     private final SparkClosedLoopController extensionPortController;
@@ -35,7 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
             SparkMax intakeExtensionStarboardMotor,
             SparkMax intakeExtensionPortMotor,
             SparkMax pickupMotor,
-            SparkMax intakeTestMotor,
+//            SparkMax intakeTestMotor,
             DigitalInput extendedSwitch1,
             DigitalInput extendedSwitch2,
             DigitalInput retractedSwitch1,
@@ -46,7 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.extensionPortMotor = intakeExtensionPortMotor;
         this.pickupMotor = pickupMotor;
 
-        this.testMotor = intakeTestMotor;
+//        this.testMotor = intakeTestMotor;
 
         this.extendedSwitchStarboard = extendedSwitch1;
         this.extendedSwitchPort = extendedSwitch2;
@@ -180,13 +180,15 @@ public class IntakeSubsystem extends SubsystemBase {
 //Testing basic leader-follower pair
     public void simplePairExtension(){
         if(!isStarboardExtended() && !isPortExtended()){
-            testMotor.set(0.1);
+            extensionPortMotor.set(0.1);
+            extensionStarboardMotor.set(0.1);
         }
     }
 
     public void simplePairRetraction(){
         if(!isStarboardRetracted() && !isPortRetracted()){
-            testMotor.set(-0.1);
+            extensionPortMotor.set(-0.1);
+            extensionStarboardMotor.set(-0.1);
         }
     }
 
@@ -208,8 +210,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public void updateIntakePosition() {}
 
     public void stopTranslation() {
-        testMotor.stopMotor();
-    }
+        extensionPortMotor.stopMotor();
+        extensionStarboardMotor.stopMotor();    }
 
     public void stopPickup(){
         pickupMotor.stopMotor();
