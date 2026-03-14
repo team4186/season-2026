@@ -86,7 +86,7 @@ public final class Constants {
     public static class LimelightConstants {
         // Camera names
         public static final String LIMELIGHT_TURRET = "limelight-turret";
-        public static final String LIMELIGHT_ROBOT = "limelight-robot";
+        public static final String LIMELIGHT_ROBOT = "limelight-climb";
 
         // StdDevs for pose estimation trust levels
         public static final double LIMELIGHT_X_STD_DEVS = 0.5;
