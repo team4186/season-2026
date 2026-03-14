@@ -195,8 +195,11 @@ public final class Constants {
 
         // Extension Speeds & Pickup Speeds (Closed-Loop)
         public static final double EXTENSION_FULL_FREE_SPEED = 11000; //
-        public static final double PICKUP_FAST_SPEED = 2500; //in rpm, about half of max rpm for a neo brushless
-        public static final double PICKUP_SLOW_SPEED = 500; //about 10%
+        public static final double PICKUP_FAST_SPEED_SETPOINT = 2500; //in rpm, about half of max rpm for a neo brushless
+        public static final double PICKUP_SLOW_SPEED_SETPOINT = 500; //TODO: change to an actual number
+        public static final double PICKUP_FAST_SPEED = 0.50; //in rpm, about half of max rpm for a neo brushless
+        public static final double PICKUP_SLOW_SPEED = 0.10; //TODO: change to an actual number
+
 
         // Extension PID
         public static final double EXTENSION_P = 0.0; //TODO: set PID values

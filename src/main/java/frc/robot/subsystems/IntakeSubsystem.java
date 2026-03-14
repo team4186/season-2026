@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.RelativeEncoder;
 import frc.robot.UnitsUtility;
@@ -70,7 +71,7 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Intake_Starboard_Extend_Switch", isStarboardExtended());
         SmartDashboard.putBoolean("Intake_Port_Extend_Switch", isPortExtended());
         SmartDashboard.putBoolean("Intake_Starboard_Retract_Switch", isStarboardRetracted());
-        SmartDashboard.putBoolean("Port_Retract_Switch", isPortRetracted());
+        SmartDashboard.putBoolean("Intake_Port_Retract_Switch", isPortRetracted());
 
         //Encoder Values
         SmartDashboard.putNumber("Intake_Starboard_Position:", getStarboardPosition());
@@ -180,19 +181,24 @@ public class IntakeSubsystem extends SubsystemBase {
 
     //just feeding a velocity
     public void simplePairExtension(){
-        if(!isStarboardExtended() && !isPortExtended()){
-            extensionPortMotor.set(0.1);
+        if(!isStarboardExtended()){
             extensionStarboardMotor.set(0.1);
+        }
+        if(!isPortExtended()){
+            extensionPortMotor.set(0.1);
         }
     }
 
 
     public void simplePairRetraction(){
-        if(!isStarboardRetracted() && !isPortRetracted()){
-            extensionPortMotor.set(-0.1);
+        if(!isStarboardRetracted()){
             extensionStarboardMotor.set(-0.1);
         }
+        if(!isPortRetracted()){
+            extensionPortMotor.set(-0.1);
+        }
     }
+
 
 
     public void pickupBallsFast(){
@@ -201,6 +207,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void pickupBallsSlow(){
         pickupMotor.set(IntakeConstants.PICKUP_SLOW_SPEED);
+    }
+
+    public void pickupBalls(double speed){
+        pickupMotor.set(speed);
     }
 
 
@@ -233,7 +243,12 @@ public class IntakeSubsystem extends SubsystemBase {
         return extensionPortRelativeEncoder.getPosition();
     }
 
-//    public Command
+    public Command setSlowPickup(double speed){
+        return Commands.runOnce(()->pickupBalls(speed),this).repeatedly();
+    }
 
+    public Command stopPickupMotor(){
+        return Commands.runOnce(this::stopPickup,this);
+    }
 
 }

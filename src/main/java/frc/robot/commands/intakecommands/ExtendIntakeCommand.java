@@ -7,8 +7,8 @@ public class ExtendIntakeCommand extends Command {
     private final IntakeSubsystem intakeSubsystem;
 
     private boolean isFinished = false;
-    private boolean isExtended = false;
-    private boolean isRetracted = false;
+
+
 
     public ExtendIntakeCommand(IntakeSubsystem intakeSubsystem){
         this.intakeSubsystem = intakeSubsystem;
@@ -25,8 +25,6 @@ public class ExtendIntakeCommand extends Command {
             intakeSubsystem.simplePairExtension();
         }
 
-        isExtended = intakeSubsystem.isIntakeExtended();
-        isRetracted = intakeSubsystem.isIntakeRetracted();
     }
 
     public boolean isFinished(){return isFinished;}

@@ -48,7 +48,8 @@ public class RobotContainer {
     private final CommandXboxController driverXbox = new CommandXboxController(3);
     private final CommandPS5Controller driverPS5 = new CommandPS5Controller(4);
     private final CommandStadiaController driverStadia = new CommandStadiaController(0);
-    private final CommandJoystick joystickDriver = new CommandJoystick(1); //set port 0 for stadia/joystick, whichever is being used
+    private final CommandJoystick joystickDriver = new CommandJoystick(0); //set port 0 for stadia/joystick, whichever is being used
+    private final CommandJoystick joystickOperator = new CommandJoystick(1);
 
     private final Components motorComponents = Components.getInstance();
 
@@ -300,7 +301,6 @@ public class RobotContainer {
         //Intake Commands
         ExtendIntakeCommand extendIntakeCommand = new ExtendIntakeCommand(intakeSubsystem);
         RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
-        PickupIntakeCommand pickupIntakeCommand = new PickupIntakeCommand(intakeSubsystem);
 
         //Climb Commands
         DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem);
@@ -364,11 +364,12 @@ public class RobotContainer {
             //Intake Command keybind
             joystickDriver.button(5).onTrue(extendIntakeCommand);
             joystickDriver.button(3).onTrue(retractIntakeCommand);
-            joystickDriver.button(2).onTrue(pickupIntakeCommand);
+            joystickOperator.button(2).onTrue(intakeSubsystem.setSlowPickup(IntakeConstants.PICKUP_SLOW_SPEED));
+            joystickOperator.button(7).onTrue(intakeSubsystem.stopPickupMotor());
 
             //Climb Command keybinds
-            joystickDriver.button(6).onTrue(deployClimbCommand);
-            joystickDriver.button(4).onTrue(retractClimbCommand);
+            joystickOperator.button(6).onTrue(deployClimbCommand);
+            joystickOperator.button(4).onTrue(retractClimbCommand);
 
 
 
