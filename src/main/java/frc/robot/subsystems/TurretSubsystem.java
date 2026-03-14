@@ -31,7 +31,7 @@ public class TurretSubsystem extends SubsystemBase {
     private double minRotation = -Constants.TurretConstants.TURRET_MAX_ROTATION;
 
     // zero limit switch (for turret)
-    private final DigitalInput zeroLimitSwitch;
+    private final DigitalInput hoodLimitSwitch;
     // left limit switch
     private final DigitalInput leftLimitSwitch;
     // right limit switch
@@ -52,7 +52,7 @@ public class TurretSubsystem extends SubsystemBase {
             SparkFlex shooterMotor,
             SparkMax turretMotor,
             SparkMax hoodMotor,
-            DigitalInput zeroLimitSwitch,
+            DigitalInput hoodLimitSwitch,
             DigitalInput leftLimitSwitch,
             DigitalInput rightLimitSwitch
     ){
@@ -64,7 +64,7 @@ public class TurretSubsystem extends SubsystemBase {
         this.turretClosedLoopController = turretMotor.getClosedLoopController();
         this.hoodClosedLoopController = hoodMotor.getClosedLoopController();
 
-        this.zeroLimitSwitch = zeroLimitSwitch;
+        this.hoodLimitSwitch = hoodLimitSwitch;
         this.leftLimitSwitch = leftLimitSwitch;
         this.rightLimitSwitch = rightLimitSwitch;
 
@@ -125,7 +125,7 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
 
-    public boolean getZeroLimitSwitch() { return zeroLimitSwitch.get(); }
+    public boolean getZeroLimitSwitch() { return hoodLimitSwitch.get(); }
 
 
 //    public boolean getHomeLimitSwitch() { return homeLimitSwitch.get(); }

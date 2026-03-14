@@ -105,9 +105,9 @@ public final class Constants {
         public static final int SHOOTER_LEAD_MOTOR_ID = 31; // TODO
 
         //LimitSwitch DIO Ports
-        public static final int TURRET_ZERO__LIMIT_SWITCH = 0;
-        public static final int TURRET_LEFT_LIMIT_SWITCH = 0;
-        public static final int TURRET_RIGHT_LIMIT_SWITCH = 0;
+        public static final int HOOD_LIMIT_SWITCH = 0;
+        public static final int TURRET_LEFT_LIMIT_SWITCH = 2;
+        public static final int TURRET_RIGHT_LIMIT_SWITCH = 3;
 
         // CAN ID's
         public static final int SHOOTER_CURRENT_LIMIT = 0;
