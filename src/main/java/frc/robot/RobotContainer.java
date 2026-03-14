@@ -47,7 +47,7 @@ public class RobotContainer {
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverXbox = new CommandXboxController(3);
     private final CommandPS5Controller driverPS5 = new CommandPS5Controller(4);
-    private final CommandStadiaController driverStadia = new CommandStadiaController(0);
+    private final CommandStadiaController driverStadia = new CommandStadiaController(5);
     private final CommandJoystick joystickDriver = new CommandJoystick(0); //set port 0 for stadia/joystick, whichever is being used
     private final CommandJoystick joystickOperator = new CommandJoystick(1);
 
