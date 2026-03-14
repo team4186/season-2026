@@ -402,6 +402,9 @@ public class RobotContainer {
             driverXbox.leftBumper().onTrue(Commands.none());
             driverXbox.rightBumper().onTrue(Commands.none());
 
+            joystickDriver.button(7).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(0.1), climbSubsystem).repeatedly());
+            joystickDriver.button(8).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-0.1), climbSubsystem).repeatedly());
+
         } else {
            //Teleop Command Keybinds
 
