@@ -73,11 +73,11 @@ public class ClimbSubsystem extends SubsystemBase {
 
 
     public void simpleClimbDeploy(double speed) {
-//        if (ClimbConstants.CLIMB_DEPLOY_ANGLE >= climbEncoder.getPosition()) {
+        if (ClimbConstants.CLIMB_DEPLOY_ANGLE >= climbEncoder.getPosition()) {
             climbMotor.set(speed);
-//        } else {
-//            climbMotor.stopMotor();
-//        }
+        } else {
+            climbMotor.stopMotor();
+        }
     }
 
 

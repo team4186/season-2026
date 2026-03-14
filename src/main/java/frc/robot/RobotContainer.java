@@ -407,8 +407,13 @@ public class RobotContainer {
         } else {
            //Teleop Command Keybinds
 
-            joystickOperator.button(7).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(0.5), climbSubsystem).repeatedly());
-            joystickOperator.button(8).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-0.5), climbSubsystem).repeatedly());
+            joystickDriver.button(7)
+                    .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(1.0), climbSubsystem).repeatedly())
+                    .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
+
+            joystickDriver.button(8)
+                    .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-1.0), climbSubsystem).repeatedly())
+                    .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
 
             joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
             joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
