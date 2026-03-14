@@ -23,12 +23,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final RelativeEncoder extensionStarboardRelativeEncoder;
     private final RelativeEncoder extensionPortRelativeEncoder;
+    private final RelativeEncoder pickupEncoder;
 
     private final SparkMax extensionStarboardMotor;
     private final SparkMax extensionPortMotor;
     private final SparkMax pickupMotor;
-
-//    private final SparkMax testMotor;
 
     private final SparkClosedLoopController extensionStarboardController;
     private final SparkClosedLoopController extensionPortController;
@@ -58,6 +57,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         this.extensionStarboardRelativeEncoder = intakeExtensionStarboardMotor.getEncoder();
         this.extensionPortRelativeEncoder = intakeExtensionPortMotor.getEncoder();
+        this.pickupEncoder = pickupMotor.getEncoder();
 
         this.extensionStarboardController =  intakeExtensionPortMotor.getClosedLoopController();
         this.extensionPortController = intakeExtensionPortMotor.getClosedLoopController();
@@ -76,9 +76,11 @@ public class IntakeSubsystem extends SubsystemBase {
         //Encoder Values
         SmartDashboard.putNumber("Intake_Starboard_Position:", getStarboardPosition());
         SmartDashboard.putNumber("Intake_Port_Position:",getPortPosition());
+        SmartDashboard.putNumber("Intake_Pickup_Velocity",pickupEncoder.getVelocity());
 
         SmartDashboard.putBoolean("Intake_Starboard_is_at_setpoint",starboardAtSetpoint());
         SmartDashboard.putBoolean("Intake_Port_is_at_setpoint", portAtSetpoint());
+
     }
 
     public boolean starboardAtSetpoint(){

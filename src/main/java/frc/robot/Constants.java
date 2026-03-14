@@ -280,7 +280,7 @@ public final class Constants {
 
 
     public static final class ClimbConstants {
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
 
         // IDS
         public static final int CLIMB_MOTOR_ID = 35;
