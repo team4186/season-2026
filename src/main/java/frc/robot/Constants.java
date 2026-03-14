@@ -185,10 +185,10 @@ public final class Constants {
         public static final int PICKUP_MOTOR_ID = 21; //TODO: set values here
 
         // Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
-        public static final int EXTENDED_LSChannel_PORT = 0; //TODO: set LSChannels
-        public static final int EXTENDED_LSChannel_STARBOARD = 0;
-        public static final int RETRACTED_LSChannel_PORT = 6;
-        public static final int RETRACTED_LSChannel_STARBOARD = 0;
+        public static final int EXTENDED_LSChannel_PORT = 6; //TODO: set LSChannels
+        public static final int EXTENDED_LSChannel_STARBOARD = 9;
+        public static final int RETRACTED_LSChannel_PORT = 7;
+        public static final int RETRACTED_LSChannel_STARBOARD = 8;
 
         public static final double EXTENSION_GEAR_RATIO = 1.0;
         public static final double PICKUP_GEAR_RATIO = 1.0;
@@ -267,10 +267,11 @@ public final class Constants {
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;
         public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
+        public static final double FEED_SLOW_SPEED = 0.01;
 
         public static final double ROTATE_MIN_OUTPUT = -0.75;
         public static final double ROTATE_MAX_OUTPUT = 0.75;
-        public static final double ROTATE_SLOW_SPEED = 0.0;
+        public static final double ROTATE_SLOW_SPEED = 0.01;
         public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
     }
 
