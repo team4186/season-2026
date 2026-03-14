@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.SpindexerConstants;
@@ -53,10 +55,25 @@ public class SpindexerSubsystem extends SubsystemBase {
     }
 
 
+    private void feed(){
+        feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
+        rotateMotor.set(SpindexerConstants.ROTATE_MAX_SPEED);
+    }
 
 
-    public void spin(){}
+    public void stopMotors(){
+        feedMotor.stopMotor();
+        rotateMotor.stopMotor();
+    }
 
 
-    public void feed(){}
+
+    public Command run(){
+        return Commands.runOnce( this::feed, this).repeatedly();
+    }
+
+
+    public Command stop(){
+        return Commands.runOnce( this::stopMotors , this);
+    }
 }
