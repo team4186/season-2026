@@ -25,6 +25,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -193,6 +194,9 @@ public class SwerveSubsystem extends SubsystemBase
   public void periodic()
   {
     vision.updatePoseEstimate(swerveDrive);
+    SmartDashboard.putNumber("Swerve_X_Position", swerveDrive.getPose().getTranslation().getX());
+    SmartDashboard.putNumber("Swerve_Y_Position", swerveDrive.getPose().getTranslation().getY());
+    SmartDashboard.putNumber("Swerve_Angle", swerveDrive.getPose().getRotation().getDegrees());
   }
 
 
