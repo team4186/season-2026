@@ -78,8 +78,7 @@ public class TurretSubsystem extends SubsystemBase {
     public void periodic(){
         SmartDashboard.putBoolean("Turret_Left_Limit_Switch: ", getLeftLimitSwitch());
         SmartDashboard.putBoolean("Turret_Right_Limit_Switch: ", getRightLimitSwitch());
-        SmartDashboard.putBoolean("Turret_Zero Limit_Switch: ", getZeroLimitSwitch());
-//        SmartDashboard.putBoolean("Hood_Home_Limit_Switch: ", getHomeLimitSwitch());
+        SmartDashboard.putBoolean("Hood_Limit_Switch: ", getHoodLimitSwitch());
 
         SmartDashboard.putNumber("Shooter_Velocity: ", getShooterVelocity());
         SmartDashboard.putNumber("Turret_Position: ", getTurretPosition());
@@ -125,10 +124,7 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
 
-    public boolean getZeroLimitSwitch() { return hoodLimitSwitch.get(); }
-
-
-//    public boolean getHomeLimitSwitch() { return homeLimitSwitch.get(); }
+    public boolean getHoodLimitSwitch() { return hoodLimitSwitch.get(); }
 
 
     public double getTurretPosition() { return turretRelativeEncoder.getPosition(); }
