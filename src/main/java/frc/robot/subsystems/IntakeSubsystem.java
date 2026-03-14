@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.RelativeEncoder;
 import frc.robot.UnitsUtility;
@@ -89,21 +90,21 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     private boolean isStarboardExtended() {
-        return UnitsUtility.isBeamBroken(extendedSwitchStarboard, false, "Intake Extension Switch Starboard");
+        return !UnitsUtility.isBeamBroken(extendedSwitchStarboard, false, "Intake Extension Switch Starboard");
     }
 
 
     private boolean isPortExtended() {
-        return UnitsUtility.isBeamBroken(extendedSwitchPort, false, "Intake Extension Switch Port");
+        return !UnitsUtility.isBeamBroken(extendedSwitchPort, false, "Intake Extension Switch Port");
     }
 
 
     private boolean isStarboardRetracted(){
-        return UnitsUtility.isBeamBroken(retractedSwitchStarboard, false, "Retracted Extension Switch Starboard");
+        return !UnitsUtility.isBeamBroken(retractedSwitchStarboard, false, "Intake Retracted Switch Starboard");
     }
 
     private boolean isPortRetracted(){
-        return UnitsUtility.isBeamBroken(retractedSwitchPort, false, "Retracted Extension Switch Port");
+        return !UnitsUtility.isBeamBroken(retractedSwitchPort, false, "Intake Retracted Switch Port");
     }
 
     public boolean isIntakeExtended(){
@@ -177,7 +178,7 @@ public class IntakeSubsystem extends SubsystemBase {
         retractIntakeStarboard();
     }
 
-//Testing basic leader-follower pair
+//just feeding a velocity
     public void simplePairExtension(){
         if(!isStarboardExtended() && !isPortExtended()){
             extensionPortMotor.set(0.1);
@@ -233,6 +234,7 @@ public class IntakeSubsystem extends SubsystemBase {
         return extensionPortRelativeEncoder.getPosition();
     }
 
+//    public Command
 
 
 }

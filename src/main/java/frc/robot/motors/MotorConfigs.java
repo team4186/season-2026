@@ -251,49 +251,49 @@ public final class MotorConfigs {
         return motorLeader;
     }
 
-    public SparkMax applyIntakePairSparkConfig(
-            SparkMax motorLeader,
-            SparkMax motorFollower,
-            boolean invertSecondMotor,
-            boolean inverse
-    ){
-        SparkBaseConfig baseConfig = DefaultSparkMaxConfig;
-
-        baseConfig.inverted(inverse)
-                .smartCurrentLimit(NeoMotorConstants.SMART_CURRENT_LIMIT_550)
-                .idleMode(IntakeConstants.EXTENSION_IDLE_MODE);
-
-        baseConfig.encoder
-                .positionConversionFactor(IntakeConstants.EXTENSION_POSITION_CONVERSION_FACTOR)
-                .velocityConversionFactor(IntakeConstants.EXTENSION_VELOCITY_CONVERSION_FACTOR)
-                .quadratureAverageDepth(Constants.VELOCITY_AVERAGE_DEPTH)
-                .quadratureMeasurementPeriod(Constants.VELOCITY_MEASUREMENT_PERIOD);
-
-        motorLeader.configure(
-                baseConfig,
-                ResetMode.kNoResetSafeParameters,
-                PersistMode.kPersistParameters);
-
-
-        SparkBaseConfig followerConfig = new SparkMaxConfig();
-
-        // boolean invertFollower = invertSecondMotor ^ inverse; // using XOR boolean logic
-        boolean invertFollower = inverse;
-        if (invertSecondMotor) {
-            invertFollower = !invertFollower;
-        }
-
-        followerConfig
-                .apply(baseConfig)
-                .follow(motorLeader, invertFollower);
-
-        motorFollower.configure(
-                followerConfig,
-                ResetMode.kNoResetSafeParameters,
-                PersistMode.kPersistParameters);
-
-        return motorLeader;
-    }
+//    public SparkMax applyIntakePairSparkConfig(
+//            SparkMax motorLeader,
+//            SparkMax motorFollower,
+//            boolean invertSecondMotor,
+//            boolean inverse
+//    ){
+//        SparkBaseConfig baseConfig = DefaultSparkMaxConfig;
+//
+//        baseConfig.inverted(inverse)
+//                .smartCurrentLimit(NeoMotorConstants.SMART_CURRENT_LIMIT_550)
+//                .idleMode(IntakeConstants.EXTENSION_IDLE_MODE);
+//
+//        baseConfig.encoder
+//                .positionConversionFactor(IntakeConstants.EXTENSION_POSITION_CONVERSION_FACTOR)
+//                .velocityConversionFactor(IntakeConstants.EXTENSION_VELOCITY_CONVERSION_FACTOR)
+//                .quadratureAverageDepth(Constants.VELOCITY_AVERAGE_DEPTH)
+//                .quadratureMeasurementPeriod(Constants.VELOCITY_MEASUREMENT_PERIOD);
+//
+//        motorLeader.configure(
+//                baseConfig,
+//                ResetMode.kNoResetSafeParameters,
+//                PersistMode.kPersistParameters);
+//
+//
+//        SparkBaseConfig followerConfig = new SparkMaxConfig();
+//
+//        // boolean invertFollower = invertSecondMotor ^ inverse; // using XOR boolean logic
+//        boolean invertFollower = inverse;
+//        if (invertSecondMotor) {
+//            invertFollower = !invertFollower;
+//        }
+//
+//        followerConfig
+//                .apply(baseConfig)
+//                .follow(motorLeader, invertFollower);
+//
+//        motorFollower.configure(
+//                followerConfig,
+//                ResetMode.kNoResetSafeParameters,
+//                PersistMode.kPersistParameters);
+//
+//        return motorLeader;
+//    }
 
     // TODO: Setup SparkMax config
     public SparkMax applyIntakeExtensionSparkConfig(

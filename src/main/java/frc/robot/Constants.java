@@ -97,9 +97,9 @@ public final class Constants {
 
     public static final class TurretConstants {
         // NEO 550
-        public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
         public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
-        public static final SparkBaseConfig.IdleMode HOOD_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final SparkBaseConfig.IdleMode HOOD_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
         public static final int ROTATE_MOTOR_ID = 38; // TODO: Add equivalent const values and replace in for Components
         public static final int SHOOTER_LEAD_MOTOR_ID = 31; // TODO
@@ -177,7 +177,7 @@ public final class Constants {
     public static final class IntakeConstants {
         // Extension idle modes & Pickup idle modes
         public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast; //TODO: set back to kBrake once we're done testing inverses-SHing
-        public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
         // ID's
         public static final int STARBOARD_EXTENSION_MOTOR_ID = 14;
@@ -277,7 +277,7 @@ public final class Constants {
 
 
     public static final class ClimbConstants {
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
         // IDS
         public static final int CLIMB_MOTOR_ID = 35;

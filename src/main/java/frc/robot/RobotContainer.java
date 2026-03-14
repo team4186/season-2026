@@ -89,7 +89,7 @@ public class RobotContainer {
             motorComponents.getTurretShooterMotor(),
             motorComponents.getTurretRotateMotor(),
             motorComponents.getTurretHoodMotor(),
-            new DigitalInput(Constants.TurretConstants.TURRET_ZERO__LIMIT_SWITCH),
+            new DigitalInput(Constants.TurretConstants.HOOD_LIMIT_SWITCH),
             new DigitalInput(Constants.TurretConstants.TURRET_LEFT_LIMIT_SWITCH),
             new DigitalInput(Constants.TurretConstants.TURRET_RIGHT_LIMIT_SWITCH)
     );
