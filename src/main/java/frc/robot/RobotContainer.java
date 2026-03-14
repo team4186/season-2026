@@ -65,21 +65,21 @@ public class RobotContainer {
 
 // TODO: Test and uncomment subsystems
 
-    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
-            motorComponents.getIntakeExtensionStarboardMotor(),
-            motorComponents.getIntakeExtensionPortMotor(),
-            motorComponents.getIntakePickupMotor(),
-//            motorComponents.getIntakeExtensionMotorPair(),
-            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
-            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
-            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
-            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
-    );
-//
-    private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
-            motorComponents.getSpindexerRotateMotor()
-            //motorComponents.getSpindexerFeedMotor()
-    );
+//    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
+//            motorComponents.getIntakeExtensionStarboardMotor(),
+//            motorComponents.getIntakeExtensionPortMotor(),
+//            motorComponents.getIntakePickupMotor(),
+////            motorComponents.getIntakeExtensionMotorPair(),
+//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
+//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
+//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
+//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
+//    );
+////
+//    private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
+//            motorComponents.getSpindexerRotateMotor()
+//            //motorComponents.getSpindexerFeedMotor()
+//    );
 
     private final ClimbSubsystem climbSubsystem = new ClimbSubsystem(
             motorComponents.getClimbMotor(),
@@ -346,8 +346,8 @@ public class RobotContainer {
 
 
         //Intake Commands
-        ExtendIntakeCommand extendIntakeCommand = new ExtendIntakeCommand(intakeSubsystem);
-        RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
+//        ExtendIntakeCommand extendIntakeCommand = new ExtendIntakeCommand(intakeSubsystem);
+//        RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
 
         //Climb Commands
         DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem);
@@ -402,13 +402,13 @@ public class RobotContainer {
             driverXbox.leftBumper().onTrue(Commands.none());
             driverXbox.rightBumper().onTrue(Commands.none());
 
-            joystickOperator.button(7).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(0.1), climbSubsystem).repeatedly());
-            joystickOperator.button(8).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-0.1), climbSubsystem).repeatedly());
-
-            joystickOperator.trigger().whileTrue(Commands.runOnce(spindexerSubsystem::feed, spindexerSubsystem).repeatedly());
+            //joystickOperator.trigger().whileTrue(Commands.runOnce(spindexerSubsystem::feed, spindexerSubsystem).repeatedly());
 
         } else {
            //Teleop Command Keybinds
+
+            joystickOperator.button(7).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(0.5), climbSubsystem).repeatedly());
+            joystickOperator.button(8).whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-0.5), climbSubsystem).repeatedly());
 
             joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
             joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());

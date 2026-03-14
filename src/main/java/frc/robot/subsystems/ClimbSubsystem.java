@@ -61,6 +61,7 @@ public class ClimbSubsystem extends SubsystemBase {
         return climbEncoder.getPosition();
     }
 
+
 //    public void resetClimb() {
 //        if (!getLimitSwitch()) {
 //            climbMotorController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
@@ -72,20 +73,19 @@ public class ClimbSubsystem extends SubsystemBase {
 
 
     public void simpleClimbDeploy(double speed) {
-        if (ClimbConstants.CLIMB_DEPLOY_ANGLE >= climbEncoder.getPosition()) {
+//        if (ClimbConstants.CLIMB_DEPLOY_ANGLE >= climbEncoder.getPosition()) {
             climbMotor.set(speed);
-        } else {
-            climbMotor.stopMotor();
-        }
+//        } else {
+//            climbMotor.stopMotor();
+//        }
     }
 
 
     public void simpleClimbMoveDown(double speed) {
-        //
-        if (!homeSwitch.get()) {
-            climbMotor.set(speed);
-        } else {
+        if (getLimitSwitch()) {
             climbMotor.stopMotor();
+        } else {
+            climbMotor.set(speed);
         }
     }
 
@@ -102,7 +102,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
 
     public boolean getLimitSwitch(){
-        return homeSwitch.get();
+        return !homeSwitch.get();
     }
 
 //commented out for push, uncomment if needed ziyao. - Shing and Rishab
