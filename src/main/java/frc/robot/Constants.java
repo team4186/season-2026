@@ -171,7 +171,7 @@ public final class Constants {
 
     public static final class IntakeConstants {
         // Extension idle modes & Pickup idle modes
-        public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+        public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast; //TODO: set back to kBrake once we're done testing inverses-SHing
         public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
 
         // ID's
