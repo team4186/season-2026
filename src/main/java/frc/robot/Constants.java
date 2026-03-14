@@ -305,7 +305,7 @@ public final class Constants {
         // TODO: Update with real world values
         public static final double CLIMB_MIN_ANGLE = 0.0;
         public static final double CLIMB_MAX_ANGLE = 0.0;
-        public static final double CLIMB_DEPLOY_ANGLE = 150.0;
+        public static final double CLIMB_DEPLOY_ANGLE = 90.0;
         public static final double CLIMB_UP_ANGLE = 0.0; // Placeholder, please change.
         public static final double CLIMB_DOWN_ANGLE = 0.0; // Placeholder, please change.
         public static final double CLIMB_L1_ANGLE = 0.0;

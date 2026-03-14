@@ -17,7 +17,6 @@ public class RetractClimbCommand extends Command {
     public void initialize(){}
     @Override
     public void execute(){
-        climbSubsystem.zeroAtSwitch();
         if(climbSubsystem.getPosition() >= 0.0){
             climbSubsystem.simpleClimbDeploy(-0.1); //TODO: move to constants
         }else{

@@ -39,7 +39,11 @@ public class ClimbSubsystem extends SubsystemBase {
     public void periodic(){
         SmartDashboard.putBoolean("Climb_Home_Limit_Switch: ", getLimitSwitch());
         SmartDashboard.putNumber("Climb_Current_Position: ", getPosition());
-    //    SmartDashboard.putBoolean("Climb_is_at_Setpoint: ", isClimbAtSetpoint());
+        //    SmartDashboard.putBoolean("Climb_is_at_Setpoint: ", isClimbAtSetpoint());
+
+        if (getLimitSwitch()) {
+            climbEncoder.setPosition(0);
+        }
     }
 
 
@@ -66,8 +70,23 @@ public class ClimbSubsystem extends SubsystemBase {
 //        }
 //    }
 
-    public void simpleClimbDeploy(double speed){
-        climbMotor.set(speed);
+
+    public void simpleClimbDeploy(double speed) {
+        if (ClimbConstants.CLIMB_DEPLOY_ANGLE >= climbEncoder.getPosition()) {
+            climbMotor.set(speed);
+        } else {
+            climbMotor.stopMotor();
+        }
+    }
+
+
+    public void simpleClimbMoveDown(double speed) {
+        //
+        if (!homeSwitch.get()) {
+            climbMotor.set(speed);
+        } else {
+            climbMotor.stopMotor();
+        }
     }
 
 
@@ -86,11 +105,6 @@ public class ClimbSubsystem extends SubsystemBase {
         return homeSwitch.get();
     }
 
-    public void zeroAtSwitch(){
-        if(getLimitSwitch()){
-            resetEncoder();
-        }
-    }
 //commented out for push, uncomment if needed ziyao. - Shing and Rishab
 //    public Command deployClimbCommand() {
 //        updateClimb(Constants.ClimbConstants.CLIMB_DEPLOY_ANGLE);
