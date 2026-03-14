@@ -20,10 +20,7 @@ public class ClimbSubsystem extends SubsystemBase {
     private final DigitalInput homeSwitch;
     private final RelativeEncoder climbEncoder;
     private final SparkClosedLoopController climbMotorController;
-    // left climb motor
-    // right climb motor
-    // pigeon/gyro --- swerve for gyro instance periodically
-    // retracted limit switch
+
     private int endOfTravel;
 
 
@@ -31,10 +28,10 @@ public class ClimbSubsystem extends SubsystemBase {
             SparkMax climbMotor,
             DigitalInput homeSwitch
     ) {
-    this.climbMotor = climbMotor;
-    this.homeSwitch = homeSwitch;
-    this.climbEncoder = climbMotor.getEncoder();
-    this.climbMotorController = climbMotor.getClosedLoopController();
+        this.climbMotor = climbMotor;
+        this.homeSwitch = homeSwitch;
+        this.climbEncoder = climbMotor.getEncoder();
+        this.climbMotorController = climbMotor.getClosedLoopController();
     }
 
 
@@ -42,15 +39,15 @@ public class ClimbSubsystem extends SubsystemBase {
     public void periodic(){
         SmartDashboard.putBoolean("Climb_Home_Limit_Switch: ", getLimitSwitch());
         SmartDashboard.putNumber("Climb_Current_Position: ", getPosition());
-        SmartDashboard.putBoolean("Climb_is_at_Setpoint: ", isClimbAtSetpoint());
+    //    SmartDashboard.putBoolean("Climb_is_at_Setpoint: ", isClimbAtSetpoint());
     }
 
 
     // Generic updateClimb function, setpoint can be some angle where the arm needs to be deployed.
     // Setpoint could also be some angle where the arm is clamped down.
-    public void updateClimb(double angleSetpoint){
-        climbMotorController.setSetpoint(angleSetpoint, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-    }
+//    public void updateClimb(double angleSetpoint){
+//        climbMotorController.setSetpoint(angleSetpoint, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+//    }
 
     public void climbStop(){
         climbMotor.stopMotor();
@@ -60,14 +57,14 @@ public class ClimbSubsystem extends SubsystemBase {
         return climbEncoder.getPosition();
     }
 
-    public void resetClimb() {
-        if (!getLimitSwitch()) {
-            climbMotorController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-        } else {
-            climbStop();
-            resetEncoder();
-        }
-    }
+//    public void resetClimb() {
+//        if (!getLimitSwitch()) {
+//            climbMotorController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+//        } else {
+//            climbStop();
+//            resetEncoder();
+//        }
+//    }
 
     public void simpleClimbDeploy(double speed){
         climbMotor.set(speed);
@@ -75,9 +72,9 @@ public class ClimbSubsystem extends SubsystemBase {
 
 
 
-    public boolean isClimbAtSetpoint() {
-        return climbMotorController.isAtSetpoint();
-    }
+//    public boolean isClimbAtSetpoint() {
+//        return climbMotorController.isAtSetpoint();
+//    }
 
 
     public void resetEncoder() {
