@@ -53,7 +53,7 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     public Command run(){
-        return Commands.run( this::feed, this);
+        return Commands.runOnce( this::feed, this).repeatedly();
     }
 
 
