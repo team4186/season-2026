@@ -102,8 +102,8 @@ public final class Constants {
         public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
         public static final SparkBaseConfig.IdleMode HOOD_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
-        public static final int ROTATE_MOTOR_ID = 38; // TODO: Add equivalent const values and replace in for Components
-        public static final int SHOOTER_LEAD_MOTOR_ID = 31; // TODO
+        public static final int ROTATE_MOTOR_ID = 38;
+        public static final int SHOOTER_LEAD_MOTOR_ID = 31;
         public static final int SHOOTER_FOLLOWER_MOTOR_ID = 32;
         public static final int HOOD_MOTOR_ID = 22;
 
@@ -150,7 +150,7 @@ public final class Constants {
         // Conversion factors and expected measured limits
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
         public static final double SHOOTER_POSITION_CONVERSION_FACTOR = 1.0;
-        public static final double HOOD_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double HOOD_POSITION_CONVERSION_FACTOR = (1 / HOOD_GEAR_RATIO) * 360;
 
         public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double SHOOTER_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -162,12 +162,12 @@ public final class Constants {
         public static final double SHOOTER_MIN_OUTPUT = -0.75;
         public static final double SHOOTER_MAX_OUTPUT = 0.75;
 
-        public static final double HOOD_MIN_OUTPUT = 0.0;
-        public static final double HOOD_MAX_OUTPUT = 0.0;
+        public static final double HOOD_MIN_OUTPUT = -0.25;
+        public static final double HOOD_MAX_OUTPUT = 0.25;
 
-        public static final double ROTATE_ERROR_THRESHOLD = 0;
-        public static final double SHOOTER_ERROR_THRESHOLD = 0;
-        public static final double HOOD_ERROR_THRESHOLD = 0;
+        public static final double ROTATE_ERROR_THRESHOLD = 0.0;
+        public static final double SHOOTER_ERROR_THRESHOLD = 0.0;
+        public static final double HOOD_ERROR_THRESHOLD = 0.0;
     }
 
 
@@ -197,15 +197,21 @@ public final class Constants {
         public static final double PICKUP_FAST_SPEED = 0.50; //in rpm, about half of max rpm for a neo brushless
         public static final double PICKUP_SLOW_SPEED = 0.10; //TODO: change to an actual number
 
-
         // Extension PID
         public static final double EXTENSION_P = 0.0; //TODO: set PID values
         public static final double EXTENSION_I = 0.0;
         public static final double EXTENSION_D = 0.0;
 
+        public static final double PICKUP_P = 0.0;
+        public static final double PICKUP_I = 0.0;
+        public static final double PICKUP_D = 0.0;
+
         // Extension FeedForward
         public static final double EXTENSION_KS = 0.0;
         public static final double EXTENSION_KV = NeoMotorConstants.NEO_550_KV;
+
+        public static final double PICKUP_KS = 0.0;
+        public static final double PICKUP_KV = NeoMotorConstants.NEO_550_KV; // TODO: Double check
 
         public static final double EXTENSION_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
         public static final double EXTENSION_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -216,6 +222,9 @@ public final class Constants {
         public static final double EXTENSION_MAX_ANGLE = 0.00; //TODO: find angles
         public static final double MIN_ANGLE = 0.00;
 
+        public static final double EXTENSION_ERROR_THRESHOLD = 0.0; // TODO: Update
+        public static final double PICKUP_ERROR_THRESHOLD = 0.0;
+
         // Pickup values
         public static final double PICKUP_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
         public static final double PICKUP_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -223,8 +232,8 @@ public final class Constants {
         public static final double PICKUP_MAX_OUTPUT = 0.75;
 
         //End of Rail values
-        public static final double RAIL_END = 31.0; //
-        public static final double RAIL_START = 0.0;
+        public static final double INTAKE_RAIL_END = 31.0; //
+        public static final double INTAKE_RAIL_START = 0.0;
     }
 
 
@@ -235,7 +244,6 @@ public final class Constants {
         //TODO: change current limit to lower?
         public static final int FEED_CURRENT_LIMIT = 50;
         public static final int ROTATE_CURRENT_LIMIT = 50;
-
 
         // Spark ID'S
         public static final int ROTATE_MOTOR_ID = 25;
@@ -269,12 +277,15 @@ public final class Constants {
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;
         public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
-        public static final double FEED_SLOW_SPEED = 0.01;
+        public static final double FEED_SLOW_SPEED = 0.1;
 
         public static final double ROTATE_MIN_OUTPUT = -0.75;
         public static final double ROTATE_MAX_OUTPUT = 0.75;
         public static final double ROTATE_SLOW_SPEED = 0.01;
         public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
+
+        public static final double ROTATE_ERROR_THRESHOLD = 0.0;
+        public static final double FEED_ERROR_THRESHOLD = 0.0;
     }
 
 
@@ -300,6 +311,8 @@ public final class Constants {
 
         public static final double CLIMB_MIN_OUTPUT = -0.75;
         public static final double CLIMB_MAX_OUTPUT = 0.75;
+
+        public static final double CLIMB_ERROR_THRESHOLD = 0.0;
 
         // TODO: Update with real world values
         public static final double CLIMB_MIN_ANGLE = 0.0;

@@ -45,8 +45,8 @@ public final class MotorConfigs {
     /**
      * Use this apply config to motor in {@link Components} class.
      *
-     * @param motor a
-     * @param inverse a
+     * @param motor SparkMax motor object needing configuration
+     * @param inverse the motor direction
      *
      * @return SparkMax motor with applied config
      */
@@ -95,6 +95,7 @@ public final class MotorConfigs {
         return motor;
     }
 
+
     // TODO: Implement for individual motor
     public SparkMax applyTurretHoodSparkConfig(
             SparkMax motor,
@@ -105,31 +106,34 @@ public final class MotorConfigs {
         config
                 .inverted(inverse)
                 .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_550)
-                .idleMode(TurretConstants.ROTATE_IDLE_MODE);
+                .idleMode(TurretConstants.HOOD_IDLE_MODE);
 
         config.encoder
-                .positionConversionFactor(TurretConstants.ROTATE_POSITION_CONVERSION_FACTOR)
-                .velocityConversionFactor(TurretConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
+                .positionConversionFactor(TurretConstants.HOOD_POSITION_CONVERSION_FACTOR)
+                .velocityConversionFactor(TurretConstants.HOOD_VELOCITY_CONVERSION_FACTOR);
 
         config.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 // Set PID values for position control. We don't need to pass a closed loop
                 // slot, as it will default to slot 0.
                 .pid(
-                        TurretConstants.ROTATE_P,
-                        TurretConstants.ROTATE_I,
-                        TurretConstants.ROTATE_D,
+                        TurretConstants.HOOD_P,
+                        TurretConstants.HOOD_I,
+                        TurretConstants.HOOD_D,
                         ClosedLoopSlot.kSlot0)
                 .outputRange(
-                        TurretConstants.ROTATE_MIN_OUTPUT,
-                        TurretConstants.ROTATE_MAX_OUTPUT,
+                        TurretConstants.HOOD_MIN_OUTPUT,
+                        TurretConstants.HOOD_MAX_OUTPUT,
+                        ClosedLoopSlot.kSlot0)
+                .allowedClosedLoopError(
+                        TurretConstants.HOOD_ERROR_THRESHOLD,
                         ClosedLoopSlot.kSlot0)
                 .feedForward
                 .kS(
-                        TurretConstants.ROTATE_KS,
+                        TurretConstants.HOOD_KS,
                         ClosedLoopSlot.kSlot0)
                 .kV(
-                        TurretConstants.ROTATE_KV,
+                        TurretConstants.HOOD_KV,
                         ClosedLoopSlot.kSlot0);
 
         motor.configure(
@@ -140,51 +144,6 @@ public final class MotorConfigs {
 
         return motor;
     }
-//Possible to be removed \/\/\/\/\/\/\/\/\/
-//    public SparkMax applyTurretShooterSparkConfig(
-//            SparkMax motor,
-//            boolean inverse
-//    ) {
-//        SparkBaseConfig config = DefaultSparkMaxConfig;
-//
-//        config
-//                .inverted(inverse)
-//                .smartCurrentLimit(NeoMotorConstants.SMART_CURRENT_LIMIT_VORTEX)
-//                .idleMode(TurretConstants.SHOOTER_IDLE_MODE);
-//
-//        config.encoder
-//                .positionConversionFactor(TurretConstants.ROTATE_POSITION_CONVERSION_FACTOR)
-//                .velocityConversionFactor(TurretConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
-//
-//        config.closedLoop
-//                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-//                // Set PID values for position control. We don't need to pass a closed loop
-//                // slot, as it will default to slot 0.
-//                .pid(
-//                        TurretConstants.ROTATE_P,
-//                        TurretConstants.ROTATE_I,
-//                        TurretConstants.ROTATE_D,
-//                        ClosedLoopSlot.kSlot0)
-//                .outputRange(
-//                        TurretConstants.ROTATE_MIN_OUTPUT,
-//                        TurretConstants.ROTATE_MAX_OUTPUT,
-//                        ClosedLoopSlot.kSlot0)
-//                .feedForward
-//                .kS(
-//                        TurretConstants.ROTATE_KS,
-//                        ClosedLoopSlot.kSlot0)
-//                .kV(
-//                        NeoMotorConstants.NEO_VORTEX_KV,
-//                        ClosedLoopSlot.kSlot0);
-//
-//        motor.configure(
-//                config,
-//                ResetMode.kResetSafeParameters,
-//                PersistMode.kPersistParameters
-//        );
-//
-//        return motor;
-//    }
 
 
     public SparkFlex applyShooterSparkConfig(
@@ -201,21 +160,24 @@ public final class MotorConfigs {
 
         // Using Velocity
         baseConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .pid(
-                TurretConstants.SHOOTER_P,
-                TurretConstants.SHOOTER_I,
-                TurretConstants.SHOOTER_D,
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pid(
+                    TurretConstants.SHOOTER_P,
+                    TurretConstants.SHOOTER_I,
+                    TurretConstants.SHOOTER_D,
+                    ClosedLoopSlot.kSlot1)
+                .outputRange(
+                    TurretConstants.SHOOTER_MIN_OUTPUT,
+                    TurretConstants.SHOOTER_MAX_OUTPUT,
+                    ClosedLoopSlot.kSlot1) // Range of total voltage
+                .allowedClosedLoopError(
+                        TurretConstants.SHOOTER_ERROR_THRESHOLD,
+                        ClosedLoopSlot.kSlot0)
+                .feedForward
+                // kV is now in Volts, so we multiply by the nominal voltage (12V)
+                .kS(TurretConstants.SHOOTER_KS,
                 ClosedLoopSlot.kSlot1)
-            .outputRange(
-                TurretConstants.SHOOTER_MIN_OUTPUT,
-                TurretConstants.SHOOTER_MAX_OUTPUT,
-                ClosedLoopSlot.kSlot1) // Range of total voltage
-            .feedForward
-            // kV is now in Volts, so we multiply by the nominal voltage (12V)
-            .kS(TurretConstants.SHOOTER_KS,
-                ClosedLoopSlot.kSlot1)
-            .kV(
+                .kV(
                 TurretConstants.SHOOTER_KV,
                 ClosedLoopSlot.kSlot1);
 
@@ -252,8 +214,6 @@ public final class MotorConfigs {
     }
 
 
-
-    // TODO: Setup SparkMax config
     public SparkMax applyIntakeExtensionSparkConfig(
         SparkMax motor,
         boolean inverse
@@ -269,26 +229,29 @@ public final class MotorConfigs {
                     .positionConversionFactor(IntakeConstants.EXTENSION_POSITION_CONVERSION_FACTOR)
                     .velocityConversionFactor(IntakeConstants.EXTENSION_VELOCITY_CONVERSION_FACTOR);
 
-            config.closedLoop
-                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                    // Set PID values for position control. We don't need to pass a closed loop
-                    // slot, as it will default to slot 0.
-                    .pid(
-                            IntakeConstants.EXTENSION_P,
-                            IntakeConstants.EXTENSION_I,
-                            IntakeConstants.EXTENSION_D,
-                            ClosedLoopSlot.kSlot0)
-                    .outputRange(
-                            IntakeConstants.EXTENSION_MIN_OUTPUT,
-                            IntakeConstants.EXTENSION_MAX_OUTPUT,
-                            ClosedLoopSlot.kSlot0)
-                    .feedForward
-                    .kS(
-                            IntakeConstants.EXTENSION_KS,
-                            ClosedLoopSlot.kSlot0)
-                    .kV(
-                            IntakeConstants.EXTENSION_KV,
-                            ClosedLoopSlot.kSlot0);
+//            config.closedLoop
+//                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+//                    // Set PID values for position control. We don't need to pass a closed loop
+//                    // slot, as it will default to slot 0.
+//                    .pid(
+//                            IntakeConstants.EXTENSION_P,
+//                            IntakeConstants.EXTENSION_I,
+//                            IntakeConstants.EXTENSION_D,
+//                            ClosedLoopSlot.kSlot0)
+//                    .outputRange(
+//                            IntakeConstants.EXTENSION_MIN_OUTPUT,
+//                            IntakeConstants.EXTENSION_MAX_OUTPUT,
+//                            ClosedLoopSlot.kSlot0)
+//                    .allowedClosedLoopError(
+//                            IntakeConstants.EXTENSION_ERROR_THRESHOLD,
+//                            ClosedLoopSlot.kSlot0)
+//                    .feedForward
+//                    .kS(
+//                            IntakeConstants.EXTENSION_KS,
+//                            ClosedLoopSlot.kSlot0)
+//                    .kV(
+//                            IntakeConstants.EXTENSION_KV,
+//                            ClosedLoopSlot.kSlot0);
 
             motor.configure(
                     config,
@@ -321,21 +284,24 @@ public final class MotorConfigs {
 //                    // Set PID values for position control. We don't need to pass a closed loop
 //                    // slot, as it will default to slot 0.
 //                    .pid(
-//                            IntakeConstants.INTAKE_P,
-//                            IntakeConstants.INTAKE_I,
-//                            IntakeConstants.INTAKE_D,
-//                            ClosedLoopSlot.kSlot0)
+//                            IntakeConstants.PICKUP_P,
+//                            IntakeConstants.PICKUP_I,
+//                            IntakeConstants.PICKUP_D,
+//                            ClosedLoopSlot.kSlot1)
 //                    .outputRange(
-//                            IntakeConstants.INTAKE_MIN_OUTPUT,
-//                            IntakeConstants.INTAKE_MAX_OUTPUT,
-//                            ClosedLoopSlot.kSlot0)
+//                            IntakeConstants.PICKUP_MIN_OUTPUT,
+//                            IntakeConstants.PICKUP_MAX_OUTPUT,
+//                            ClosedLoopSlot.kSlot1)
+//                    .allowedClosedLoopError(
+//                            IntakeConstants.PICKUP_ERROR_THRESHOLD,
+//                            ClosedLoopSlot.kSlot1)
 //                    .feedForward
 //                    .kS(
-//                            IntakeConstants.INTAKE_KS,
-//                            ClosedLoopSlot.kSlot0)
+//                            IntakeConstants.PICKUP_KS,
+//                            ClosedLoopSlot.kSlot1)
 //                    .kV(
-//                            IntakeConstants.INTAKE_KV,
-//                            ClosedLoopSlot.kSlot0);
+//                            IntakeConstants.PICKUP_KV,
+//                            ClosedLoopSlot.kSlot1);
 
             motor.configure(
                     config,
@@ -346,8 +312,6 @@ public final class MotorConfigs {
     }
 
 
-
-    // TODO: Setup SparkMax config
     public SparkMax applyClimbSparkConfig(
         SparkMax motor,
         boolean inverse
@@ -376,6 +340,9 @@ public final class MotorConfigs {
 //                            ClimbConstants.CLIMB_MIN_OUTPUT,
 //                            ClimbConstants.CLIMB_MAX_OUTPUT,
 //                            ClosedLoopSlot.kSlot0)
+//                    .allowedClosedLoopError(
+//                            ClimbConstants.CLIMB_ERROR_THRESHOLD,
+//                            ClosedLoopSlot.kSlot0)
 //                    .feedForward
 //                    .kS(
 //                            ClimbConstants.CLIMB_KS,
@@ -392,14 +359,6 @@ public final class MotorConfigs {
 
             return motor;
     }
-
-
-    // TODO: Setup SparkMax config
-    public SparkMax applyTurretLoaderSparkConfig(){
-        return null;
-    }
-
-
 
 
     // TODO: Implement for individual motor
@@ -424,20 +383,20 @@ public final class MotorConfigs {
 //                    // Set PID values for position control. We don't need to pass a closed loop
 //                    // slot, as it will default to slot 0.
 //                    .pid(
-//                            IntakeConstants.INTAKE_PICKUP_P,
-//                            IntakeConstants.INTAKE_PICKUP_I,
-//                            IntakeConstants.INTAKE_PICKUP_D,
+//                            SpindexerConstants.ROTATE_P,
+//                            SpindexerConstants.ROTATE_I,
+//                            SpindexerConstants.ROTATE_D,
 //                            ClosedLoopSlot.kSlot0)
 //                    .outputRange(
-//                            IntakeConstants.MIN_OUTPUT,
-//                            IntakeConstants.MAX_OUTPUT,
+//                            SpindexerConstants.ROTATE_MIN_OUTPUT,
+//                            SpindexerConstants.ROTATE_MAX_OUTPUT,
 //                            ClosedLoopSlot.kSlot0)
 //                    .feedForward
 //                    .kS(
-//                            IntakeConstants.INTAKE_PICKUP_KS,
+//                            SpindexerConstants.ROTATE_KS,
 //                            ClosedLoopSlot.kSlot0)
 //                    .kV(
-//                            IntakeConstants.INTAKE_PICKUP_KV,
+//                            SpindexerConstants.ROTATE_KV,
 //                            ClosedLoopSlot.kSlot0);
 
             motor.configure(
@@ -466,26 +425,26 @@ public final class MotorConfigs {
                     .positionConversionFactor(SpindexerConstants.FEED_POSITION_CONVERSION_FACTOR)
                     .velocityConversionFactor(SpindexerConstants.FEED_VELOCITY_CONVERSION_FACTOR);
 
-            config.closedLoop
-                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                    // Set PID values for position control. We don't need to pass a closed loop
-                    // slot, as it will default to slot 0.
-                    .pid(
-                            SpindexerConstants.FEED_P,
-                            SpindexerConstants.FEED_I,
-                            SpindexerConstants.FEED_D,
-                            ClosedLoopSlot.kSlot0)
-                    .outputRange(
-                            SpindexerConstants.FEED_MIN_OUTPUT,
-                            SpindexerConstants.FEED_MAX_OUTPUT,
-                            ClosedLoopSlot.kSlot0)
-                    .feedForward
-                    .kS(
-                            SpindexerConstants.FEED_KS,
-                            ClosedLoopSlot.kSlot0)
-                    .kV(
-                            SpindexerConstants.FEED_KV,
-                            ClosedLoopSlot.kSlot0);
+//            config.closedLoop
+//                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+//                    // Set PID values for position control. We don't need to pass a closed loop
+//                    // slot, as it will default to slot 0.
+//                    .pid(
+//                            SpindexerConstants.FEED_P,
+//                            SpindexerConstants.FEED_I,
+//                            SpindexerConstants.FEED_D,
+//                            ClosedLoopSlot.kSlot0)
+//                    .outputRange(
+//                            SpindexerConstants.FEED_MIN_OUTPUT,
+//                            SpindexerConstants.FEED_MAX_OUTPUT,
+//                            ClosedLoopSlot.kSlot0)
+//                    .feedForward
+//                    .kS(
+//                            SpindexerConstants.FEED_KS,
+//                            ClosedLoopSlot.kSlot0)
+//                    .kV(
+//                            SpindexerConstants.FEED_KV,
+//                            ClosedLoopSlot.kSlot0);
 
             motor.configure(
                     config,
