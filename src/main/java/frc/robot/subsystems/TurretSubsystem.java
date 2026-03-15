@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.*;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -10,47 +11,36 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class TurretSubsystem extends SubsystemBase {
-    // Shooter motor
+    // Motors
     private final SparkFlex shooterMotor;
-
-    // Turret motor
     private final SparkMax turretMotor;
+    private final SparkMax hoodMotor;
 
-    // Shooter closed loop controller (slot 0: position, slot 1: velocity)
-    private final SparkClosedLoopController shooterClosedLoopController;
-
-    // aiming closed loop controller (slot 0: position, slot 1: velocity)
+    // Shooter closed loop controller (slot 0: position)
     private final SparkClosedLoopController turretClosedLoopController;
-
     private final SparkClosedLoopController hoodClosedLoopController;
 
-    // max rotation (170 degrees, with 20 degrees of dead zone in the back)
-    private final double maxRotation = TurretConstants.TURRET_MAX_ROTATION;
+    // aiming closed loop controller (slot 1: Velocity)
+    private final SparkClosedLoopController shooterClosedLoopController;
 
-    // min rotation (-170 degrees, with 20 degrees of dead zone in the back)
-    private final double minRotation = TurretConstants.TURRET_MIN_ROTATION;
+    // Turret and Hood Rotation
+    private final double maxTurretRotation = TurretConstants.TURRET_MAX_ROTATION;
+    private final double minTurretRotation = TurretConstants.TURRET_MIN_ROTATION;
+    private final double maxHoodRotation = TurretConstants.HOOD_MAX_ROTATION;
+    private final double minHoodRotation = TurretConstants.HOOD_MIN_ROTATION;
 
-    private final double deadZone = TurretConstants.TURRET_ROTATION_DEAD_ZONE;
+    private final double turretDeadZone = TurretConstants.TURRET_ROTATION_DEAD_ZONE;
 
-
-
-    // zero limit switch (for turret)
+    // Limit Switches
     private final DigitalInput hoodLimitSwitch;
-    // left limit switch
     private final DigitalInput leftLimitSwitch;
-    // right limit switch
     private final DigitalInput rightLimitSwitch;
 
-    private final SparkMax hoodMotor;
-    // home limit switch (starting pos for hood)
-
-
-    // Encoder stuff
+    // Encoders
     private final RelativeEncoder turretRelativeEncoder;
-
     private final RelativeEncoder hoodRelativeEncoder;
-
     private final RelativeEncoder shooterRelativeEncoder;
+
 
     public TurretSubsystem(
             SparkFlex shooterMotor,
@@ -101,62 +91,6 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
 
-//    public void reset() {
-//        shooterMotor.set(0); // TODO: update to set kVelocity using closed loop controller
-//        while (!homeLimitSwitch.get()) { // TODO: Rewrite while loop to check state and update incrementally
-//            hoodMotor.set(-0.5);
-//        }
-//
-//        while (!zeroLimitSwitch.get()) { // TODO: Rewrite while loop to check state and update incrementally
-//            // Apply power to motor directly
-//            // aimingMotor.set();
-//
-//            // Update desired position for motor controller
-//            turretClosedLoopController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-//        }
-//    }
-
-
-    // TODO: Simple table first then regression with enough data with high confidence
-    public void getRegression(double detectedDistance) {
-        /**Create a regression function during testing of optimal hood angle
-        vs RPM at different distances. 
-        
-        Feed limelight distance input into the regression function.
-        **/
-
-        /** Why is this better than a kinematics equation?
-        To solve obtain the ideal shooting velocity for the updateShooterRPM function,
-        you need know the angle and the launch distance from the turret to the wall.
-
-        Getting the distance from the turret to the goal is simple enough, but getting the launch angle is tricky.
-        The launch angle is not the same as the hood angle, so there is no easy way for us to know that on the fly.
-
-        The kinematics equation outputs initial velocity in terms of m/s, but the robot takes velocity in RPM.
-        While you can convert m/s to RPM, the ideal initial launch velocity for the ball is not the same as
-        the initial velocity of the flywheel (which is roughly 2 times the speed).
-
-        Not only that, the velocity of the flywheel isn't the same as the rotational velocity of the shaft.
-        Meaning that you need to take that into account when calculating motor RPM.
-        Even with all of that in consideration, there are still gear boxes, which makes this process even more
-        complicated.
-
-        After all that, you still need another kinematics equation to solve for the ideal launch angle.
-        Which is just a pain to do for something that can be solved easily with regression.
-
-        TDLR: Regression is simpler because we can ignore unit conversions from M/S to RPM and all
-        the shenanigans that come with physics.
-        **/
-
-        /** Why is this worse than kinematics? Because I said so **/
-    }
-
-
-    // TODO: Decision -> Should we include this in reset function? Should we have separate reset functions with one calling all of them in one case?
-
-
-    // TODO: Implement with closed loop controller and desired rpm or speed if using velocity conversion with encoder
-
     public void updateTurretRotation(double angle) {
         turretClosedLoopController.setSetpoint(aimingFilter(angle), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
@@ -168,7 +102,7 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     public void updateHoodAngle(double angle) {
-        hoodClosedLoopController.setSetpoint(Math.max(0, Math.min(angle, 35)), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        hoodClosedLoopController.setSetpoint(Math.max(minHoodRotation, Math.min(angle, maxHoodRotation)), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
 
@@ -176,28 +110,58 @@ public class TurretSubsystem extends SubsystemBase {
     private double aimingFilter (double reqSetpoint) {
         double adjustedSetpoint = 0.0;
 
-        if (reqSetpoint > maxRotation + deadZone ) {
-            adjustedSetpoint = Math.max( reqSetpoint - 360, minRotation);
-        } else if (reqSetpoint < minRotation - deadZone) {
-            adjustedSetpoint = Math.max( reqSetpoint + 360, maxRotation);
-        } else if (reqSetpoint >= maxRotation) {
-            adjustedSetpoint = maxRotation;
-        } else if (reqSetpoint <= minRotation) {
-            adjustedSetpoint = minRotation;
+        if (reqSetpoint > maxTurretRotation + turretDeadZone ) {
+            adjustedSetpoint = Math.max( reqSetpoint - 360, minTurretRotation);
+        } else if (reqSetpoint < minTurretRotation - turretDeadZone) {
+            adjustedSetpoint = Math.min( reqSetpoint + 360, maxTurretRotation);
+        } else if (reqSetpoint >= maxTurretRotation) {
+            adjustedSetpoint = maxTurretRotation;
+        } else if (reqSetpoint <= minTurretRotation) {
+            adjustedSetpoint = minTurretRotation;
         }
 
         return adjustedSetpoint;
     }
 
-    // TODO: What is the default case for each turret limit switch? Should we track and/or note this here?
-    public boolean getLeftLimitSwitch() {
-        return leftLimitSwitch.get();
+
+    // TODO: Simple table first then regression with enough data with high confidence
+    public void getRegression(double detectedDistance) {
+        /**Create a regression function during testing of optimal hood angle
+         vs RPM at different distances.
+
+         Feed limelight distance input into the regression function.
+         **/
+
+        /** Why is this better than a kinematics equation?
+         To solve obtain the ideal shooting velocity for the updateShooterRPM function,
+         you need know the angle and the launch distance from the turret to the wall.
+
+         Getting the distance from the turret to the goal is simple enough, but getting the launch angle is tricky.
+         The launch angle is not the same as the hood angle, so there is no easy way for us to know that on the fly.
+
+         The kinematics equation outputs initial velocity in terms of m/s, but the robot takes velocity in RPM.
+         While you can convert m/s to RPM, the ideal initial launch velocity for the ball is not the same as
+         the initial velocity of the flywheel (which is roughly 2 times the speed).
+
+         Not only that, the velocity of the flywheel isn't the same as the rotational velocity of the shaft.
+         Meaning that you need to take that into account when calculating motor RPM.
+         Even with all of that in consideration, there are still gear boxes, which makes this process even more
+         complicated.
+
+         After all that, you still need another kinematics equation to solve for the ideal launch angle.
+         Which is just a pain to do for something that can be solved easily with regression.
+
+         TDLR: Regression is simpler because we can ignore unit conversions from M/S to RPM and all
+         the shenanigans that come with physics.
+         **/
+
+        /** Why is this worse than kinematics? Because I said so **/
     }
 
+    public boolean getLeftLimitSwitch() { return leftLimitSwitch.get(); }
 
-    public boolean getRightLimitSwitch() {
-        return rightLimitSwitch.get();
-    }
+
+    public boolean getRightLimitSwitch() { return rightLimitSwitch.get(); }
 
 
     public boolean getHoodLimitSwitch() { return hoodLimitSwitch.get(); }
