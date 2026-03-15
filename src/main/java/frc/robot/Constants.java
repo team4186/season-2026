@@ -4,10 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
 import com.revrobotics.spark.config.SparkBaseConfig;
+
+import static edu.wpi.first.units.Units.Meter;
 
 
 /**
@@ -45,6 +50,19 @@ public final class Constants {
 //                 0.4,
 //                 0,
 //                 0.01);
+    //Left and right are relative to robot looking at tags.
+/**Red Left :  TX: 15.00 Ty: 4.84
+Red Right   Tx: 14.99 Ty: 4.10 (difference between ty's should be 0.82m, red right seemed inaccurate
+ so i based red right ty off of red left
+ **/
+public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(15.00),
+        Meter.of(4.84)),
+        Rotation2d.fromDegrees(0));
+     public static final Pose2d RedRightPole = new Pose2d(new Translation2d(Meter.of(15.00),
+            Meter.of(4.02)),
+            Rotation2d.fromDegrees(0));
+     public static final Pose2d BlueLeftPole = new Pose2d();
+     public static final Pose2d BlueRightPole = new Pose2d();
      }
 
 
