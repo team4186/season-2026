@@ -125,9 +125,9 @@ public final class Constants {
         public static final double HOOD_GEAR_RATIO = 20;
 
         // PID
-        public static final double ROTATE_P = 0.0075;
+        public static final double ROTATE_P = 0.0175; // rotate is prone to oscillation at some points
         public static final double ROTATE_I = 0.0;
-        public static final double ROTATE_D = 0.002;
+        public static final double ROTATE_D = 0.0085;
 
         public static final double SHOOTER_P = 0.0075;
         public static final double SHOOTER_I = 0.0;
@@ -139,13 +139,13 @@ public final class Constants {
 
         // FeedForward // TODO: update
 
-        public static final double ROTATE_KS = 0.185;
+        public static final double ROTATE_KS = 0.51;
         public static final double SHOOTER_KS = 0.185;
         public static final double HOOD_KS = 0;
 
-        public static final double ROTATE_KV = 0;
-        public static final double SHOOTER_KV = 0;
-        public static final double HOOD_KV = 0;
+        public static final double ROTATE_KV = NeoMotorConstants.NEO_550_KV;
+        public static final double SHOOTER_KV = NeoMotorConstants.NEO_VORTEX_KV;
+        public static final double HOOD_KV = NeoMotorConstants.NEO_550_KV;
 
         // Conversion factors and expected measured limits
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
@@ -156,8 +156,8 @@ public final class Constants {
         public static final double SHOOTER_VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double HOOD_VELOCITY_CONVERSION_FACTOR = 1.0;
 
-        public static final double ROTATE_MIN_OUTPUT = -0.75;
-        public static final double ROTATE_MAX_OUTPUT = 0.75;
+        public static final double ROTATE_MIN_OUTPUT = -0.9;
+        public static final double ROTATE_MAX_OUTPUT = 0.9;
 
         public static final double SHOOTER_MIN_OUTPUT = -0.75;
         public static final double SHOOTER_MAX_OUTPUT = 0.75;
@@ -165,7 +165,7 @@ public final class Constants {
         public static final double HOOD_MIN_OUTPUT = -0.25;
         public static final double HOOD_MAX_OUTPUT = 0.25;
 
-        public static final double ROTATE_ERROR_THRESHOLD = 0.0;
+        public static final double ROTATE_ERROR_THRESHOLD = 0.13;
         public static final double SHOOTER_ERROR_THRESHOLD = 0.0;
         public static final double HOOD_ERROR_THRESHOLD = 0.0;
     }
