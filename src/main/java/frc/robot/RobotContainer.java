@@ -418,8 +418,12 @@ public class RobotContainer {
                     .whileFalse(spindexerSubsystem.stopFeed());
 
 
-            joystickDriver.button(6).whileTrue(intakeSubsystem.extendIntake());
-            joystickDriver.button(4).whileTrue(intakeSubsystem.retractIntake());
+            joystickDriver.button(6)
+                    .whileTrue(intakeSubsystem.extendIntake())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+            joystickDriver.button(4)
+                    .whileTrue(intakeSubsystem.retractIntake())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));;
 
             //TODO: Uncomment for drive team after subsystem testing
 //            //Intake Command keybind

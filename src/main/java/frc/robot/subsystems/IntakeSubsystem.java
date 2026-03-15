@@ -252,6 +252,8 @@ public class IntakeSubsystem extends SubsystemBase {
         return extensionPortRelativeEncoder.getPosition();
     }
 
+
+
     public Command setSlowPickup(double speed){
         return Commands.runOnce(()->pickupBalls(speed),this).repeatedly();
     }
@@ -259,6 +261,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command stopPickupMotor(){
         return Commands.runOnce(this::stopPickup,this);
     }
+
+
 
     public Command extendIntake(){
         return Commands.runOnce(this::extendIntake,this).repeatedly();
