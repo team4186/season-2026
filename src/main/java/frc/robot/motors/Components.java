@@ -124,7 +124,7 @@ public class Components {
         if (spindexerRotateMotor == null) {
             spindexerRotateMotor = customConfigs.applySpindexerRotateSparkConfig(
                     new SparkMax(SpindexerConstants.ROTATE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless), // TODO: Move id to Constants
-                    false);
+                    true);
         }
         return spindexerRotateMotor;
     }

@@ -6,8 +6,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,14 +22,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.commands.intakecommands.ExtendIntakeCommand;
-import frc.robot.commands.intakecommands.RetractIntakeCommand;
 import frc.robot.subsystems.*;
 import frc.robot.motors.Components;
 import java.io.File;
 import swervelib.SwerveInputStream;
-import frc.robot.commands.intakecommands.*;
 import frc.robot.commands.climbCommand.*;
 
 /**
@@ -75,11 +69,11 @@ public class RobotContainer {
 //            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
 //            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
 //    );
-////
-//    private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
-//            motorComponents.getSpindexerRotateMotor()
-//            //motorComponents.getSpindexerFeedMotor()
-//    );
+
+    private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
+            motorComponents.getSpindexerRotateMotor()
+            //motorComponents.getSpindexerFeedMotor()
+    );
 
     private final ClimbSubsystem climbSubsystem = new ClimbSubsystem(
             motorComponents.getClimbMotor(),
@@ -114,8 +108,8 @@ public class RobotContainer {
 
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(
                     drivebase.getSwerveDrive(),
-                    () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * -1,
-                    () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * -1)
+                    () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * 1,
+                    () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * 1)
             .withControllerRotationAxis(
                     () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
@@ -124,24 +118,14 @@ public class RobotContainer {
     // Copy of above but with x, y flipped for red side alliance
     SwerveInputStream driveAngularVelocityRedAlliance = SwerveInputStream.of(
                     drivebase.getSwerveDrive(),
-                    () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * 1,
-                    () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * 1)
+                    () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * -1,
+                    () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * -1)
             .withControllerRotationAxis(
                     () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
     SwerveInputStream driveAngularVelocitySlow = SwerveInputStream.of(
-                    drivebase.getSwerveDrive(),
-                    () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * -1,
-                    () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * -1)
-            .withControllerRotationAxis(
-                    () -> attenuated( joystickDriver.getTwist(), 3, 0.375 ) * 1)
-            .deadband(OperatorConstants.DEADBAND)
-            .allianceRelativeControl(true);
-
-    // Copy of above but with x, y flipped for red side alliance
-    SwerveInputStream driveAngularVelocitySlowRedAlliance = SwerveInputStream.of(
                     drivebase.getSwerveDrive(),
                     () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * 1,
                     () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * 1)
@@ -150,10 +134,20 @@ public class RobotContainer {
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
+    // Copy of above but with x, y flipped for red side alliance
+    SwerveInputStream driveAngularVelocitySlowRedAlliance = SwerveInputStream.of(
+                    drivebase.getSwerveDrive(),
+                    () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * -1,
+                    () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * -1)
+            .withControllerRotationAxis(
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.375 ) * 1)
+            .deadband(OperatorConstants.DEADBAND)
+            .allianceRelativeControl(true);
+
     SwerveInputStream driveRobotRelativeSlow = SwerveInputStream.of(
                     drivebase.getSwerveDrive(),
-                    () -> attenuated( joystickDriver.getY(), 2, 0.25 ) * 1,
-                    () -> attenuated( joystickDriver.getX(), 2, 0.25 ) * 1)
+                    () -> attenuated( joystickDriver.getY(), 2, 0.25 ) * -1,
+                    () -> attenuated( joystickDriver.getX(), 2, 0.25 ) * -1)
             .withControllerRotationAxis(
                     () -> attenuated( joystickDriver.getTwist(), 3, 0.25 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
@@ -418,6 +412,10 @@ public class RobotContainer {
             joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
             joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
+            joystickDriver.button(3)
+                    .whileTrue(spindexerSubsystem.rotateMotors())
+                    .whileFalse(spindexerSubsystem.stopFeed());
+
             //TODO: Uncomment for drive team after subsystem testing
 //            //Intake Command keybind
 //            joystickDriver.button(5).onTrue(extendIntakeCommand);
@@ -473,7 +471,7 @@ public class RobotContainer {
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
-     * @return the command to run in autonomous
+     * @return the command to rotateMotors in autonomous
      */
     public Command getAutonomousCommand() {
         // Pass in the selected auto from the SmartDashboard as our desired autnomous

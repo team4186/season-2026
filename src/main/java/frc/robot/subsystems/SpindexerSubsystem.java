@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.SpindexerConstants;
 
 
@@ -74,12 +73,12 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
 
-    public Command run(){
+    public Command rotateMotors(){
         return Commands.runOnce( this::feed, this).repeatedly();
     }
 
 
-    public Command stop(){
+    public Command stopFeed(){
         return Commands.runOnce( this::stopMotors , this);
     }
 }
