@@ -265,10 +265,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     public Command extendIntake(){
-        return Commands.runOnce(this::extendIntake,this).repeatedly();
+        return Commands.runOnce(this::simplePairExtension,this).repeatedly();
     }
 
     public Command retractIntake(){
-        return Commands.runOnce(this::retractIntake,this).repeatedly();
+        return Commands.runOnce(this::simplePairRetraction,this).repeatedly();
     }
 }
