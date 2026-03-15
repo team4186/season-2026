@@ -211,6 +211,8 @@ public final class Constants {
         public static final double EXTENSION_VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double EXTENSION_MIN_OUTPUT = -0.75;
         public static final double EXTENSION_MAX_OUTPUT = 0.75;
+        public static final double EXTENSION_SLOW_SPEED = 0.10;
+        public static final double EXTENSION_FAST_SPEED = 0.40;
         public static final double EXTENSION_MAX_ANGLE = 0.00; //TODO: find angles
         public static final double MIN_ANGLE = 0.00;
 

@@ -27,6 +27,7 @@ import frc.robot.motors.Components;
 import java.io.File;
 import swervelib.SwerveInputStream;
 import frc.robot.commands.climbCommand.*;
+import frc.robot.Constants.IntakeConstants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -59,16 +60,16 @@ public class RobotContainer {
 
 // TODO: Test and uncomment subsystems
 
-//    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
-//            motorComponents.getIntakeExtensionStarboardMotor(),
-//            motorComponents.getIntakeExtensionPortMotor(),
-//            motorComponents.getIntakePickupMotor(),
-////            motorComponents.getIntakeExtensionMotorPair(),
-//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
-//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
-//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
-//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
-//    );
+    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
+            motorComponents.getIntakeExtensionStarboardMotor(),
+            motorComponents.getIntakeExtensionPortMotor(),
+            motorComponents.getIntakePickupMotor(),
+//            motorComponents.getIntakeExtensionMotorPair(),
+            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
+            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
+            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
+            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
+    );
 
     private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
             motorComponents.getSpindexerRotateMotor()
@@ -415,6 +416,10 @@ public class RobotContainer {
             joystickDriver.button(3)
                     .whileTrue(spindexerSubsystem.rotateMotors())
                     .whileFalse(spindexerSubsystem.stopFeed());
+
+
+            joystickDriver.button(6).whileTrue(intakeSubsystem.extendIntake());
+            joystickDriver.button(4).whileTrue(intakeSubsystem.retractIntake());
 
             //TODO: Uncomment for drive team after subsystem testing
 //            //Intake Command keybind

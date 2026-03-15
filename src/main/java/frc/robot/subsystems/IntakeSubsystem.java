@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.RelativeEncoder;
+import frc.robot.Constants;
 import frc.robot.UnitsUtility;
 import frc.robot.Constants.IntakeConstants;
 
@@ -184,20 +185,28 @@ public class IntakeSubsystem extends SubsystemBase {
     //just feeding a velocity
     public void simplePairExtension(){
         if(!isStarboardExtended()){
-            extensionStarboardMotor.set(0.1);
+            extensionStarboardMotor.set(IntakeConstants.EXTENSION_SLOW_SPEED);
+        }else{
+            extensionStarboardMotor.stopMotor();
         }
         if(!isPortExtended()){
-            extensionPortMotor.set(0.1);
+            extensionPortMotor.set(IntakeConstants.EXTENSION_SLOW_SPEED);
+        }else{
+            extensionPortMotor.stopMotor();
         }
     }
 
 
     public void simplePairRetraction(){
         if(!isStarboardRetracted()){
-            extensionStarboardMotor.set(-0.1);
+            extensionStarboardMotor.set(-IntakeConstants.EXTENSION_SLOW_SPEED);
+        }else{
+            extensionStarboardMotor.stopMotor();
         }
         if(!isPortRetracted()){
-            extensionPortMotor.set(-0.1);
+            extensionPortMotor.set(-IntakeConstants.EXTENSION_SLOW_SPEED);
+        }else{
+            extensionPortMotor.stopMotor();
         }
     }
 
@@ -253,4 +262,11 @@ public class IntakeSubsystem extends SubsystemBase {
         return Commands.runOnce(this::stopPickup,this);
     }
 
+    public Command extendIntake(){
+        return Commands.runOnce(this::extendIntake,this).repeatedly();
+    }
+
+    public Command retractIntake(){
+        return Commands.runOnce(this::retractIntake,this).repeatedly();
+    }
 }
