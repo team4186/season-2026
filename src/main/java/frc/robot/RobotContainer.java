@@ -413,18 +413,26 @@ public class RobotContainer {
             joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
             joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-            joystickDriver.button(3)
+            joystickOperator.button(3)
                     .whileTrue(spindexerSubsystem.rotateMotors())
                     .whileFalse(spindexerSubsystem.stopFeed());
+            joystickOperator.button(2)
+                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_FAST))
+                            .whileFalse(intakeSubsystem.stopPickupMotor());
 
+            joystickOperator.button(5)
+                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
+                    .whileFalse(intakeSubsystem.stopPickupMotor());
 
-            joystickDriver.button(6)
+            joystickOperator.button(6)
                     .whileTrue(intakeSubsystem.extendIntake())
                     .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
-            joystickDriver.button(4)
+
+            joystickOperator.button(4)
                     .whileTrue(intakeSubsystem.retractIntake())
                     .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));;
 
+            joystickDriver.button(9).whileTrue(drivebase.driveToPose(Constants.AutonConstants.RedLeftPole));
             //TODO: Uncomment for drive team after subsystem testing
 //            //Intake Command keybind
 //            joystickDriver.button(5).onTrue(extendIntakeCommand);

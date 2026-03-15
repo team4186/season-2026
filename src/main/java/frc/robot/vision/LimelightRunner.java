@@ -56,6 +56,11 @@ public class LimelightRunner {
 //        SmartDashboard.putNumber("Y Offset", yOffset)
 //        SmartDashboard.putNumber("% of Image", tagArea)
 //        SmartDashboard.putNumber("Distance", Units.metersToInches(distance))
+        if(LimelightHelpers.getTV(LimelightConstants.LIMELIGHT_ROBOT)){
+            LimelightHelpers.setLEDMode_ForceOn(LimelightConstants.LIMELIGHT_ROBOT);
+        }else{
+            LimelightHelpers.setLEDMode_ForceOff(LimelightConstants.LIMELIGHT_ROBOT);
+        }
     }
 
 

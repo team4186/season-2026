@@ -194,7 +194,9 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast; //TODO: set back to kBrake once we're done testing inverses-SHing
         public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
-        // ID's
+        public static final double INTAKE_SPEED_SLOW = 0.1;
+        public static final double INTAKE_SPEED_FAST = 0.65;
+             // ID's
         public static final int STARBOARD_EXTENSION_MOTOR_ID = 14;
         public static final int PORT_EXTENSION_MOTOR_ID = 13;//TODO: set values here
         public static final int PICKUP_MOTOR_ID = 21; //TODO: set values here
