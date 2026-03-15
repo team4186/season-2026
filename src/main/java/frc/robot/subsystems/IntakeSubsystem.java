@@ -122,7 +122,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //TODO: MAKE SURE THE MOTORS ARE INVERTED,AND OPPOSITE CORRECTLY!!!!!! VERY IMPORTANT OR STUFF WILL BREAK!!!!! -Shing
     private void extendIntakeStarboard(){
         if(!isStarboardExtended()){
-            extensionStarboardController.setSetpoint(IntakeConstants.RAIL_END, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+            extensionStarboardController.setSetpoint(IntakeConstants.INTAKE_RAIL_END, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
             // 31.0 is the length of the rail on the intake, in cm. It's the far end of the rail- Shing
         } else {
             extensionStarboardMotor.stopMotor();
@@ -132,7 +132,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void extendIntakePort(){
         if(!isPortExtended()){
-            extensionPortController.setSetpoint(IntakeConstants.RAIL_END, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+            extensionPortController.setSetpoint(IntakeConstants.INTAKE_RAIL_END, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
         } else {
             extensionPortMotor.stopMotor();
         }
@@ -155,7 +155,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void retractIntakeStarboard(){
         if(!isStarboardRetracted()){
-            extensionStarboardController.setSetpoint(IntakeConstants.RAIL_START, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+            extensionStarboardController.setSetpoint(IntakeConstants.INTAKE_RAIL_START, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
             // 0 is the other end, the start - Shing
         }else{
             extensionStarboardMotor.stopMotor();
@@ -164,7 +164,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void retractIntakePort(){
         if(!isPortRetracted()){
-            extensionPortController.setSetpoint(IntakeConstants.RAIL_START, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+            extensionPortController.setSetpoint(IntakeConstants.INTAKE_RAIL_START, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
             // 0 is the other end, the start - Shing
         }else{
             extensionPortMotor.stopMotor();
