@@ -4,12 +4,16 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.config.PIDConstants;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkBaseConfig;
+
+import static edu.wpi.first.units.Units.Meter;
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -25,14 +29,18 @@ import com.revrobotics.spark.config.SparkBaseConfig;
  */
 public final class Constants {
 
-    public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
+    // public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
+    public static final double ROBOT_MASS = (109.2) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-    public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
+    public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag // TODO: Modify?
     public static final double MAX_SPEED = Units.feetToMeters(18.0); //orig value 14.5
     public static final double NOMINAL_VOLTAGE = 12.0;
 
-    // Maximum speed of the robot in meters per second, used to limit acceleration.
+    // Improving Velocity Based Control
+    public static final int VELOCITY_AVERAGE_DEPTH = 5; // 5 Sample Count
+    public static final int VELOCITY_MEASUREMENT_PERIOD = 1; // 1ms Moving Avg Window
 
+    // Maximum speed of the robot in meters per second, used to limit acceleration.
      public static final class AutonConstants {
 //         public static final PIDConstants TRANSLATION_PID = new PIDConstants(
 //                 0.7,
@@ -42,6 +50,19 @@ public final class Constants {
 //                 0.4,
 //                 0,
 //                 0.01);
+    //Left and right are relative to robot looking at tags.
+/**Red Left :  TX: 15.00 Ty: 4.84
+Red Right   Tx: 14.99 Ty: 4.10 (difference between ty's should be 0.82m, red right seemed inaccurate
+ so i based red right ty off of red left
+ **/
+public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(15.00),
+        Meter.of(4.84)),
+        Rotation2d.fromDegrees(0));
+     public static final Pose2d RedRightPole = new Pose2d(new Translation2d(Meter.of(15.00),
+            Meter.of(4.02)),
+            Rotation2d.fromDegrees(0));
+     public static final Pose2d BlueLeftPole = new Pose2d();
+     public static final Pose2d BlueRightPole = new Pose2d();
      }
 
 
@@ -60,10 +81,31 @@ public final class Constants {
     }
 
 
+    public static final class NeoMotorConstants {
+        // NEO (REGULAR)
+        // SMART CURRENT LIMIT (50A - 60A)
+        public static final int SMART_CURRENT_LIMIT_REGULAR = 50;
+        public static final double NEO_REG_FREE_SPEED = 5676;
+        public static final double NEO_REG_KV = NOMINAL_VOLTAGE / NEO_REG_FREE_SPEED; // kv 473
+
+        // NEO 550
+        // SMART CURRENT LIMIT (20A - 40A)
+        public static final int SMART_CURRENT_LIMIT_550 = 30;
+        public static final double NEO_550_FREE_SPEED = 11000;
+        public static final double NEO_550_KV = NOMINAL_VOLTAGE / NEO_550_FREE_SPEED; // kv 915
+
+        // NEO VORTEX
+        // SMART CURRENT LIMIT 80A
+        public static final int SMART_CURRENT_LIMIT_VORTEX = 80;
+        public static final double NEO_VORTEX_FREE_SPEED = 6784; // kv 560
+        public static final double NEO_VORTEX_KV = NOMINAL_VOLTAGE / NEO_VORTEX_FREE_SPEED; // kv 560
+    }
+
+
     public static class LimelightConstants {
         // Camera names
         public static final String LIMELIGHT_TURRET = "limelight-turret";
-        public static final String LIMELIGHT_ROBOT = "limelight-robot";
+        public static final String LIMELIGHT_ROBOT = "limelight-climb";
 
         // StdDevs for pose estimation trust levels
         public static final double LIMELIGHT_X_STD_DEVS = 0.5;
@@ -74,144 +116,231 @@ public final class Constants {
 
     public static final class TurretConstants {
         // NEO 550
-        public static final int MOTOR_CURRENT_LIMIT = 50;
-        public static final double MOTOR_FREE_SPEED = 11000;
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final double GEAR_RATIO = 1.0 / 20.0;
+        public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final SparkBaseConfig.IdleMode HOOD_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
-        // SparkMax
-        public static final int TURRET_MOTOR_ID = 0; // TODO: Add equivalent const values and replace in for Components
+        public static final int ROTATE_MOTOR_ID = 38;
+        public static final int SHOOTER_LEAD_MOTOR_ID = 31;
+        public static final int SHOOTER_FOLLOWER_MOTOR_ID = 32;
+        public static final int HOOD_MOTOR_ID = 22;
+
+        //LimitSwitch DIO Ports
+        public static final int HOOD_LIMIT_SWITCH = 0;
+        public static final int TURRET_LEFT_LIMIT_SWITCH = 2;
+        public static final int TURRET_RIGHT_LIMIT_SWITCH = 3;
 
         // Max rotation
-        public static final double TURRET_MAX_ROTATION = 170.0; // Degrees
+        public static final double TURRET_MAX_ROTATION = 100.0; // Degrees
+        public static final double TURRET_MIN_ROTATION = -100.0;
+        public static final double TURRET_ROTATION_DEAD_ZONE = Math.max(0.0, 360 - (TURRET_MAX_ROTATION - TURRET_MIN_ROTATION));
 
-        // PID // TODO: Update with full weighted system
-        public static final double TURRET_P = 0.0075;
-        public static final double TURRET_I = 0.0;
-        public static final double TURRET_D = 0.002;
+        public static final double HOOD_MAX_ROTATION = 35.0; // Degrees
+        public static final double HOOD_MIN_ROTATION = 0.0;
 
-        // FeedForward
-        public static final double TURRET_KS = 0.185;
-        public static final double TURRET_KV = NOMINAL_VOLTAGE / TurretConstants.MOTOR_FREE_SPEED;
-
-        public static final double POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
-        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double MIN_OUTPUT = -0.75;
-        public static final double MAX_OUTPUT = 0.75;
-    }
-
-
-    public static final class ShooterConstants {
-        // NEO Vortex
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
-        public static final int MOTOR_CURRENT_LIMIT = 80; // NEO VORTEX
-        public static final double MOTOR_FREE_SPEED = 6784.0;
+        public static final double ROTATE_GEAR_RATIO = ((216.0/57.0) * 20.0); // 216:57 * 20:1
+        public static final double SHOOTER_GEAR_RATIO = (1.0/1.25); // 1:1.25 (increase)
+        public static final double HOOD_GEAR_RATIO = 20;
 
         // PID
-        public static final double SHOOTER_P = 0.001;
+        public static final double ROTATE_P = 0.0175; // rotate is prone to oscillation at some points
+        public static final double ROTATE_I = 0.0;
+        public static final double ROTATE_D = 0.0085;
+
+        public static final double SHOOTER_P = 0.0075;
         public static final double SHOOTER_I = 0.0;
-        public static final double SHOOTER_D = 0.0;
+        public static final double SHOOTER_D = 0.002;
 
-        // FeedForward
-        public static final double SHOOTER_KS = 0.10;
-        public static final double SHOOTER_KV = NOMINAL_VOLTAGE / ShooterConstants.MOTOR_FREE_SPEED;
+        public static final double HOOD_P = 0.0075;
+        public static final double HOOD_I = 0.0;
+        public static final double HOOD_D = 0.002;
 
-        // CLOSED LOOP CONTROLLER
-        public static final ControlType CONTROL_TYPE = ControlType.kVelocity;
-        public static final double POSITION_CONVERSION_FACTOR = 1.0;
-        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double MIN_OUTPUT = -0.90;
-        public static final double MAX_OUTPUT = 0.90;
+        // FeedForward // TODO: update
 
-        // Improving Velocity Based Control
-        public static final int AVERAGE_DEPTH = 5; // 5 Sample Count
-        public static final int MEASUREMENT_PERIOD = 1; // 1ms Moving Avg Window
+        public static final double ROTATE_KS = 0.51;
+        public static final double SHOOTER_KS = 0.185;
+        public static final double HOOD_KS = 0;
+
+        public static final double ROTATE_KV = NeoMotorConstants.NEO_550_KV;
+        public static final double SHOOTER_KV = NeoMotorConstants.NEO_VORTEX_KV;
+        public static final double HOOD_KV = NeoMotorConstants.NEO_550_KV;
+
+        // Conversion factors and expected measured limits
+        public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
+        public static final double SHOOTER_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double HOOD_POSITION_CONVERSION_FACTOR = (1 / HOOD_GEAR_RATIO) * 360;
+
+        public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double SHOOTER_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double HOOD_VELOCITY_CONVERSION_FACTOR = 1.0;
+
+        public static final double ROTATE_MIN_OUTPUT = -0.9;
+        public static final double ROTATE_MAX_OUTPUT = 0.9;
+
+        public static final double SHOOTER_MIN_OUTPUT = -0.75;
+        public static final double SHOOTER_MAX_OUTPUT = 0.75;
+
+        public static final double HOOD_MIN_OUTPUT = -0.25;
+        public static final double HOOD_MAX_OUTPUT = 0.25;
+
+        public static final double ROTATE_ERROR_THRESHOLD = 0.13;
+        public static final double SHOOTER_ERROR_THRESHOLD = 0.0;
+        public static final double HOOD_ERROR_THRESHOLD = 0.0;
     }
 
 
     public static final class IntakeConstants {
-        //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
-         public static final int INTAKE_EXTENDED_LSChannel1 = 0; //TODO: set LSChannels
-        public static final int INTAKE_EXTENDED_LSChannel2 = 0;
-        public static final int INTAKE_RETRACTED_LSChannel1 = 0;
-        public static final int INTAKE_RETRACTED_LSChannel2 = 0;
+        // Extension idle modes & Pickup idle modes
+        public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast; //TODO: set back to kBrake once we're done testing inverses-SHing
+        public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
-        // NEO 550
-        public static final int INTAKE_CAN_ID = 0; //TODO: set values here
-        public static final int INTAKE_CURRENT_LIMIT = 50;
-        public static final double INTAKE_FREE_SPEED = 11000;
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final double INTAKE_RATIO = 1.0; // slightly different in reality but who cares
+        public static final double INTAKE_SPEED_SLOW = 0.1;
+        public static final double INTAKE_SPEED_FAST = 0.65;
+             // ID's
+        public static final int STARBOARD_EXTENSION_MOTOR_ID = 14;
+        public static final int PORT_EXTENSION_MOTOR_ID = 13;//TODO: set values here
+        public static final int PICKUP_MOTOR_ID = 21; //TODO: set values here
 
-        // PID
-        public static final double INTAKE_P = 0.0; //TODO: set PID values
-        public static final double INTAKE_I = 0.0;
-        public static final double INTAKE_D = 0.0;
+        // Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
+        public static final int EXTENDED_LSChannel_PORT = 6;
+        public static final int EXTENDED_LSChannel_STARBOARD = 9;
+        public static final int RETRACTED_LSChannel_PORT = 7;
+        public static final int RETRACTED_LSChannel_STARBOARD = 8;
 
-        // FeedForward
-        public static final double INTAKE_KS = 0.0; //TODO: set feedforward values
-        public static final double INTAKE_KV = NOMINAL_VOLTAGE / INTAKE_FREE_SPEED;
+        public static final double EXTENSION_GEAR_RATIO = 1.0;
+        public static final double PICKUP_GEAR_RATIO = 1.0;
 
-        public static final double INTAKE_POSITION_CONVERSION_FACTOR = (1 / INTAKE_RATIO) * 360; // Convert to degrees
-        public static final double INTAKE_VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double INTAKE_MIN_OUTPUT = -0.75;
-        public static final double INTAKE_MAX_OUTPUT = 0.75;
-        public static final double INTAKE_MAX_ANGLE = 0.00; //TODO: find angles
+        // Extension Speeds & Pickup Speeds (Closed-Loop)
+        public static final double EXTENSION_FULL_FREE_SPEED = 11000; //
+        public static final double PICKUP_FAST_SPEED_SETPOINT = 2500; //in rpm, about half of max rpm for a neo brushless
+        public static final double PICKUP_SLOW_SPEED_SETPOINT = 500; //TODO: change to an actual number
+        public static final double PICKUP_FAST_SPEED = 0.50; //in rpm, about half of max rpm for a neo brushless
+        public static final double PICKUP_SLOW_SPEED = 0.10; //TODO: change to an actual number
+
+        // Extension PID
+        public static final double EXTENSION_P = 0.0; //TODO: set PID values
+        public static final double EXTENSION_I = 0.0;
+        public static final double EXTENSION_D = 0.0;
+
+        public static final double PICKUP_P = 0.0;
+        public static final double PICKUP_I = 0.0;
+        public static final double PICKUP_D = 0.0;
+
+        // Extension FeedForward
+        public static final double EXTENSION_KS = 0.0;
+        public static final double EXTENSION_KV = NeoMotorConstants.NEO_550_KV;
+
+        public static final double PICKUP_KS = 0.0;
+        public static final double PICKUP_KV = NeoMotorConstants.NEO_550_KV; // TODO: Double check
+
+        public static final double EXTENSION_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
+        public static final double EXTENSION_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double EXTENSION_MIN_OUTPUT = -0.75;
+        public static final double EXTENSION_MAX_OUTPUT = 0.75;
+        public static final double EXTENSION_SLOW_SPEED = 0.10;
+        public static final double EXTENSION_FAST_SPEED = 0.40;
+        public static final double EXTENSION_MAX_ANGLE = 0.00; //TODO: find angles
         public static final double MIN_ANGLE = 0.00;
 
-        public static final int DEPLOY_CAN_ID = 0; //TODO: set values here
-        public static final int DEPLOY_CURRENT_LIMIT = 50;
-        public static final double DEPLOY_SPEED = 0; //still in rpm, might wanna change this
-        public static final double DEPLOY_RATIO = 1.0; // need to figure this out
+        public static final double EXTENSION_ERROR_THRESHOLD = 0.0; // TODO: Update
+        public static final double PICKUP_ERROR_THRESHOLD = 0.0;
 
-        public static final double DEPLOY_PICKUP_P = 0.0; //TODO: set PID values
-        public static final double DEPLOY_PICKUP_I = 0.0;
-        public static final double DEPLOY_PICKUP_D = 0.0;
+        // Pickup values
+        public static final double PICKUP_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
+        public static final double PICKUP_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double PICKUP_MIN_OUTPUT = -0.75;
+        public static final double PICKUP_MAX_OUTPUT = 0.75;
 
-        // FeedForward
-        public static final double DEPLOY_PICKUP_KS = 0.0; //TODO: set feedforward values
-        public static final double DEPLOY_PICKUP_KV = NOMINAL_VOLTAGE / INTAKE_FREE_SPEED;
-
-
-        public static final double DEPLOY_MIN_OUTPUT = -0.75;
-        public static final double DEPLOY_MAX_OUTPUT = 0.75;
-        public static final double DEPLOY_MAX_ANGLE = 0.00; //TODO: find angles
-        public static final double DEPLOY_MIN_ANGLE = 0.00;
+        //End of Rail values
+        public static final double INTAKE_RAIL_END = 31.0; //
+        public static final double INTAKE_RAIL_START = 0.0;
     }
 
 
     public static final class SpindexerConstants {
-        //Limit Switches, Extended is when extended, retracted is when retracted, two pairs of switches each, you get it
-        public static final int SPINDEXER_EXTENDED_LSChannel1 = 0;
-        public static final int SPINDEXER_EXTENDED_LSChannel2 = 0;
-        public static final int SPINDEXER_RETRACTED_LSChannel1 = 0;
-        public static final int SPINDEXER_RETRACTED_LSChannel2 = 0;
+        public static final SparkBaseConfig.IdleMode FEED_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
-        // NEO 550
+        //TODO: change current limit to lower?
+        public static final int FEED_CURRENT_LIMIT = 50;
+        public static final int ROTATE_CURRENT_LIMIT = 50;
 
-        public static final int SPINDEXER_CAN_ID = 50;
-        public static final int SPINDEXER_CURRENT_LIMIT = 50;
-        public static final double SPINDEXER_FREE_SPEED = 11000;
-        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
-        public static final double GEAR_RATIO = 1.0; // probably a little different but who cares
+        // Spark ID'S
+        public static final int ROTATE_MOTOR_ID = 25;
+        public static final int FEED_MOTOR_ID = 26;
 
-        // PID
-        public static final double SPINDEXER_PICKUP_P = 0.0075;
-        public static final double SPINDEXER_PICKUP_I = 0.0;
-        public static final double SPINDEXER_PICKUP_D = 0.002;
+        // Feed gear ratios & Rotate gear ratios TODO: UPDATE
+        public static final double FEED_GEAR_RATIO = 1; // 1:1
+        public static final double ROTATE_GEAR_RATIO = 4.0 * (57.0 / 22.0); // 4:1 * (57:22)
 
-        // FeedForward
-        public static final double SPINDEXER_PICKUP_KS = 0.185;
-        public static final double SPINDEXER_PICKUP_KV = NOMINAL_VOLTAGE / SPINDEXER_FREE_SPEED;
+        // PIDs
+        public static final double FEED_P = 0.0;
+        public static final double FEED_I = 0.0;
+        public static final double FEED_D = 0.0;
 
-        public static final double POSITION_CONVERSION_FACTOR = (1 / GEAR_RATIO) * 360; // Convert to degrees
-        public static final double VELOCITY_CONVERSION_FACTOR = 1.0;
-        public static final double MIN_OUTPUT = -0.75;
-        public static final double MAX_OUTPUT = 0.75;
-        public static final double MAX_SPEED = 0.75; // set between -1 to 1
+        public static final double ROTATE_P = 0.0;
+        public static final double ROTATE_I = 0.0;
+        public static final double ROTATE_D = 0.0;
+
+        // FeedForward // TODO: UPDATE
+        public static final double FEED_KV = 0;
+        public static final double ROTATE_KV = 0;
+        public static final double FEED_KS = 0.185;
+        public static final double ROTATE_KS = 0.185;
+
+        public static final double FEED_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double ROTATE_POSITION_CONVERSION_FACTOR = 1.0;
+
+        public static final double FEED_VELOCITY_CONVERSION_FACTOR = 1.0; // RPM
+        public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0; // RPM
+
+        public static final double FEED_MIN_OUTPUT = -0.75;
+        public static final double FEED_MAX_OUTPUT = 0.75;
+        public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
+        public static final double FEED_SLOW_SPEED = 0.1;
+
+        public static final double ROTATE_MIN_OUTPUT = -0.75;
+        public static final double ROTATE_MAX_OUTPUT = 0.75;
+        public static final double ROTATE_SLOW_SPEED = 0.01;
+        public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
+
+        public static final double ROTATE_ERROR_THRESHOLD = 0.0;
+        public static final double FEED_ERROR_THRESHOLD = 0.0;
     }
 
 
-    // TODO: Update with Constants
-    public static final class ClimbConstants {}
+    public static final class ClimbConstants {
+        public static final SparkBaseConfig.IdleMode IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
+
+        // IDS
+        public static final int CLIMB_MOTOR_ID = 35;
+        public static final int CLIMB_LSChannel = 5;
+
+        public static final double CLIMB_GEAR_RATIO = 20; // 20:1
+
+        public static final double CLIMB_POSITION_CONVERSION_FACTOR = (1 / CLIMB_GEAR_RATIO) * 360; // Convert to degrees
+        public static final double CLIMB_VELOCITY_CONVERSION_FACTOR = 1.0;
+
+        public static final double CLIMB_P = 0.0; //TODO: set PID values
+        public static final double CLIMB_I = 0.0;
+        public static final double CLIMB_D = 0.0;
+
+        // NEO REG
+        public static final double CLIMB_KS = 0.0;
+        public static final double CLIMB_KV = NeoMotorConstants.NEO_REG_KV;
+
+        public static final double CLIMB_MIN_OUTPUT = -0.75;
+        public static final double CLIMB_MAX_OUTPUT = 0.75;
+
+        public static final double CLIMB_ERROR_THRESHOLD = 0.0;
+
+        // TODO: Update with real world values
+        public static final double CLIMB_MIN_ANGLE = 0.0;
+        public static final double CLIMB_MAX_ANGLE = 0.0;
+        public static final double CLIMB_DEPLOY_ANGLE = 6600.0; //no idea what units these are in. AHS kids, ask mr,joo about the shing rule
+        public static final double CLIMB_UP_ANGLE = 0.0; // Placeholder, please change.
+        public static final double CLIMB_DOWN_ANGLE = 0.0; // Placeholder, please change.
+        public static final double CLIMB_L1_ANGLE = 0.0;
+
+    }
 }

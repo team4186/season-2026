@@ -8,7 +8,7 @@ import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+import frc.robot.Constants.LimelightConstants;
 import swervelib.SwerveDrive;
 
 import static edu.wpi.first.units.Units.DegreesPerSecond;
@@ -48,14 +48,19 @@ public class LimelightRunner {
 //        SmartDashboard.putBoolean("Has Target Tag?", tagInView);
 //        ledPub.set( tagInView? 3.0 : 1.0 );
 
-        SmartDashboard.putBoolean("Has Target Tag?", LimelightHelpers.getTV(Constants.LimelightConstants.LIMELIGHT_TURRET));
-        SmartDashboard.putNumber("tx", LimelightHelpers.getTX(Constants.LimelightConstants.LIMELIGHT_TURRET));
-        SmartDashboard.putNumber("ty", LimelightHelpers.getTY(Constants.LimelightConstants.LIMELIGHT_TURRET));
-
+        SmartDashboard.putBoolean("Has Target Tag?", LimelightHelpers.getTV(LimelightConstants.LIMELIGHT_TURRET));
+        SmartDashboard.putNumber("tx", LimelightHelpers.getTX(LimelightConstants.LIMELIGHT_TURRET));
+        SmartDashboard.putNumber("ty", LimelightHelpers.getTY(LimelightConstants.LIMELIGHT_TURRET));
+        SmartDashboard.putNumber("Distance to turret tag", getDistanceToTag(LimelightConstants.LIMELIGHT_TURRET));
 //        SmartDashboard.putNumber("X Offset", tagOffset)
 //        SmartDashboard.putNumber("Y Offset", yOffset)
 //        SmartDashboard.putNumber("% of Image", tagArea)
 //        SmartDashboard.putNumber("Distance", Units.metersToInches(distance))
+        if(LimelightHelpers.getTV(LimelightConstants.LIMELIGHT_ROBOT)){
+            LimelightHelpers.setLEDMode_ForceOn(LimelightConstants.LIMELIGHT_ROBOT);
+        }else{
+            LimelightHelpers.setLEDMode_ForceOff(LimelightConstants.LIMELIGHT_ROBOT);
+        }
     }
 
 
@@ -92,9 +97,9 @@ public class LimelightRunner {
     public void updatePoseEstimate(SwerveDrive swerveDrive) {
         double robotYaw = swerveDrive.getYaw().getDegrees();
         // TODO: Change to limelight robot when installed on chassis
-        LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.LIMELIGHT_TURRET, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+        LimelightHelpers.SetRobotOrientation(LimelightConstants.LIMELIGHT_ROBOT, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.LIMELIGHT_TURRET);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimelightConstants.LIMELIGHT_ROBOT);
 
         SmartDashboard.putBoolean("Available Tag?", (limelightMeasurement.tagCount > 0));
         SmartDashboard.putNumber("Angular Velocity Gyro", Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)));
@@ -107,13 +112,35 @@ public class LimelightRunner {
                 limelightMeasurement.pose,
                 limelightMeasurement.timestampSeconds,
                 VecBuilder.fill(
-                    Constants.LimelightConstants.LIMELIGHT_X_STD_DEVS,
-                    Constants.LimelightConstants.LIMELIGHT_Y_STD_DEVS,
-                    Constants.LimelightConstants.LIMELIGHT_HEADING_STD_DEVS)
+                    LimelightConstants.LIMELIGHT_X_STD_DEVS,
+                    LimelightConstants.LIMELIGHT_Y_STD_DEVS,
+                    LimelightConstants.LIMELIGHT_HEADING_STD_DEVS)
             );
         }
     }
 
+
+    /**
+     * Function to grab distance to tag from desired camera.
+     *
+     * @param limelightName name of limelight network table
+     * @return Distance in meters to target tag
+     */
+    // Below is robot pose
+    public double getDistanceToTag(String limelightName){
+        return LimelightHelpers.getBotPose3d(limelightName).getZ();
+    }
+
+    /**
+     * Target pose camera space stuff
+     */
+    public double getDistanceTargetPoseCameraSpace(String turretLimelightName) {
+        return LimelightHelpers.getTargetPose_CameraSpace(turretLimelightName)[2];
+    }
+
+    public double getYawTargetPoseCameraSpace(String turretLimelightName) {
+        return LimelightHelpers.getTargetPose_CameraSpace(turretLimelightName)[4];
+    }
 
     public void close(){
 //        tvSub.close();
