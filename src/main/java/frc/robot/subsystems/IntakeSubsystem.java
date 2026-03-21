@@ -183,12 +183,12 @@ public class IntakeSubsystem extends SubsystemBase {
     //just feeding a velocity
     public void simplePairExtension(){
         if(!isStarboardExtended()){
-            extensionStarboardMotor.set(IntakeConstants.EXTENSION_SLOW_SPEED);
+            extensionStarboardMotor.set(IntakeConstants.EXTENSION_FAST_SPEED);
         }else{
             extensionStarboardMotor.stopMotor();
         }
         if(!isPortExtended()){
-            extensionPortMotor.set(IntakeConstants.EXTENSION_SLOW_SPEED);
+            extensionPortMotor.set(IntakeConstants.EXTENSION_FAST_SPEED);
         }else{
             extensionPortMotor.stopMotor();
         }
@@ -197,12 +197,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void simplePairRetraction(){
         if(!isStarboardRetracted()){
-            extensionStarboardMotor.set(-IntakeConstants.EXTENSION_SLOW_SPEED);
+            extensionStarboardMotor.set(-IntakeConstants.EXTENSION_FAST_SPEED);
         }else{
             extensionStarboardMotor.stopMotor();
         }
         if(!isPortRetracted()){
-            extensionPortMotor.set(-IntakeConstants.EXTENSION_SLOW_SPEED);
+            extensionPortMotor.set(-IntakeConstants.EXTENSION_FAST_SPEED);
         }else{
             extensionPortMotor.stopMotor();
         }

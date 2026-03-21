@@ -65,10 +65,10 @@ public class RobotContainer {
             motorComponents.getIntakeExtensionPortMotor(),
             motorComponents.getIntakePickupMotor(),
 //            motorComponents.getIntakeExtensionMotorPair(),
-            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
             new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
-            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT),
-            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD)
+            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
+            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD),
+            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT)
     );
 
     private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(

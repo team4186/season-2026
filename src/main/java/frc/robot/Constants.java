@@ -195,7 +195,7 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
         public static final double INTAKE_SPEED_SLOW = 0.1;
-        public static final double INTAKE_SPEED_FAST = 0.65;
+        public static final double INTAKE_SPEED_FAST = 0.3;
              // ID's
         public static final int STARBOARD_EXTENSION_MOTOR_ID = 14;
         public static final int PORT_EXTENSION_MOTOR_ID = 13;//TODO: set values here
@@ -238,7 +238,7 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double EXTENSION_MIN_OUTPUT = -0.75;
         public static final double EXTENSION_MAX_OUTPUT = 0.75;
         public static final double EXTENSION_SLOW_SPEED = 0.10;
-        public static final double EXTENSION_FAST_SPEED = 0.40;
+        public static final double EXTENSION_FAST_SPEED = 0.30;
         public static final double EXTENSION_MAX_ANGLE = 0.00; //TODO: find angles
         public static final double MIN_ANGLE = 0.00;
 
