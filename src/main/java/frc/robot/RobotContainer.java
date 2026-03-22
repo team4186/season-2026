@@ -60,21 +60,21 @@ public class RobotContainer {
 
 // TODO: Test and uncomment subsystems
 
-    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
-            motorComponents.getIntakeExtensionStarboardMotor(),
-            motorComponents.getIntakeExtensionPortMotor(),
-            motorComponents.getIntakePickupMotor(),
-//            motorComponents.getIntakeExtensionMotorPair(),
-            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
-            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
-            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD),
-            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT)
-    );
+//    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
+//            motorComponents.getIntakeExtensionStarboardMotor(),
+//            motorComponents.getIntakeExtensionPortMotor(),
+//            motorComponents.getIntakePickupMotor(),
+////            motorComponents.getIntakeExtensionMotorPair(),
+//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
+//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
+//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD),
+//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT)
+//    );
 
-    private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
-            motorComponents.getSpindexerRotateMotor()
-            //motorComponents.getSpindexerFeedMotor()
-    );
+//    private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
+//            motorComponents.getSpindexerRotateMotor()
+//            //motorComponents.getSpindexerFeedMotor()
+//    );
 
     private final ClimbSubsystem climbSubsystem = new ClimbSubsystem(
             motorComponents.getClimbMotor(),
@@ -112,7 +112,7 @@ public class RobotContainer {
                     () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * 1,
                     () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * 1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
+                    () -> attenuated( joystickOperator.getTwist(), 3, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
@@ -122,7 +122,7 @@ public class RobotContainer {
                     () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * -1,
                     () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * -1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
+                    () -> attenuated( joystickOperator.getTwist(), 3, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
@@ -131,7 +131,7 @@ public class RobotContainer {
                     () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * 1,
                     () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * 1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickDriver.getTwist(), 3, 0.375 ) * 1)
+                    () -> attenuated( joystickOperator.getTwist(), 3, 0.375 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
@@ -141,7 +141,7 @@ public class RobotContainer {
                     () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * -1,
                     () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * -1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickDriver.getTwist(), 3, 0.375 ) * 1)
+                    () -> attenuated( joystickOperator.getTwist(), 3, 0.375 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
@@ -150,7 +150,7 @@ public class RobotContainer {
                     () -> attenuated( joystickDriver.getY(), 2, 0.25 ) * -1,
                     () -> attenuated( joystickDriver.getX(), 2, 0.25 ) * -1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickDriver.getTwist(), 3, 0.25 ) * 1)
+                    () -> attenuated( joystickOperator.getTwist(), 3, 0.25 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .robotRelative(true);
 
@@ -402,6 +402,18 @@ public class RobotContainer {
         } else {
            //Teleop Command Keybinds
 
+            Pose2d startPose = new Pose2d(new Translation2d(3.580, 4.179),
+                    Rotation2d.fromDegrees(180));
+            Pose2d targetPose = new Pose2d(new Translation2d(2.666, 4.179),
+                    Rotation2d.fromDegrees(180));
+
+            joystickOperator.button(10)
+                    .onTrue(Commands.runOnce(() -> drivebase.resetOdometry(startPose)));
+
+            joystickOperator.button(11).whileTrue(drivebase.driveToPose(targetPose));
+
+
+
             joystickDriver.button(7)
                     .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(1.0), climbSubsystem).repeatedly())
                     .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
@@ -413,24 +425,24 @@ public class RobotContainer {
             joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
             joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-            joystickOperator.button(3)
-                    .whileTrue(spindexerSubsystem.rotateMotors())
-                    .whileFalse(spindexerSubsystem.stopFeed());
-            joystickOperator.button(2)
-                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_FAST))
-                            .whileFalse(intakeSubsystem.stopPickupMotor());
-
-            joystickOperator.button(5)
-                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
-                    .whileFalse(intakeSubsystem.stopPickupMotor());
-
-            joystickOperator.button(6)
-                    .whileTrue(intakeSubsystem.extendIntake())
-                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
-
-            joystickOperator.button(4)
-                    .whileTrue(intakeSubsystem.retractIntake())
-                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));;
+//            joystickOperator.button(3)
+//                    .whileTrue(spindexerSubsystem.rotateMotors())
+//                    .whileFalse(spindexerSubsystem.stopFeed());
+//            joystickOperator.button(2)
+//                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_FAST))
+//                            .whileFalse(intakeSubsystem.stopPickupMotor());
+//
+//            joystickOperator.button(5)
+//                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
+//                    .whileFalse(intakeSubsystem.stopPickupMotor());
+//
+//            joystickOperator.button(6)
+//                    .whileTrue(intakeSubsystem.extendIntake())
+//                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+//
+//            joystickOperator.button(4)
+//                    .whileTrue(intakeSubsystem.retractIntake())
+//                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));;
 
             joystickDriver.button(9).whileTrue(drivebase.driveToPose(Constants.AutonConstants.RedLeftPole));
             //TODO: Uncomment for drive team after subsystem testing
@@ -449,12 +461,10 @@ public class RobotContainer {
 
 
             driverStadia.leftTrigger().whileTrue(driveFieldOrientedAngularVelocityStadia);
-            Pose2d targetPose = new Pose2d(new Translation2d(15, 4),
-                    Rotation2d.fromDegrees(180));
 
             driverStadia.leftBumper().onTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-            driverStadia.a().whileTrue(drivebase.driveToPose(targetPose));
+            // driverStadia.a().whileTrue(drivebase.driveToPose(targetPose));
 
 
 
