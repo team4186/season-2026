@@ -296,11 +296,13 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
 
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;
-        public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
-        public static final double FEED_SLOW_SPEED = 0.1;
+
+        public static final double FEED_MAX_SPEED = 0.80; // set between -1 to 1
+        public static final double FEED_SLOW_SPEED = 0.5;
 
         public static final double ROTATE_MIN_OUTPUT = -0.75;
         public static final double ROTATE_MAX_OUTPUT = 0.75;
+
         public static final double ROTATE_SLOW_SPEED = 0.01;
         public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
 
