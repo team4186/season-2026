@@ -209,11 +209,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
-
-    public void pickupBallsFast(){
-        pickupMotor.set(IntakeConstants.PICKUP_FAST_SPEED);
-    }
-
     public void pickupBallsSlow(){
         pickupMotor.set(IntakeConstants.PICKUP_SLOW_SPEED);
     }

@@ -194,8 +194,10 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast; //TODO: set back to kBrake once we're done testing inverses-SHing
         public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
-        public static final double INTAKE_SPEED_SLOW = 0.1;
-        public static final double INTAKE_SPEED_FAST = 0.3;
+        //"intake" refers to the intake rollers
+        public static final double INTAKE_SPEED_SLOW = 0.2;
+        public static final double INTAKE_SPEED_FAST = 0.6;
+
              // ID's
         public static final int STARBOARD_EXTENSION_MOTOR_ID = 14;
         public static final int PORT_EXTENSION_MOTOR_ID = 13;//TODO: set values here
@@ -214,8 +216,8 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double EXTENSION_FULL_FREE_SPEED = 11000; //
         public static final double PICKUP_FAST_SPEED_SETPOINT = 2500; //in rpm, about half of max rpm for a neo brushless
         public static final double PICKUP_SLOW_SPEED_SETPOINT = 500; //TODO: change to an actual number
-        public static final double PICKUP_FAST_SPEED = 0.50; //in rpm, about half of max rpm for a neo brushless
-        public static final double PICKUP_SLOW_SPEED = 0.10; //TODO: change to an actual number
+
+        public static final double PICKUP_SLOW_SPEED = 0.10; //TODO: change to an actual number, also what is this even used for
 
         // Extension PID
         public static final double EXTENSION_P = 0.0; //TODO: set PID values
