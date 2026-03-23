@@ -112,7 +112,7 @@ public class RobotContainer {
                     () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * 1,
                     () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * 1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickOperator.getTwist(), 3, 0.75 ) * 1)
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
@@ -122,16 +122,16 @@ public class RobotContainer {
                     () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * -1,
                     () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * -1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickOperator.getTwist(), 3, 0.75 ) * 1)
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
     SwerveInputStream driveAngularVelocitySlow = SwerveInputStream.of(
                     drivebase.getSwerveDrive(),
-                    () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * 1,
-                    () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * 1)
+                    () -> attenuated( joystickDriver.getY(), 2, 0.15 ) * 1,
+                    () -> attenuated( joystickDriver.getX(), 2, 0.15 ) * 1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickOperator.getTwist(), 3, 0.375 ) * 1)
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.5 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
@@ -141,7 +141,7 @@ public class RobotContainer {
                     () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * -1,
                     () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * -1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickOperator.getTwist(), 3, 0.375 ) * 1)
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.375 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
@@ -150,7 +150,7 @@ public class RobotContainer {
                     () -> attenuated( joystickDriver.getY(), 2, 0.25 ) * -1,
                     () -> attenuated( joystickDriver.getX(), 2, 0.25 ) * -1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickOperator.getTwist(), 3, 0.25 ) * 1)
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.25 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .robotRelative(true);
 
