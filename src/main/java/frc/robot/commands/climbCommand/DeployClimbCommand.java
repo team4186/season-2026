@@ -18,10 +18,10 @@ public class DeployClimbCommand extends Command {
     public void initialize(){}
     @Override
     public void execute(){
-        if(climbSubsystem.getPosition() <= ClimbConstants.CLIMB_DEPLOY_ANGLE){
-            climbSubsystem.simpleClimbDeploy(0.1); //TODO: move to constants
+        if(climbSubsystem.getPosition()<ClimbConstants.CLIMB_THRESHOLD_ANGLE){
+            climbSubsystem.simpleClimbDeploy(ClimbConstants.CLIMB_FAST_SPEED);
         }else{
-            isFinished = true;
+            climbSubsystem.climbStop();
         }
     }
     @Override

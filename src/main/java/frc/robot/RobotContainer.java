@@ -282,6 +282,11 @@ public class RobotContainer {
 
         // Create the NamedCommands that will be used in PathPlanner
         NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+        NamedCommands.registerCommand("climbArmUp",Commands.runOnce(() ->
+                climbSubsystem.simpleClimbDeploy(1.0), climbSubsystem).repeatedly());
+        NamedCommands.registerCommand("climbArmDown",Commands.runOnce(() ->
+                climbSubsystem.simpleClimbMoveDown(-1.0), climbSubsystem).repeatedly());
+
 
         //Have the autoChooser pull in all PathPlanner autos as options
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -415,11 +420,11 @@ public class RobotContainer {
 
 
             joystickDriver.button(7)
-                    .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(1.0), climbSubsystem).repeatedly())
+                    .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
                     .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
 
             joystickDriver.button(8)
-                    .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-1.0), climbSubsystem).repeatedly())
+                    .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
                     .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
 
             joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));

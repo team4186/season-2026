@@ -342,9 +342,13 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double CLIMB_MIN_ANGLE = 0.0;
         public static final double CLIMB_MAX_ANGLE = 0.0;
         public static final double CLIMB_DEPLOY_ANGLE = 6600.0; //no idea what units these are in. AHS kids, ask mr,joo about the shing rule
+        public static final double CLIMB_THRESHOLD_ANGLE = 5700.0;
         public static final double CLIMB_UP_ANGLE = 0.0; // Placeholder, please change.
         public static final double CLIMB_DOWN_ANGLE = 0.0; // Placeholder, please change.
         public static final double CLIMB_L1_ANGLE = 0.0;
+
+        public static final double CLIMB_FAST_SPEED = 0.8;
+        public static final double CLIMB_MAX_SPEED = 1.0;
 
     }
 }
