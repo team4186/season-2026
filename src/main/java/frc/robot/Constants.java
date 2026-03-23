@@ -139,7 +139,7 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double HOOD_MIN_ROTATION = 0.0;
 
         public static final double ROTATE_GEAR_RATIO = ((216.0/57.0) * 20.0); // 216:57 * 20:1
-        public static final double SHOOTER_GEAR_RATIO = (1.0/1.25); // 1:1.25 (increase)
+        public static final double SHOOTER_GEAR_RATIO = (1/1.25); // 1:1.25 (increase)
         public static final double HOOD_GEAR_RATIO = 20;
 
         // PID
@@ -147,9 +147,9 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double ROTATE_I = 0.0;
         public static final double ROTATE_D = 0.0085;
 
-        public static final double SHOOTER_P = 0.0075;
+        public static final double SHOOTER_P = 0.00075;
         public static final double SHOOTER_I = 0.0;
-        public static final double SHOOTER_D = 0.002;
+        public static final double SHOOTER_D = 0.0;
 
         public static final double HOOD_P = 0.0075;
         public static final double HOOD_I = 0.0;
@@ -162,12 +162,12 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double HOOD_KS = 0;
 
         public static final double ROTATE_KV = NeoMotorConstants.NEO_550_KV;
-        public static final double SHOOTER_KV = NeoMotorConstants.NEO_VORTEX_KV;
+        public static final double SHOOTER_KV = 0.001425;
         public static final double HOOD_KV = NeoMotorConstants.NEO_550_KV;
 
         // Conversion factors and expected measured limits
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
-        public static final double SHOOTER_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double SHOOTER_POSITION_CONVERSION_FACTOR = ( 1/ SHOOTER_GEAR_RATIO );
         public static final double HOOD_POSITION_CONVERSION_FACTOR = (1 / HOOD_GEAR_RATIO) * 360;
 
         public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -298,11 +298,13 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
 
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;
-        public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
-        public static final double FEED_SLOW_SPEED = 0.1;
+
+        public static final double FEED_MAX_SPEED = 0.80; // set between -1 to 1
+        public static final double FEED_SLOW_SPEED = 0.5;
 
         public static final double ROTATE_MIN_OUTPUT = -0.75;
         public static final double ROTATE_MAX_OUTPUT = 0.75;
+
         public static final double ROTATE_SLOW_SPEED = 0.01;
         public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
 

@@ -630,9 +630,9 @@ public class SwerveSubsystem extends SubsystemBase
   public Command driveToPose(Pose2d pose){
     PathConstraints constraints = new PathConstraints(
             swerveDrive.getMaximumChassisVelocity(),
-            4.0,
+            2.0,
             swerveDrive.getMaximumChassisAngularVelocity(),
-            Units.degreesToRadians(720)
+            Units.degreesToRadians(180)
     );
 
     return AutoBuilder.pathfindToPose(
