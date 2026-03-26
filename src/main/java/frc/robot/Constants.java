@@ -86,19 +86,19 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         // SMART CURRENT LIMIT (50A - 60A)
         public static final int SMART_CURRENT_LIMIT_REGULAR = 50;
         public static final double NEO_REG_FREE_SPEED = 5676;
-        public static final double NEO_REG_KV = NOMINAL_VOLTAGE / NEO_REG_FREE_SPEED; // kv 473
+        public static final double NEO_REG_RATING_KV = 473.0; // kv 473
 
         // NEO 550
         // SMART CURRENT LIMIT (20A - 40A)
         public static final int SMART_CURRENT_LIMIT_550 = 30;
         public static final double NEO_550_FREE_SPEED = 11000;
-        public static final double NEO_550_KV = NOMINAL_VOLTAGE / NEO_550_FREE_SPEED; // kv 915
+        public static final double NEO_550_RATING_KV = 915.0; // Neo Vortex KV rating under no load
 
         // NEO VORTEX
         // SMART CURRENT LIMIT 80A
         public static final int SMART_CURRENT_LIMIT_VORTEX = 80;
-        public static final double NEO_VORTEX_FREE_SPEED = 6784; // kv 560
-        public static final double NEO_VORTEX_KV = NOMINAL_VOLTAGE / NEO_VORTEX_FREE_SPEED; // kv 560
+        public static final double NEO_VORTEX_FREE_SPEED = 6784;
+        public static final double NEO_VORTEX_RATING_KV = 560.0; // Neo Vortex KV rating under no load
     }
 
 
@@ -133,7 +133,8 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         // Max rotation
         public static final double TURRET_MAX_ROTATION = 100.0; // Degrees
         public static final double TURRET_MIN_ROTATION = -100.0;
-        public static final double TURRET_ROTATION_DEAD_ZONE = Math.max(0.0, 360 - (TURRET_MAX_ROTATION - TURRET_MIN_ROTATION));
+        public static final double TURRET_ROTATION_DEAD_ZONE = Math.max( 0.0,
+            360 - (Math.abs(TURRET_MAX_ROTATION) + Math.abs(TURRET_MIN_ROTATION)));
 
         public static final double HOOD_MAX_ROTATION = 35.0; // Degrees
         public static final double HOOD_MIN_ROTATION = 0.0;
@@ -143,27 +144,27 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double HOOD_GEAR_RATIO = 20;
 
         // PID
-        public static final double ROTATE_P = 0.0175; // rotate is prone to oscillation at some points
+        public static final double ROTATE_P = 0.0; // TODO: Update
         public static final double ROTATE_I = 0.0;
-        public static final double ROTATE_D = 0.0085;
+        public static final double ROTATE_D = 0.0;
 
         public static final double SHOOTER_P = 0.00075;
         public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.0;
 
-        public static final double HOOD_P = 0.0075;
+        public static final double HOOD_P = 0.0; // TODO: Update
         public static final double HOOD_I = 0.0;
-        public static final double HOOD_D = 0.002;
+        public static final double HOOD_D = 0.0;
 
         // FeedForward // TODO: update
 
         public static final double ROTATE_KS = 0.51;
         public static final double SHOOTER_KS = 0.185;
-        public static final double HOOD_KS = 0;
+        public static final double HOOD_KS = 0; // TODO: Update
 
-        public static final double ROTATE_KV = NeoMotorConstants.NEO_550_KV;
+        public static final double ROTATE_KV = 0.0; // TODO: Update
         public static final double SHOOTER_KV = 0.001425;
-        public static final double HOOD_KV = NeoMotorConstants.NEO_550_KV;
+        public static final double HOOD_KV = 0.0; // TODO: Update
 
         // Conversion factors and expected measured limits
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
@@ -230,10 +231,10 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
 
         // Extension FeedForward
         public static final double EXTENSION_KS = 0.0;
-        public static final double EXTENSION_KV = NeoMotorConstants.NEO_550_KV;
+        public static final double EXTENSION_KV = 0.0;
 
         public static final double PICKUP_KS = 0.0;
-        public static final double PICKUP_KV = NeoMotorConstants.NEO_550_KV; // TODO: Double check
+        public static final double PICKUP_KV = 0.0;
 
         public static final double EXTENSION_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
         public static final double EXTENSION_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -331,7 +332,7 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
 
         // NEO REG
         public static final double CLIMB_KS = 0.0;
-        public static final double CLIMB_KV = NeoMotorConstants.NEO_REG_KV;
+        public static final double CLIMB_KV = 0.0;
 
         public static final double CLIMB_MIN_OUTPUT = -0.75;
         public static final double CLIMB_MAX_OUTPUT = 0.75;
