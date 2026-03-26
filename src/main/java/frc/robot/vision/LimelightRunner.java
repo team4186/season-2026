@@ -142,6 +142,37 @@ public class LimelightRunner {
         return LimelightHelpers.getTargetPose_CameraSpace(turretLimelightName)[4];
     }
 
+
+    // Update Camera Pose, can be used to dynamically update pose updates using turret
+    public void setCameraPose(String limelightName, double[] cameraPoseOffset){
+        if ( cameraPoseOffset.length != 6 ){
+            return;
+        }
+
+        LimelightHelpers.setCameraPose_RobotSpace(
+            limelightName,
+            cameraPoseOffset[0],    // Forward offset (meters)
+            cameraPoseOffset[1],    // Side offset (meters)
+            cameraPoseOffset[2],    // Height offset (meters)
+            cameraPoseOffset[3],    // Roll (degrees)
+            cameraPoseOffset[4],   // Pitch (degrees)
+            cameraPoseOffset[5]     // Yaw (degrees)
+        );
+    }
+
+
+    // TODO: Use in RobotContainer or at match start for blue or red side tags
+    // Adjust valid tags for a particular limelight camera
+    public void fiducialIdFilterOverride(String limelightName, int[] validTags){
+        LimelightHelpers.SetFiducialIDFiltersOverride(limelightName, validTags);
+    }
+
+    // Can only have one offset for each pipeline, 10 total pipelines available, can assign offset each tag and use that as a target
+    public void setFiducial3DOffset(String limelightName, double xOffset, double yOffset, double zOffset){
+        LimelightHelpers.setFiducial3DOffset(limelightName, xOffset, yOffset, zOffset);
+    }
+
+
     public void close(){
 //        tvSub.close();
 //        txSub.close();
