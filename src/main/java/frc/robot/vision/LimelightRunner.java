@@ -3,15 +3,18 @@ package frc.robot.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.LimelightConstants;
 import swervelib.SwerveDrive;
 
 import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static java.lang.Math.tan;
 
 
 public class LimelightRunner {
@@ -44,18 +47,16 @@ public class LimelightRunner {
 
 
     public void update() {
-//        boolean tagInView = hasTargetTag();
-//        SmartDashboard.putBoolean("Has Target Tag?", tagInView);
-//        ledPub.set( tagInView? 3.0 : 1.0 );
-
         SmartDashboard.putBoolean("Has Target Tag?", LimelightHelpers.getTV(LimelightConstants.LIMELIGHT_TURRET));
         SmartDashboard.putNumber("tx", LimelightHelpers.getTX(LimelightConstants.LIMELIGHT_TURRET));
         SmartDashboard.putNumber("ty", LimelightHelpers.getTY(LimelightConstants.LIMELIGHT_TURRET));
-        SmartDashboard.putNumber("Distance to turret tag", getDistanceToTag(LimelightConstants.LIMELIGHT_TURRET));
-//        SmartDashboard.putNumber("X Offset", tagOffset)
-//        SmartDashboard.putNumber("Y Offset", yOffset)
-//        SmartDashboard.putNumber("% of Image", tagArea)
-//        SmartDashboard.putNumber("Distance", Units.metersToInches(distance))
+        // SmartDashboard.putNumber("", hasTargetClimber());
+
+        double distInInches = getTurretDistanceToTagTrig();
+        SmartDashboard.putNumber("Turret AprilTag Distance w/Trig Inches", distInInches);
+        SmartDashboard.putNumber("Turret AprilTag Distance w/Trig Meters", distInInches * 0.0254);
+        SmartDashboard.putNumber("Turret AprilTag Distance w/Helper Meters", getDistanceToTagWithHelper(LimelightConstants.LIMELIGHT_TURRET));
+
         if(LimelightHelpers.getTV(LimelightConstants.LIMELIGHT_ROBOT)){
             LimelightHelpers.setLEDMode_ForceOn(LimelightConstants.LIMELIGHT_ROBOT);
         }else{
@@ -88,8 +89,6 @@ public class LimelightRunner {
 //    LimelightHelpers.SetIMUAssistAlpha("", 0.001);  // Adjust correction strength
 */
 
-//    private boolean hasTargetTag(){ return tvSub.get() > 0.0; }
-
 
     /**
      * Updates pose using limelight pose estimation
@@ -120,23 +119,40 @@ public class LimelightRunner {
     }
 
 
+    public boolean hasTargetTurret(){
+        return LimelightHelpers.getTV(LimelightConstants.LIMELIGHT_TURRET);
+    }
+
+
+    public boolean hasTargetClimber(){
+        return LimelightHelpers.getTV(LimelightConstants.LIMELIGHT_TURRET);
+    }
+
+
     /**
      * Function to grab distance to tag from desired camera.
      *
      * @param limelightName name of limelight network table
      * @return Distance in meters to target tag
      */
-    // Below is robot pose
-    public double getDistanceToTag(String limelightName){
-        return LimelightHelpers.getBotPose3d(limelightName).getZ();
+    // Below is robot pose in meters relative to the robot
+    public double getDistanceToTagWithHelper(String limelightName){
+        Pose3d aprilTag = LimelightHelpers.getTargetPose3d_RobotSpace(limelightName);
+        return aprilTag.getZ();
     }
 
-    /**
-     * Target pose camera space stuff
-     */
-    public double getDistanceTargetPoseCameraSpace(String turretLimelightName) {
-        return LimelightHelpers.getTargetPose_CameraSpace(turretLimelightName)[2];
+
+    // Returns Distance to scoring april tag in inches
+    public double getTurretDistanceToTagTrig(){
+        //44.25 is height in inches of AprilTag off floor
+        //25.0 degrees is mounting angle of limelight
+        double tagyOffset = LimelightHelpers.getTY(LimelightConstants.LIMELIGHT_TURRET);
+        double angleInRadians = Math.toRadians((25.0 + tagyOffset));
+        double distance = 44.25 / tan(angleInRadians);
+
+        return (hasTargetTurret()) ? distance : -1.0;
     }
+
 
     public double getYawTargetPoseCameraSpace(String turretLimelightName) {
         return LimelightHelpers.getTargetPose_CameraSpace(turretLimelightName)[4];
@@ -167,16 +183,12 @@ public class LimelightRunner {
         LimelightHelpers.SetFiducialIDFiltersOverride(limelightName, validTags);
     }
 
+
     // Can only have one offset for each pipeline, 10 total pipelines available, can assign offset each tag and use that as a target
     public void setFiducial3DOffset(String limelightName, double xOffset, double yOffset, double zOffset){
         LimelightHelpers.setFiducial3DOffset(limelightName, xOffset, yOffset, zOffset);
     }
 
 
-    public void close(){
-//        tvSub.close();
-//        txSub.close();
-//        tySub.close();
-//        ledPub.close();
-    }
+    public void close(){}
 }
