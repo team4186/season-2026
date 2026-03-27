@@ -5,17 +5,13 @@
 package frc.robot.subsystems;
 
 
-import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Meter;
-import static frc.robot.Constants.LimelightConstants;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -34,8 +30,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-
-import frc.robot.vision.LimelightHelpers;
 import frc.robot.vision.LimelightRunner;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -69,18 +63,24 @@ public class SwerveSubsystem extends SubsystemBase
 
     Pose2d startingPose;
 
-    if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-      startingPose = new Pose2d(new Translation2d(Meter.of(16),
+    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+      startingPose = new Pose2d(
+          new Translation2d(
+              Meter.of(16),
               Meter.of(4)),
-              Rotation2d.fromDegrees(180));
+          Rotation2d.fromDegrees(180));
     } else if( DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      startingPose = new Pose2d(new Translation2d(Meter.of(1),
+      startingPose = new Pose2d(
+          new Translation2d(
+              Meter.of(1),
               Meter.of(4)),
               Rotation2d.fromDegrees(0));
     } else { // Driver Station unavailable
-      startingPose = new Pose2d(new Translation2d(Meter.of(5),
+      startingPose = new Pose2d(
+          new Translation2d(
+              Meter.of(5),
               Meter.of(5)),
-              Rotation2d.fromDegrees(0));
+          Rotation2d.fromDegrees(0));
     }
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
@@ -105,6 +105,7 @@ public class SwerveSubsystem extends SubsystemBase
 
     setupPathPlanner();
   }
+
 
   public void setupPathPlanner()
   {
@@ -170,7 +171,7 @@ public class SwerveSubsystem extends SubsystemBase
 
     //Preload PathPlanner Path finding
     // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
-    PathfindingCommand.warmupCommand().schedule();
+    PathfindingCommand.warmupCommand();
   }
 
 

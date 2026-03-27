@@ -86,6 +86,7 @@ public class IntakeSubsystem extends SubsystemBase {
         return extensionStarboardController.isAtSetpoint();
     }
 
+
     public boolean portAtSetpoint(){
         return extensionPortController.isAtSetpoint();
     }
@@ -105,19 +106,20 @@ public class IntakeSubsystem extends SubsystemBase {
         return !UnitsUtility.isBeamBroken(retractedSwitchStarboard, false, "Intake Retracted Switch Starboard");
     }
 
+
     private boolean isPortRetracted(){
         return !UnitsUtility.isBeamBroken(retractedSwitchPort, false, "Intake Retracted Switch Port");
     }
+
 
     public boolean isIntakeExtended(){
         return isStarboardExtended() && isPortExtended();
     }
 
+
     public boolean isIntakeRetracted(){
         return isPortRetracted() && isStarboardRetracted();
     }
-
-
 
 
     //TODO: MAKE SURE THE MOTORS ARE INVERTED,AND OPPOSITE CORRECTLY!!!!!! VERY IMPORTANT OR STUFF WILL BREAK!!!!! -Shing
@@ -140,20 +142,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
-    // \/\/\/\/\/Is this needed? Not sure how to feed one value into two controllers, to keep both sides in sync. If there's a better way, delete \/\/\/\/\/
-//    public void extendIntake() {
-////        if(isStarboardExtended() && isPortExtended()){
-////            extensionStarboardController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-////            extensionPortController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-////        }else{
-////            extensionStarboardMotor.stopMotor();
-////            extensionPortMotor.stopMotor();
-////        }
-//        extendIntakePort();
-//        extendIntakeStarboard();
-//    }
-
-
     private void retractIntakeStarboard(){
         if(!isStarboardRetracted()){
             extensionStarboardController.setSetpoint(IntakeConstants.INTAKE_RAIL_START, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
@@ -171,13 +159,6 @@ public class IntakeSubsystem extends SubsystemBase {
             extensionPortMotor.stopMotor();
         }
     }
-
-
-    // TODO: intake using CLOSED LOOP
-//    public void retractIntake(){
-//        retractIntakePort();
-//        retractIntakeStarboard();
-//    }
 
 
     //just feeding a velocity
@@ -213,23 +194,21 @@ public class IntakeSubsystem extends SubsystemBase {
         pickupMotor.set(IntakeConstants.PICKUP_SLOW_SPEED);
     }
 
+
     public void pickupBalls(double speed){
         pickupMotor.set(speed);
     }
 
 
-
-    // TODO: Possible Close Loop Implmentation for pickup. Low Priority
-    public void updateIntakePickupSpeed() {}
-    public void updateIntakePosition() {}
-
     public void stopTranslation() {
         extensionPortMotor.stopMotor();
         extensionStarboardMotor.stopMotor();    }
 
+
     public void stopPickup(){
         pickupMotor.stopMotor();
     }
+
 
     public void stop(){
         extensionPortMotor.stopMotor();
@@ -238,30 +217,30 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
-
     public double getStarboardPosition(){
         return extensionStarboardRelativeEncoder.getPosition();
     }
+
 
     public double getPortPosition(){
         return extensionPortRelativeEncoder.getPosition();
     }
 
 
-
     public Command setSlowPickup(double speed){
         return Commands.runOnce(()->pickupBalls(speed),this).repeatedly();
     }
+
 
     public Command stopPickupMotor(){
         return Commands.runOnce(this::stopPickup,this);
     }
 
 
-
     public Command extendIntake(){
         return Commands.runOnce(this::simplePairExtension,this).repeatedly();
     }
+
 
     public Command retractIntake(){
         return Commands.runOnce(this::simplePairRetraction,this).repeatedly();

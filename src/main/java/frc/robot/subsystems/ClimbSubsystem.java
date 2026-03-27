@@ -47,29 +47,14 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
 
-    // Generic updateClimb function, setpoint can be some angle where the arm needs to be deployed.
-    // Setpoint could also be some angle where the arm is clamped down.
-//    public void updateClimb(double angleSetpoint){
-//        climbMotorController.setSetpoint(angleSetpoint, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-//    }
-
     public void climbStop(){
         climbMotor.stopMotor();
     }
 
+
     public double getPosition(){
         return climbEncoder.getPosition();
     }
-
-
-//    public void resetClimb() {
-//        if (!getLimitSwitch()) {
-//            climbMotorController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-//        } else {
-//            climbStop();
-//            resetEncoder();
-//        }
-//    }
 
 
     public void simpleClimbDeploy(double speed) {
@@ -90,12 +75,6 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
 
-
-//    public boolean isClimbAtSetpoint() {
-//        return climbMotorController.isAtSetpoint();
-//    }
-
-
     public void resetEncoder() {
         climbEncoder.setPosition(0);
     }
@@ -104,6 +83,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public boolean getLimitSwitch(){
         return !homeSwitch.get();
     }
+
 
 //commented out for push, uncomment if needed ziyao. - Shing and Rishab
 //    public Command deployClimbCommand() {
