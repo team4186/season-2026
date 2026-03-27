@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import java.lang.Math.*;
+import java.util.Map;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -41,14 +43,17 @@ public class TurretSubsystem extends SubsystemBase {
     private final RelativeEncoder hoodRelativeEncoder;
     private final RelativeEncoder shooterRelativeEncoder;
 
+    // K: Distance (Rounded to nearest Integer in feet), V: { ShooterRpm, HoodAngle }
+    private final Map<Integer, Double[]> lookupTable;
+
 
     public TurretSubsystem(
-            SparkFlex shooterMotor,
-            SparkMax turretMotor,
-            SparkMax hoodMotor,
-            DigitalInput hoodLimitSwitch,
-            DigitalInput leftLimitSwitch,
-            DigitalInput rightLimitSwitch
+        SparkFlex shooterMotor,
+        SparkMax turretMotor,
+        SparkMax hoodMotor,
+        DigitalInput hoodLimitSwitch,
+        DigitalInput leftLimitSwitch,
+        DigitalInput rightLimitSwitch
     ){
         this.shooterMotor = shooterMotor;
         this.turretMotor = turretMotor;
@@ -65,6 +70,7 @@ public class TurretSubsystem extends SubsystemBase {
         this.turretRelativeEncoder = turretMotor.getEncoder();
         this.shooterRelativeEncoder = shooterMotor.getEncoder();
         this.hoodRelativeEncoder = hoodMotor.getEncoder();
+        this.lookupTable = TurretConstants.TURRET_LOOKUP_TABLE;
     }
 
 
@@ -81,6 +87,7 @@ public class TurretSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Shooter_is_at_set_speed", isShooterAtSetpoint());
         SmartDashboard.putBoolean("Hood_is_at_set_angle", isHoodAtSetpoint());
         SmartDashboard.putBoolean("Turret_is_at_target_position", isTurretAtSetpoint());
+        SmartDashboard.putNumber("Print something to smart dashboard", lookupTable.get(2)[0]);
     }
 
 

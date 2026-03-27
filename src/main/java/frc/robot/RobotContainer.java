@@ -83,14 +83,14 @@ public class RobotContainer {
     );
 
 
-//    private final TurretSubsystem turretSubsystem = new TurretSubsystem(
-//            motorComponents.getTurretShooterMotor(),
-//            motorComponents.getTurretRotateMotor(),
-//            motorComponents.getTurretHoodMotor(),
-//            new DigitalInput(Constants.TurretConstants.HOOD_LIMIT_SWITCH),
-//            new DigitalInput(Constants.TurretConstants.TURRET_LEFT_LIMIT_SWITCH),
-//            new DigitalInput(Constants.TurretConstants.TURRET_RIGHT_LIMIT_SWITCH)
-//    );
+    private final TurretSubsystem turretSubsystem = new TurretSubsystem(
+            motorComponents.getTurretShooterMotor(),
+            motorComponents.getTurretRotateMotor(),
+            motorComponents.getTurretHoodMotor(),
+            new DigitalInput(Constants.TurretConstants.HOOD_LIMIT_SWITCH),
+            new DigitalInput(Constants.TurretConstants.TURRET_LEFT_LIMIT_SWITCH),
+            new DigitalInput(Constants.TurretConstants.TURRET_RIGHT_LIMIT_SWITCH)
+    );
 
 
     // NOTE:  Coords are odd for Joysticks: https://docs.wpilib.org/en/stable/docs/software/basic-programming/joystick.html

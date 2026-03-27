@@ -13,6 +13,8 @@ import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import swervelib.math.Matter;
 import com.revrobotics.spark.config.SparkBaseConfig;
+
+import java.util.HashMap;
 import java.util.Map;
 
 import static edu.wpi.first.units.Units.Meter;
@@ -70,24 +72,24 @@ public final class Constants {
         public static final double TURRET_TARGET_LEFT_SIDE_OFFSET = -TURRET_TARGET_RIGHT_SIDE_OFFSET;
 
         // Key: Turret Tag Id, Value: POI RightOffset
-        public static final Map<Integer, Double> TURRET_FIDUCIAL_RIGHT_OFFSETS = Map.ofEntries(
-            entry(2, 0.0),
-            entry(3, TURRET_TARGET_LEFT_SIDE_OFFSET),
-            entry(4, 0.0),
-            entry(5, 0.0),
-            entry(8, TURRET_TARGET_RIGHT_SIDE_OFFSET),
-            entry(9, TURRET_TARGET_LEFT_SIDE_OFFSET),
-            entry(10, 0.0),
-            entry(11, TURRET_TARGET_LEFT_SIDE_OFFSET),
-            entry(18, 0.0),
-            entry(19, TURRET_TARGET_LEFT_SIDE_OFFSET),
-            entry(20, 0.0),
-            entry(21, 0.0),
-            entry(24, TURRET_TARGET_RIGHT_SIDE_OFFSET),
-            entry(25, TURRET_TARGET_LEFT_SIDE_OFFSET),
-            entry(26, 0.0),
-            entry(27, TURRET_TARGET_LEFT_SIDE_OFFSET)
-        );
+        public static final Map<Integer, Double> TURRET_FIDUCIAL_RIGHT_OFFSETS = new HashMap<>(
+            Map.ofEntries(
+                entry(2, 0.0),
+                entry(3, TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(4, 0.0),
+                entry(5, 0.0),
+                entry(8, TURRET_TARGET_RIGHT_SIDE_OFFSET),
+                entry(9, TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(10, 0.0),
+                entry(11, TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(18, 0.0),
+                entry(19, TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(20, 0.0),
+                entry(21, 0.0),
+                entry(24, TURRET_TARGET_RIGHT_SIDE_OFFSET),
+                entry(25, TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(26, 0.0),
+                entry(27, TURRET_TARGET_LEFT_SIDE_OFFSET)));
 
 
         // NOTE: All translations are based on Blue Origin
@@ -267,28 +269,29 @@ public final class Constants {
         public static final double HOOD_ERROR_THRESHOLD = 0.0;
 
         //  Key: Distance in Feet, Value: {ShooterSpeed, HoodAngle}
-        public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE = Map.ofEntries(
-            entry(1, new Double[]{ 0.0, 0.0}),
-            entry(2, new Double[]{ 0.0, 0.0}),
-            entry(3, new Double[]{ 0.0, 0.0}),
-            entry(4, new Double[]{ 0.0, 0.0}),
-            entry(5, new Double[]{ 0.0, 0.0}),
-            entry(6, new Double[]{ 0.0, 0.0}),
-            entry(7, new Double[]{ 0.0, 0.0}),
-            entry(8, new Double[]{ 0.0, 0.0}),
-            entry(9, new Double[]{ 0.0, 0.0}),
-            entry(10, new Double[]{ 0.0, 0.0}),
-            entry(11, new Double[]{ 0.0, 0.0}),
-            entry(12, new Double[]{ 0.0, 0.0}),
-            entry(13, new Double[]{ 0.0, 0.0}),
-            entry(14, new Double[]{ 0.0, 0.0}),
-            entry(15, new Double[]{ 0.0, 0.0}),
-            entry(16, new Double[]{ 0.0, 0.0}),
-            entry(17, new Double[]{ 0.0, 0.0}),
-            entry(18, new Double[]{ 0.0, 0.0}),
-            entry(19, new Double[]{ 0.0, 0.0}),
-            entry(20, new Double[]{ 0.0, 0.0})
-        );
+        public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE = new HashMap<>(
+            Map.ofEntries(
+                entry(1, new Double[]{ 0.0, 0.0}),
+                entry(2, new Double[]{ 0.0, 0.0}),
+                entry(3, new Double[]{ 0.0, 0.0}),
+                entry(4, new Double[]{ 0.0, 0.0}),
+                entry(5, new Double[]{ 0.0, 0.0}),
+                entry(6, new Double[]{ 0.0, 0.0}),
+                entry(7, new Double[]{ 0.0, 0.0}),
+                entry(8, new Double[]{ 0.0, 0.0}),
+                entry(9, new Double[]{ 0.0, 0.0}),
+                entry(10, new Double[]{ 0.0, 0.0}),
+                entry(11, new Double[]{ 0.0, 0.0}),
+                entry(12, new Double[]{ 0.0, 0.0}),
+                entry(13, new Double[]{ 0.0, 0.0}),
+                entry(14, new Double[]{ 0.0, 0.0}),
+                entry(15, new Double[]{ 0.0, 0.0}),
+                entry(16, new Double[]{ 0.0, 0.0}),
+                entry(17, new Double[]{ 0.0, 0.0}),
+                entry(18, new Double[]{ 0.0, 0.0}),
+                entry(19, new Double[]{ 0.0, 0.0}),
+                entry(20, new Double[]{ 0.0, 0.0})
+        ));
     }
 
 
