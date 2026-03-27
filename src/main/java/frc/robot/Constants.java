@@ -125,6 +125,8 @@ public final class Constants {
                 Meter.of( Units.inchesToMeters(40.0) ),
                 Meter.of( Units.inchesToMeters(153.22) ));
 
+        public static final double ROBOT_X_CLIMBING_OFFSET = 0.0; // TODO: How far does it need to be in either direction to be lined up
+
 
 //        //Left and right are relative to robot looking at tags.
 //        /**Red Left :  TX: 15.00 Ty: 4.84

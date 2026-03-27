@@ -366,8 +366,12 @@ public class RobotContainer {
 //                    .whileTrue(intakeSubsystem.retractIntake())
 //                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));;
 
-            // TODO: Orientation will depend on side it is approached from
-            joystickDriver.button(9).whileTrue(drivebase.driveToPose(Constants.StructureConstants.RED_LEFT_POLE));
+            // TODO: Orientation will depend on side it is approached from, give translation constant and set orientation here
+            joystickDriver.button(9).whileTrue(drivebase.driveToPose(
+                new Pose2d(
+                    Constants.StructureConstants.RED_NORTH_POLE.getX()+Constants.StructureConstants.ROBOT_X_CLIMBING_OFFSET,
+                    Constants.StructureConstants.RED_NORTH_POLE.getY(),
+                    Rotation2d.fromDegrees(0))));
 
             //TODO: Uncomment for drive team after subsystem testing
 //            //Intake Command keybind
