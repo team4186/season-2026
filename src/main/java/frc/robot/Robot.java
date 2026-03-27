@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
         } else {
             CommandScheduler.getInstance().cancelAll();
         }
-        m_robotContainer.updateDriverAllianceControls();
+        // m_robotContainer.updateDriverAllianceControls(); // TODO: Confirm field oriented behavior
     }
 
 
