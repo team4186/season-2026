@@ -336,8 +336,6 @@ public class RobotContainer {
 
             joystickOperator.button(11).whileTrue(drivebase.driveToPose(targetPose));
 
-
-
             joystickDriver.button(7)
                     .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
                     .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
@@ -368,7 +366,9 @@ public class RobotContainer {
 //                    .whileTrue(intakeSubsystem.retractIntake())
 //                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));;
 
-            joystickDriver.button(9).whileTrue(drivebase.driveToPose(Constants.AutonConstants.RedLeftPole));
+            // TODO: Orientation will depend on side it is approached from
+            joystickDriver.button(9).whileTrue(drivebase.driveToPose(Constants.StructureConstants.RED_LEFT_POLE));
+
             //TODO: Uncomment for drive team after subsystem testing
 //            //Intake Command keybind
 //            joystickDriver.button(5).onTrue(extendIntakeCommand);
@@ -380,17 +380,11 @@ public class RobotContainer {
 //            joystickOperator.button(6).onTrue(deployClimbCommand);
 //            joystickOperator.button(4).onTrue(retractClimbCommand);
 
-
-
-
-
 //            driverStadia.leftTrigger().whileTrue(driveFieldOrientedAngularVelocityStadia);
 
 //            driverStadia.leftBumper().onTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 //            driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 //            // driverStadia.a().whileTrue(drivebase.driveToPose(targetPose));
-//
-//
 //
 //            driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 //            driverXbox.start().whileTrue(Commands.none());
