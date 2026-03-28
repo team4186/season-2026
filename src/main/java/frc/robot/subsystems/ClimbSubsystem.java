@@ -58,7 +58,12 @@ public class ClimbSubsystem extends SubsystemBase {
 
 
     public void simpleClimbDeploy(double speed) {
-        if (ClimbConstants.CLIMB_DEPLOY_ANGLE >= climbEncoder.getPosition()) {
+        // expecting positive number - confirm speed is in correct direction
+        if (speed < 0) {
+            speed = speed * -1;
+        }
+
+        if (ClimbConstants.CLIMB_DEPLOY_ANGLE > climbEncoder.getPosition()) {
             climbMotor.set(speed);
         } else {
             climbMotor.stopMotor();
@@ -67,6 +72,11 @@ public class ClimbSubsystem extends SubsystemBase {
 
 
     public void simpleClimbMoveDown(double speed) {
+        // expecting negative number - confirm speed is in correct direction
+        if (speed < 0) {
+            speed = speed * -1;
+        }
+
         if (getLimitSwitch()) {
             climbMotor.stopMotor();
         } else {
