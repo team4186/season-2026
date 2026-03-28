@@ -3,6 +3,7 @@ package frc.robot.commands.intakecommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
+
 public class RetractIntakeCommand extends Command {
     private final IntakeSubsystem intakeSubsystem;
 
@@ -10,13 +11,17 @@ public class RetractIntakeCommand extends Command {
     private boolean isExtended = false;
     private boolean isRetracted = false;
 
+
     public RetractIntakeCommand(IntakeSubsystem intakeSubsystem){
         this.intakeSubsystem = intakeSubsystem;
         addRequirements(this.intakeSubsystem);
     }
+
+
     @Override
-    public void initialize(){
-    }
+    public void initialize(){ }
+
+
     @Override
     public void execute(){
         if(intakeSubsystem.isIntakeRetracted()){
@@ -29,8 +34,8 @@ public class RetractIntakeCommand extends Command {
         isRetracted = intakeSubsystem.isIntakeRetracted();
     }
 
-    public boolean isFinished(){return isFinished;}
 
+    public boolean isFinished(){return isFinished;}
 
 
     public void end(boolean interrupted){
