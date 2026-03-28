@@ -282,7 +282,7 @@ public class RobotContainer {
 
         //Climb Commands
         DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem);
-        RetractClimbCommand retractClimbCommand = new RetractClimbCommand(climbSubsystem);
+        RetractClimbCommand retractClimbCommand = new RetractClimbCommand(climbSubsystem, Constants.ClimbConstants.CLIMB_SLOW_SPEED);
 
 
 
