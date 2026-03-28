@@ -168,10 +168,10 @@ public class LimelightRunner {
         LimelightHelpers.setCameraPose_RobotSpace(
             limelightName,
             cameraPoseOffset[0],    // Forward offset (meters)
-            cameraPoseOffset[1],    // Side offset (meters)
+            cameraPoseOffset[1],    // Right offset (meters)
             cameraPoseOffset[2],    // Height offset (meters)
             cameraPoseOffset[3],    // Roll (degrees)
-            cameraPoseOffset[4],   // Pitch (degrees)
+            cameraPoseOffset[4],    // Pitch (degrees)
             cameraPoseOffset[5]     // Yaw (degrees)
         );
     }
