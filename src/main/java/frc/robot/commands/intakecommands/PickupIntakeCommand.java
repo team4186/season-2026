@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
 
+// Reference: https://docs.wpilib.org/en/stable/docs/software/commandbased/commands.html
 public class PickupIntakeCommand extends Command {
     private final IntakeSubsystem intakeSubsystem;
 
@@ -21,23 +22,19 @@ public class PickupIntakeCommand extends Command {
     public void initialize(){
     }
 
-
+    // Shuffle repeatedly
     @Override
     public void execute(){
-        if(buttonCounts%2 == 0){
-            intakeSubsystem.pickupBallsSlow();
-        }else if(buttonCounts%2 == 1){
-            isFinished = true;
-        }
-        
-    }
+        // State: at end of length -> move back to shuffle set point
 
-    public void button_detect() {
-        buttonCounts++;
+        // State: Shuffle set point to retracted state -> move back to end of length
     }
 
 
-    public boolean isFinished(){return isFinished;}
+    public boolean isFinished(){
+        return isFinished;
+    }
+
 
     public void end(boolean interrupted){
         isFinished = false;
