@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.intakecommands.ExtendIntakeCommand;
+import frc.robot.commands.intakecommands.RetractIntakeCommand;
 import frc.robot.subsystems.*;
 import frc.robot.motors.Components;
 import java.io.File;
@@ -59,22 +61,22 @@ public class RobotContainer {
 
 // TODO: Test and uncomment subsystems
 
-//    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
-//            motorComponents.getIntakeExtensionStarboardMotor(),
-//            motorComponents.getIntakeExtensionPortMotor(),
-//            motorComponents.getIntakePickupMotor(),
-////            motorComponents.getIntakeExtensionMotorPair(),
-//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
-//            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
-//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD),
-//            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT)
-//    );
+    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
+            motorComponents.getIntakeExtensionStarboardMotor(),
+            motorComponents.getIntakeExtensionPortMotor(),
+            motorComponents.getIntakePickupMotor(),
+//            motorComponents.getIntakeExtensionMotorPair(),
+            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_STARBOARD),
+            new DigitalInput(IntakeConstants.EXTENDED_LSChannel_PORT),
+            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_STARBOARD),
+            new DigitalInput(IntakeConstants.RETRACTED_LSChannel_PORT)
+    );
 
 
-//    private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
-//            motorComponents.getSpindexerRotateMotor()
-//            //motorComponents.getSpindexerFeedMotor()
-//    );
+    private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
+            motorComponents.getSpindexerRotateMotor(),
+            motorComponents.getSpindexerFeedMotor()
+    );
 
 
     private final ClimbSubsystem climbSubsystem = new ClimbSubsystem(
@@ -91,6 +93,16 @@ public class RobotContainer {
             new DigitalInput(Constants.TurretConstants.TURRET_LEFT_LIMIT_SWITCH),
             new DigitalInput(Constants.TurretConstants.TURRET_RIGHT_LIMIT_SWITCH)
     );
+
+
+    //Intake Commands
+    ExtendIntakeCommand extendIntakeCommand = new ExtendIntakeCommand(intakeSubsystem);
+    RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
+
+    //Climb Commands
+    DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem);
+    RetractClimbCommand retractClimbCommand = new RetractClimbCommand(climbSubsystem, Constants.ClimbConstants.CLIMB_SLOW_SPEED);
+
 
 
     // NOTE:  Coords are odd for Joysticks: https://docs.wpilib.org/en/stable/docs/software/basic-programming/joystick.html
@@ -276,16 +288,6 @@ public class RobotContainer {
         Command driveFieldOrientedBlueAllianceSlow = drivebase.driveFieldOriented(driveAngularVelocitySlowBlueJoystick);
 
 
-        //Intake Commands
-//        ExtendIntakeCommand extendIntakeCommand = new ExtendIntakeCommand(intakeSubsystem);
-//        RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
-
-        //Climb Commands
-        DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem);
-        RetractClimbCommand retractClimbCommand = new RetractClimbCommand(climbSubsystem, Constants.ClimbConstants.CLIMB_SLOW_SPEED);
-
-
-
         if (RobotBase.isSimulation()) {
             // drivebase.setDefaultCommand(driveFieldOrientedPS5);
             // drivebase.setDefaultCommand(driveFieldHeadingPS5);
@@ -366,24 +368,24 @@ public class RobotContainer {
 
             // TODO: Shooting aka spindexer and motor feed balls if shooter wheel is spinning (we should also force the shooter wheel to be kcoast by default anyways)
 
-//            joystickOperator.button(3)
-//                    .whileTrue(spindexerSubsystem.rotateMotors())
-//                    .whileFalse(spindexerSubsystem.stopFeed());
-//            joystickOperator.button(2)
-//                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_FAST))
-//                            .whileFalse(intakeSubsystem.stopPickupMotor());
-//
-//            joystickOperator.button(5)
-//                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
-//                    .whileFalse(intakeSubsystem.stopPickupMotor());
-//
-//            joystickOperator.button(6)
-//                    .whileTrue(intakeSubsystem.extendIntake())
-//                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
-//
-//            joystickOperator.button(4)
-//                    .whileTrue(intakeSubsystem.retractIntake())
-//                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));;
+            joystickOperator.button(3)
+                    .whileTrue(spindexerSubsystem.rotateMotors())
+                    .whileFalse(spindexerSubsystem.stopFeed());
+            joystickOperator.button(2)
+                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_FAST))
+                            .whileFalse(intakeSubsystem.stopPickupMotor());
+
+            joystickOperator.button(5)
+                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
+                    .whileFalse(intakeSubsystem.stopPickupMotor());
+
+            joystickOperator.button(6)
+                    .whileTrue(intakeSubsystem.extendIntake())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+
+            joystickOperator.button(4)
+                    .whileTrue(intakeSubsystem.retractIntake())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));;
 
             // TODO: Orientation will depend on side it is approached from, give translation constant and set orientation here
             joystickDriver.button(9).whileTrue(drivebase.driveToPose(
@@ -393,27 +395,27 @@ public class RobotContainer {
                     Rotation2d.fromDegrees(0))));
 
             //TODO: Uncomment for drive team after subsystem testing
-//            //Intake Command keybind
-//            joystickDriver.button(5).onTrue(extendIntakeCommand);
-//            joystickDriver.button(3).onTrue(retractIntakeCommand);
-//            joystickOperator.button(2).onTrue(intakeSubsystem.setSlowPickup(IntakeConstants.PICKUP_SLOW_SPEED));
-//            joystickOperator.button(7).onTrue(intakeSubsystem.stopPickupMotor());
-//
-//            //Climb Command keybinds
-//            joystickOperator.button(6).onTrue(deployClimbCommand);
-//            joystickOperator.button(4).onTrue(retractClimbCommand);
+            //Intake Command keybind
+            joystickDriver.button(5).onTrue(extendIntakeCommand);
+            joystickDriver.button(3).onTrue(retractIntakeCommand);
+            joystickOperator.button(2).onTrue(intakeSubsystem.setSlowPickup(IntakeConstants.PICKUP_SLOW_SPEED));
+            joystickOperator.button(7).onTrue(intakeSubsystem.stopPickupMotor());
+
+            //Climb Command keybinds
+            joystickOperator.button(6).onTrue(deployClimbCommand);
+            joystickOperator.button(4).onTrue(retractClimbCommand);
 
 //            driverStadia.leftTrigger().whileTrue(driveFieldOrientedAngularVelocityStadia);
 
-//            driverStadia.leftBumper().onTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-//            driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-//            // driverStadia.a().whileTrue(drivebase.driveToPose(targetPose));
-//
-//            driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-//            driverXbox.start().whileTrue(Commands.none());
-//            driverXbox.back().whileTrue(Commands.none());
-//            driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-//            driverXbox.rightBumper().onTrue(Commands.none());
+            driverStadia.leftBumper().onTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            driverStadia.rightBumper().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            // driverStadia.a().whileTrue(drivebase.driveToPose(targetPose));
+
+            driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            driverXbox.start().whileTrue(Commands.none());
+            driverXbox.back().whileTrue(Commands.none());
+            driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            driverXbox.rightBumper().onTrue(Commands.none());
 
         }
     }
