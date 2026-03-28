@@ -190,5 +190,11 @@ public class LimelightRunner {
     }
 
 
+    public void resetFiducial3DOffset(String limelightName){
+        LimelightHelpers.setFiducial3DOffset(limelightName, 0.0, 0.0, 0.0);
+    }
+
+
+    // Close function required for Subscribers/Publishers
     public void close(){}
 }
