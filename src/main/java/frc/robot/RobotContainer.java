@@ -326,6 +326,9 @@ public class RobotContainer {
         } else {
            //Teleop Command Keybinds
 
+            // TODO: Test align to target on field, physically align the robot to ideal position and note it here
+            // Ideally as an x offset that would work for +- depending on side of approach
+            // RED N, RED S, BLUE N, BLUE S
             Pose2d startPose = new Pose2d(new Translation2d(3.580, 4.179),
                     Rotation2d.fromDegrees(180));
             Pose2d targetPose = new Pose2d(new Translation2d(2.666, 4.179),
@@ -346,6 +349,22 @@ public class RobotContainer {
 
             joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
             joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+
+            // TODO: Shuffle Intake
+            // joystickOperator.button( <> )
+
+            // TODO: set default command to go to 0
+            // turretSubsystem.setDefaultCommand();
+
+            // TODO: passing turret button ( Aim towards wall using gyro)
+
+            // TODO: Passing turret button ( Aim towards coordinates )
+
+            // TODO: scoring turret button (Simple align to april tag)
+
+            // TODO: scoring turret button (Align with update pose offset) TEST TO CONFIRM, this might act strange if we are not careful
+
+            // TODO: Shooting aka spindexer and motor feed balls if shooter wheel is spinning (we should also force the shooter wheel to be kcoast by default anyways)
 
 //            joystickOperator.button(3)
 //                    .whileTrue(spindexerSubsystem.rotateMotors())
