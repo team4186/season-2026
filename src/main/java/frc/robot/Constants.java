@@ -66,30 +66,40 @@ public final class Constants {
         public static final int[] RED_FIDUCIAL_TURRET_IDS =  { 2, 3, 4, 5, 8, 9, 10, 11 };
 
         // OFFSETS Offset to the side, back is the same regardless, height is always the same, +- 14 inches
+        // TODO: Setup at start of match for pipeline 1, 2, 3 (center, left, right)
         public static final double TURRET_TARGET_FORWARD_OFFSET = Units.inchesToMeters(-23.51);
 
         public static final double TURRET_TARGET_RIGHT_SIDE_OFFSET = Units.inchesToMeters(14.0);
         public static final double TURRET_TARGET_LEFT_SIDE_OFFSET = -TURRET_TARGET_RIGHT_SIDE_OFFSET;
 
+        public static final int[] OFFSET_GROUP_CENTER_RED = { 2, 4, 5, 10 };
+        public static final int[] OFFSET_GROUP_LEFT_RED = { 3, 9, 11 };
+        public static final int[] OFFSET_GROUP_RIGHT_RED = { 8 };
+
+        public static final int[] OFFSET_GROUP_CENTER_BLUE = { 18, 20, 21, 26 };
+        public static final int[] OFFSET_GROUP_LEFT_BLUE = { 19, 25, 27 };
+        public static final int[] OFFSET_GROUP_RIGHT_BLUE = { 24 };
+
         // Key: Turret Tag Id, Value: POI RightOffset
-        public static final Map<Integer, Double> TURRET_FIDUCIAL_RIGHT_OFFSETS = new HashMap<>(
+        public static final Map<Integer, Integer> TURRET_FIDUCIAL_PIPELINE = new HashMap<>(
             Map.ofEntries(
-                entry(2, 0.0),
-                entry(3, TURRET_TARGET_LEFT_SIDE_OFFSET),
-                entry(4, 0.0),
-                entry(5, 0.0),
-                entry(8, TURRET_TARGET_RIGHT_SIDE_OFFSET),
-                entry(9, TURRET_TARGET_LEFT_SIDE_OFFSET),
-                entry(10, 0.0),
-                entry(11, TURRET_TARGET_LEFT_SIDE_OFFSET),
-                entry(18, 0.0),
-                entry(19, TURRET_TARGET_LEFT_SIDE_OFFSET),
-                entry(20, 0.0),
-                entry(21, 0.0),
-                entry(24, TURRET_TARGET_RIGHT_SIDE_OFFSET),
-                entry(25, TURRET_TARGET_LEFT_SIDE_OFFSET),
-                entry(26, 0.0),
-                entry(27, TURRET_TARGET_LEFT_SIDE_OFFSET)));
+                entry(2, 1 ), // 0.0
+                entry(3, 2 ), // TURRET_TARGET_LEFT_SIDE_OFFSET
+                entry(4, 1 ), // 0.0
+                entry(5, 1 ), //0.0),
+                entry(8, 3 ), //TURRET_TARGET_RIGHT_SIDE_OFFSET),
+                entry(9, 2 ), //TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(10, 1 ), //0.0),
+                entry(11, 2 ), //TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(18, 1 ), //0.0),
+                entry(19, 2 ), //TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(20, 1 ), //0.0),
+                entry(21, 1 ), //0.0),
+                entry(24, 3 ), //TURRET_TARGET_RIGHT_SIDE_OFFSET),
+                entry(25, 2 ), //TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(26, 1 ), //0.0),
+                entry(27, 2 ) //TURRET_TARGET_LEFT_SIDE_OFFSET))
+            ));
 
 
         // NOTE: All translations are based on Blue Origin
@@ -106,43 +116,28 @@ public final class Constants {
 
 
         // ~34in difference between poles, Perspective based blue origin
-        public static final Translation2d RED_NORTH_POLE =
+        public static final Translation2d RED_CLIMB_NORTH_POLE =
             new Translation2d(
-                Meter.of(Units.inchesToMeters(651.22-40.0) ),
+                Meter.of( Units.inchesToMeters(651.22-40.0) ),
                 Meter.of( Units.inchesToMeters(187.22)));
 
-        public static final Translation2d RED_SOUTH_POLE =
+        public static final Translation2d RED_CLIMB_SOUTH_POLE =
             new Translation2d(
                 Meter.of( Units.inchesToMeters(651.22-40.0) ),
                 Meter.of( Units.inchesToMeters(153.22) ));
 
 
-        public static final Translation2d BLUE_NORTH_POLE =
+        public static final Translation2d BLUE_CLIMB_NORTH_POLE =
             new Translation2d(
                 Meter.of( Units.inchesToMeters(40.0) ),
                 Meter.of( Units.inchesToMeters(187.22) ));
 
-        public static final Translation2d BLUE_SOUTH_POLE =
+        public static final Translation2d BLUE_CLIMB_SOUTH_POLE =
             new Translation2d(
                 Meter.of( Units.inchesToMeters(40.0) ),
                 Meter.of( Units.inchesToMeters(153.22) ));
 
         public static final double ROBOT_X_CLIMBING_OFFSET = 0.0; // TODO: How far does it need to be in either direction to be lined up
-
-
-//        //Left and right are relative to robot looking at tags.
-//        /**Red Left :  TX: 15.00 Ty: 4.84
-//         Red Right   Tx: 14.99 Ty: 4.10 (difference between ty's should be 0.82m, red right seemed inaccurate
-//         so i based red right ty off of red left
-//         **/
-//        public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(15.00),
-//            Meter.of(4.84)),
-//            Rotation2d.fromDegrees(0));
-//        public static final Pose2d RedRightPole = new Pose2d(new Translation2d(Meter.of(15.00),
-//            Meter.of(4.02)),
-//            Rotation2d.fromDegrees(0));
-//        public static final Pose2d BlueLeftPole = new Pose2d();
-//        public static final Pose2d BlueRightPole = new Pose2d();
     }
 
 
@@ -191,6 +186,15 @@ public final class Constants {
         public static final double LIMELIGHT_X_STD_DEVS = 0.5;
         public static final double LIMELIGHT_Y_STD_DEVS = 0.5;
         public static final double LIMELIGHT_HEADING_STD_DEVS = 9999999; // StdDevs (x, y, heading)
+
+        public static final double[] LIMELIGHT_ROBOT_CAMERA_POSITION = {
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+            };
     }
 
 
@@ -271,26 +275,28 @@ public final class Constants {
         //  Key: Distance in Feet, Value: {ShooterSpeed, HoodAngle}
         public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE = new HashMap<>(
             Map.ofEntries(
-                entry(1, new Double[]{ 0.0, 0.0}),
-                entry(2, new Double[]{ 0.0, 0.0}),
-                entry(3, new Double[]{ 0.0, 0.0}),
-                entry(4, new Double[]{ 0.0, 0.0}),
-                entry(5, new Double[]{ 0.0, 0.0}),
-                entry(6, new Double[]{ 0.0, 0.0}),
-                entry(7, new Double[]{ 0.0, 0.0}),
-                entry(8, new Double[]{ 0.0, 0.0}),
-                entry(9, new Double[]{ 0.0, 0.0}),
-                entry(10, new Double[]{ 0.0, 0.0}),
-                entry(11, new Double[]{ 0.0, 0.0}),
-                entry(12, new Double[]{ 0.0, 0.0}),
-                entry(13, new Double[]{ 0.0, 0.0}),
-                entry(14, new Double[]{ 0.0, 0.0}),
-                entry(15, new Double[]{ 0.0, 0.0}),
-                entry(16, new Double[]{ 0.0, 0.0}),
-                entry(17, new Double[]{ 0.0, 0.0}),
-                entry(18, new Double[]{ 0.0, 0.0}),
-                entry(19, new Double[]{ 0.0, 0.0}),
-                entry(20, new Double[]{ 0.0, 0.0})
+                    entry(0, new Double[]{ 0.0, 0.0}),
+                    entry(1, new Double[]{ 0.0, 0.0}), // expected lower bound
+                    entry(2, new Double[]{ 0.0, 0.0}),
+                    entry(3, new Double[]{ 0.0, 0.0}),
+                    entry(4, new Double[]{ 0.0, 0.0}),
+                    entry(5, new Double[]{ 0.0, 0.0}),
+                    entry(6, new Double[]{ 0.0, 0.0}),
+                    entry(7, new Double[]{ 0.0, 0.0}),
+                    entry(8, new Double[]{ 0.0, 0.0}),
+                    entry(9, new Double[]{ 0.0, 0.0}),
+                    entry(10, new Double[]{ 0.0, 0.0}),
+                    entry(11, new Double[]{ 0.0, 0.0}),
+                    entry(12, new Double[]{ 0.0, 0.0}),
+                    entry(13, new Double[]{ 0.0, 0.0}),
+                    entry(14, new Double[]{ 0.0, 0.0}),
+                    entry(15, new Double[]{ 0.0, 0.0}),
+                    entry(16, new Double[]{ 0.0, 0.0}),
+                    entry(17, new Double[]{ 0.0, 0.0}),
+                    entry(18, new Double[]{ 0.0, 0.0}),
+                    entry(19, new Double[]{ 0.0, 0.0}),
+                    entry(20, new Double[]{ 0.0, 0.0}), // expected upper bound
+                    entry(21, new Double[]{ 0.0, 0.0})
         ));
     }
 

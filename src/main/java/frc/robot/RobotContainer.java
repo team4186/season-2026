@@ -388,8 +388,8 @@ public class RobotContainer {
             // TODO: Orientation will depend on side it is approached from, give translation constant and set orientation here
             joystickDriver.button(9).whileTrue(drivebase.driveToPose(
                 new Pose2d(
-                    Constants.StructureConstants.RED_NORTH_POLE.getX()+Constants.StructureConstants.ROBOT_X_CLIMBING_OFFSET,
-                    Constants.StructureConstants.RED_NORTH_POLE.getY(),
+                    Constants.StructureConstants.RED_CLIMB_NORTH_POLE.getX()+Constants.StructureConstants.ROBOT_X_CLIMBING_OFFSET,
+                    Constants.StructureConstants.RED_CLIMB_NORTH_POLE.getY(),
                     Rotation2d.fromDegrees(0))));
 
             //TODO: Uncomment for drive team after subsystem testing
@@ -418,27 +418,33 @@ public class RobotContainer {
         }
     }
 
+    //TODO: Finish at field
+    public void updateDriverAllianceInfo(){
+        var alliance = DriverStation.getAlliance();
 
-//   public void updateDriverAllianceControls(){
-//        var alliance = DriverStation.getAlliance();
-//
-//        if( alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red ) {
-////            Command driveFieldOrientedRedAlliance = drivebase.driveFieldOriented(driveAngularVelocityRedJoystick);
-////            Command driveFieldOrientedSlowRedAlliance = drivebase.driveFieldOriented(driveAngularVelocitySlowRedJoystick);
-////
-////            drivebase.setDefaultCommand(driveFieldOrientedRedAlliance);
-////            joystickDriver.button(11).whileTrue(driveFieldOrientedSlowRedAlliance);
-////            // joystickDriver.button(5).whileTrue(drivebase.centerModulesCommand());
-//        } else {
-//            Command driveFieldOrientedBlueAlliance = drivebase.driveFieldOriented(driveAngularVelocityBlueJoystick);
-//            Command driveFieldOrientedBlueAllianceSlow = drivebase.driveFieldOriented(driveAngularVelocitySlowBlueJoystick);
-//
-//            drivebase.setDefaultCommand(driveFieldOrientedBlueAlliance);
-//            joystickDriver.button(11).whileTrue(driveFieldOrientedBlueAllianceSlow);
-//
-//            joystickDriver.button(5).whileTrue(drivebase.centerModulesCommand());
-//        }
-//    }
+        // turret pipeline offsets, default, center, left, right
+
+
+        if ( alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red ) {
+            // Pipeline 0, all turret scoring ids
+
+            // Pipeline 1, all center ids
+
+            // Pipeline 2, all left ids
+
+            // Pipeline 3, all right ids
+
+        } else {
+            // Pipeline 0, all turret scoring ids
+
+            // Pipeline 1, all center ids
+
+            // Pipeline 2, all left ids
+
+            // Pipeline 3, all right ids
+
+        }
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
