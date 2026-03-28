@@ -4,12 +4,14 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.*;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import java.lang.Math.*;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.vision.LimelightRunner;
 
 
 public class TurretSubsystem extends SubsystemBase {
@@ -45,6 +47,8 @@ public class TurretSubsystem extends SubsystemBase {
 
     // K: Distance (Rounded to nearest Integer in feet), V: { ShooterRpm, HoodAngle }
     private final Map<Integer, Double[]> lookupTable;
+    private final Timer aprilTagLastTime;
+    private final LimelightRunner limelightRunner;
 
 
     public TurretSubsystem(
@@ -70,7 +74,11 @@ public class TurretSubsystem extends SubsystemBase {
         this.turretRelativeEncoder = turretMotor.getEncoder();
         this.shooterRelativeEncoder = shooterMotor.getEncoder();
         this.hoodRelativeEncoder = hoodMotor.getEncoder();
+
         this.lookupTable = TurretConstants.TURRET_LOOKUP_TABLE;
+        this.limelightRunner = LimelightRunner.getInstance();
+        aprilTagLastTime = new Timer();
+        aprilTagLastTime.start();
     }
 
 
