@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Feet Move Test "
+            "pathName": "Basic Climb"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Basic Left Auto"
+            "name": "climbArmUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         }
       ]

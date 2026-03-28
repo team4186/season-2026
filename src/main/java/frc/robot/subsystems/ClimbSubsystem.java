@@ -73,11 +73,24 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void simpleClimbMoveDown(double speed) {
         // expecting negative number - confirm speed is in correct direction
-        if (speed < 0) {
+        if (speed > 0) {
             speed = speed * -1;
         }
 
         if (getLimitSwitch()) {
+            climbMotor.stopMotor();
+        } else {
+            climbMotor.set(speed);
+        }
+    }
+
+    public void thresholdClimbMoveDown(double speed) {
+        // expecting negative number - confirm speed is in correct direction
+        if (speed > 0) {
+            speed = speed * -1;
+        }
+
+        if (getLimitSwitch() || climbEncoder.getPosition()<0) { //0 is placeholder for now
             climbMotor.stopMotor();
         } else {
             climbMotor.set(speed);

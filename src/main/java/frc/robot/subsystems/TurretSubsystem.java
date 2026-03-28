@@ -104,7 +104,7 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     public void updateShooterSpeed(double rpm) {
-        shooterClosedLoopController.setSetpoint(rpm, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        shooterClosedLoopController.setSetpoint(rpm, SparkBase.ControlType.kVelocity, ClosedLoopSlot.kSlot1);
     }
 
 
