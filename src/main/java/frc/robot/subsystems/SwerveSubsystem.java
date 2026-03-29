@@ -59,29 +59,13 @@ public class SwerveSubsystem extends SubsystemBase
    public SwerveSubsystem(File directory)
   {
     // TODO: Decision -> change default setpoints for testing? / Also good example of how to set pose manually for testing auto later
-    boolean blueAlliance = true;
-
-    Pose2d startingPose;
-
-    if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-      startingPose = new Pose2d(
-          new Translation2d(
-              Meter.of(16),
-              Meter.of(4)),
-          Rotation2d.fromDegrees(180));
-    } else if( DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      startingPose = new Pose2d(
-          new Translation2d(
-              Meter.of(1),
-              Meter.of(4)),
-              Rotation2d.fromDegrees(0));
-    } else { // Driver Station unavailable
-      startingPose = new Pose2d(
-          new Translation2d(
-              Meter.of(5),
-              Meter.of(5)),
-          Rotation2d.fromDegrees(0));
-    }
+    boolean blueAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
+            Meter.of(4)),
+            Rotation2d.fromDegrees(0))
+            : new Pose2d(new Translation2d(Meter.of(16),
+            Meter.of(4)),
+            Rotation2d.fromDegrees(180));
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
