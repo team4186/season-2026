@@ -448,6 +448,8 @@ public class RobotContainer {
 
             // Pipeline 3, all right ids
 
+            // Controls
+
         } else {
             // Pipeline 0, all turret scoring ids
 
@@ -456,6 +458,8 @@ public class RobotContainer {
             // Pipeline 2, all left ids
 
             // Pipeline 3, all right ids
+
+            // Controls
 
         }
     }

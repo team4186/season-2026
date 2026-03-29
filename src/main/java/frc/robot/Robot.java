@@ -118,6 +118,8 @@ public class Robot extends TimedRobot {
         m_robotContainer.setMotorBrake(true);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+        m_robotContainer.updateDriverAllianceInfo();
+
         // Print the selected autonomous command upon autonomous init
         System.out.println("Auto selected: " + m_autonomousCommand);
 
@@ -146,7 +148,7 @@ public class Robot extends TimedRobot {
         } else {
             CommandScheduler.getInstance().cancelAll();
         }
-        // m_robotContainer.updateDriverAllianceControls(); // TODO: Confirm field oriented behavior
+        m_robotContainer.updateDriverAllianceInfo();
     }
 
 
@@ -161,6 +163,7 @@ public class Robot extends TimedRobot {
     public void testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
+        m_robotContainer.updateDriverAllianceInfo();
     }
 
 
