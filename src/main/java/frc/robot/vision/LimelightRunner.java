@@ -54,9 +54,10 @@ public class LimelightRunner {
 
         double distInInches = getTurretDistanceToTagTrig();
         SmartDashboard.putNumber("Turret AprilTag Dist w/Trig Inches", distInInches);
+        SmartDashboard.putNumber("Turret AprilTag Dist w/Trig Feet", distInInches / 12.0);
         SmartDashboard.putNumber("Turret AprilTag Dist w/Trig Meters", distInInches * 0.0254);
-        SmartDashboard.putNumber("Turret AprilTag Dist w/Helper W.R.T. Camera Meters", getDistanceToTagWithHelperWRTCamera(LimelightConstants.LIMELIGHT_TURRET));
-        SmartDashboard.putNumber("Turret AprilTag Dist w/Helper W.R.T. Robot Meters", getDistanceToTagWithHelperWRTRobot(LimelightConstants.LIMELIGHT_TURRET));
+        SmartDashboard.putNumber("Turret AprilTag Dist w/Helper W.R.T. Camera Feet", getDistanceToTagWithHelperWRTCamera(LimelightConstants.LIMELIGHT_TURRET) * 3.28084);
+        SmartDashboard.putNumber("Turret AprilTag Dist w/Helper W.R.T. Robot Feet", getDistanceToTagWithHelperWRTRobot(LimelightConstants.LIMELIGHT_TURRET) * 3.28084);
 
         SmartDashboard.putNumber("Turret-Tag-Id", getAprilTagId(LimelightConstants.LIMELIGHT_TURRET));
 
@@ -171,13 +172,19 @@ public class LimelightRunner {
 
     // Returns Distance to scoring april tag in inches
     public double getTurretDistanceToTagTrig(){
-        //44.25 is height in inches of AprilTag off floor
-        //25.0 degrees is mounting angle of limelight
+        // distance from the center of the Limelight lens to the floor
         double tagyOffset = LimelightHelpers.getTY(LimelightConstants.LIMELIGHT_TURRET);
-        double angleInRadians = Math.toRadians((25.0 + tagyOffset));
-        double distance = 44.25 / tan(angleInRadians);
+        double limelightLensHeightInches = 21.48; // inches
+        double limelightMountAngleDegrees = 25.0;
 
-        return (hasTargetTurret()) ? distance : -1.0;
+        // distance from the target to the floor
+        double goalHeightInches = 44.25;
+
+        double angleToGoalDegrees = limelightMountAngleDegrees + tagyOffset;
+        double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+        //calculate distance in inches
+        return (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
     }
 
 
