@@ -5,6 +5,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TurretConstants;
 import java.lang.Math.*;
@@ -52,13 +54,13 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     public TurretSubsystem(
-        SparkFlex shooterMotor,
-        SparkMax turretMotor,
-        SparkMax hoodMotor,
-        DigitalInput hoodLimitSwitch,
-        DigitalInput leftLimitSwitch,
-        DigitalInput rightLimitSwitch
-    ){
+            SparkFlex shooterMotor,
+            SparkMax turretMotor,
+            SparkMax hoodMotor,
+            DigitalInput hoodLimitSwitch,
+            DigitalInput leftLimitSwitch,
+            DigitalInput rightLimitSwitch
+    ) {
         this.shooterMotor = shooterMotor;
         this.turretMotor = turretMotor;
         this.hoodMotor = hoodMotor;
@@ -83,7 +85,7 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     @Override
-    public void periodic(){
+    public void periodic() {
         SmartDashboard.putBoolean("Turret_Left_Limit_Switch: ", getLeftLimitSwitch());
         SmartDashboard.putBoolean("Turret_Right_Limit_Switch: ", getRightLimitSwitch());
         SmartDashboard.putBoolean("Hood_Limit_Switch: ", getHoodLimitSwitch());
@@ -96,10 +98,14 @@ public class TurretSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Hood_is_at_set_angle", isHoodAtSetpoint());
         SmartDashboard.putBoolean("Turret_is_at_target_position", isTurretAtSetpoint());
         SmartDashboard.putNumber("Print something to smart dashboard", lookupTable.get(2)[0]);
+
+        if (getHoodLimitSwitch()) {
+            hoodRelativeEncoder.setPosition(0.0);
+        }
     }
 
 
-    public void stopMotors(){
+    public void stopMotors() {
         shooterMotor.stopMotor();
         turretMotor.stopMotor();
         hoodMotor.stopMotor();
@@ -122,13 +128,13 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     // switch this to switch case
-    private double aimingFilter (double reqSetpoint) {
+    private double aimingFilter(double reqSetpoint) {
         double adjustedSetpoint = 0.0;
 
-        if (reqSetpoint > maxTurretRotation + turretDeadZone ) {
-            adjustedSetpoint = Math.max( reqSetpoint - 360, minTurretRotation);
+        if (reqSetpoint > maxTurretRotation + turretDeadZone) {
+            adjustedSetpoint = Math.max(reqSetpoint - 360, minTurretRotation);
         } else if (reqSetpoint < minTurretRotation - turretDeadZone) {
-            adjustedSetpoint = Math.min( reqSetpoint + 360, maxTurretRotation);
+            adjustedSetpoint = Math.min(reqSetpoint + 360, maxTurretRotation);
         } else if (reqSetpoint >= maxTurretRotation) {
             adjustedSetpoint = maxTurretRotation;
         } else if (reqSetpoint <= minTurretRotation) {
@@ -173,29 +179,54 @@ public class TurretSubsystem extends SubsystemBase {
         /** Why is this worse than kinematics? Because I said so **/
     }
 
-    public boolean getLeftLimitSwitch() { return leftLimitSwitch.get(); }
+    public boolean getLeftLimitSwitch() {
+        return !leftLimitSwitch.get();
+    }
 
 
-    public boolean getRightLimitSwitch() { return rightLimitSwitch.get(); }
+    public boolean getRightLimitSwitch() {
+        return !rightLimitSwitch.get();
+    }
 
 
-    public boolean getHoodLimitSwitch() { return hoodLimitSwitch.get(); }
+    public boolean getHoodLimitSwitch() {
+        return !hoodLimitSwitch.get();
+    }
 
 
-    public double getTurretPosition() { return turretRelativeEncoder.getPosition(); }
+    public double getTurretPosition() {
+        return turretRelativeEncoder.getPosition();
+    }
 
 
-    public double getShooterVelocity() { return shooterRelativeEncoder.getVelocity(); }
+    public double getShooterVelocity() {
+        return shooterRelativeEncoder.getVelocity();
+    }
 
 
-    public double getHoodPosition() { return hoodRelativeEncoder.getPosition(); }
+    public double getHoodPosition() {
+        return hoodRelativeEncoder.getPosition();
+    }
 
 
-    public boolean isTurretAtSetpoint() { return turretClosedLoopController.isAtSetpoint(); }
+    public boolean isTurretAtSetpoint() {
+        return turretClosedLoopController.isAtSetpoint();
+    }
 
 
-    public boolean isShooterAtSetpoint() { return shooterClosedLoopController.isAtSetpoint(); }
+    public boolean isShooterAtSetpoint() {
+        return shooterClosedLoopController.isAtSetpoint();
+    }
 
+    public boolean isHoodAtSetpoint() {
+        return hoodClosedLoopController.isAtSetpoint();
+    }
 
-    public boolean isHoodAtSetpoint() { return hoodClosedLoopController.isAtSetpoint(); }
+    public Command increaseHoodMotorAngle() {
+        return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() + 0.5), this);
+    }
+
+    public Command decreaseHoodMotorAngle() {
+        return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() - 0.5), this);
+    }
 }

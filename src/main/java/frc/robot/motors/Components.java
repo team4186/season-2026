@@ -55,7 +55,7 @@ public class Components {
                 new SparkFlex(TurretConstants.SHOOTER_LEAD_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
                 new SparkFlex(TurretConstants.SHOOTER_FOLLOWER_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
                 true,
-                false
+                true
             );
         }
 

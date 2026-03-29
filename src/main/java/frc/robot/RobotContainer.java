@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.intakecommands.ExtendIntakeCommand;
 import frc.robot.commands.intakecommands.RetractIntakeCommand;
+import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.*;
 import frc.robot.motors.Components;
 import java.io.File;
@@ -100,7 +102,7 @@ public class RobotContainer {
     RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
 
     //Climb Commands
-    DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem);
+    DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem, Constants.ClimbConstants.CLIMB_SLOW_SPEED);
     RetractClimbCommand retractClimbCommand = new RetractClimbCommand(climbSubsystem, Constants.ClimbConstants.CLIMB_SLOW_SPEED);
 
 
@@ -371,6 +373,8 @@ public class RobotContainer {
             joystickOperator.button(3)
                     .whileTrue(spindexerSubsystem.rotateMotors())
                     .whileFalse(spindexerSubsystem.stopFeed());
+
+
             joystickOperator.button(2)
                     .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_FAST))
                             .whileFalse(intakeSubsystem.stopPickupMotor());
@@ -385,7 +389,13 @@ public class RobotContainer {
 
             joystickOperator.button(4)
                     .whileTrue(intakeSubsystem.retractIntake())
-                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));;
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+
+            joystickOperator.button(11)
+                    .onTrue(turretSubsystem.increaseHoodMotorAngle());
+
+            joystickOperator.button(12)
+                    .onTrue(turretSubsystem.decreaseHoodMotorAngle());
 
             // TODO: Orientation will depend on side it is approached from, give translation constant and set orientation here
             joystickDriver.button(9).whileTrue(drivebase.driveToPose(
@@ -402,8 +412,8 @@ public class RobotContainer {
             joystickOperator.button(7).onTrue(intakeSubsystem.stopPickupMotor());
 
             //Climb Command keybinds
-            joystickOperator.button(6).onTrue(deployClimbCommand);
-            joystickOperator.button(4).onTrue(retractClimbCommand);
+            joystickOperator.button(8).onTrue(deployClimbCommand);
+            joystickOperator.button(10).onTrue(retractClimbCommand);
 
 //            driverStadia.leftTrigger().whileTrue(driveFieldOrientedAngularVelocityStadia);
 
