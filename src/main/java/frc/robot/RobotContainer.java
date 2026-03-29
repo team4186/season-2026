@@ -363,7 +363,7 @@ public class RobotContainer {
             // joystickOperator.button( <> )
 
             // TODO: set default command to go to 0
-            // turretSubsystem.setDefaultCommand();
+            // turretSubsystem.setDefaultCommand(Commands.runOnce(turretSubsystem::returnTurretToZero).repeatedly());
 
             // TODO: passing turret button ( Aim towards wall using gyro)
 
@@ -378,7 +378,6 @@ public class RobotContainer {
             joystickOperator.button(3)
                     .whileTrue(spindexerSubsystem.rotateMotors())
                     .whileFalse(spindexerSubsystem.stopFeed());
-
 
             joystickOperator.button(2)
                     .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_FAST))
@@ -396,11 +395,15 @@ public class RobotContainer {
                     .whileTrue(intakeSubsystem.retractIntake())
                     .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
-            joystickOperator.button(11)
-                    .onTrue(turretSubsystem.increaseHoodMotorAngle());
+            // TODO: Try this after testing setting hood angle direclty below
+//            joystickOperator.button(11)
+//                    .onTrue(turretSubsystem.increaseHoodMotorAngle());
+//
+//            joystickOperator.button(12)
+//                    .onTrue(turretSubsystem.decreaseHoodMotorAngle());
 
-            joystickOperator.button(12)
-                    .onTrue(turretSubsystem.decreaseHoodMotorAngle());
+            // TODO: Test setting to specific hood angle
+            // joystickOperator.button(12).onTrue(Commands.runOnce(() -> turretSubsystem.updateHoodAngle(20)));
 
             // TODO: Orientation will depend on side it is approached from, give translation constant and set orientation here
 //            joystickDriver.button(9).whileTrue(drivebase.driveToPose(
@@ -410,7 +413,7 @@ public class RobotContainer {
 //                    Rotation2d.fromDegrees(0))));
 
             joystickOperator.trigger()
-                    .onTrue( turretSubsystem.setShooterMotor(5000) )
+                    .onTrue( turretSubsystem.setShooterMotor(Constants.TurretConstants.SHOOTER_TARGET_FAR_SPEED) )
                     .onFalse( turretSubsystem.setShooterMotor(0) );
 
             //TODO: Uncomment for drive team after subsystem testing
