@@ -10,8 +10,9 @@ import frc.robot.Constants;
 import frc.robot.Constants.LimelightConstants;
 import swervelib.SwerveDrive;
 
+import java.util.Map;
+
 import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static java.lang.Math.tan;
 
 
 public class LimelightRunner {
@@ -54,7 +55,7 @@ public class LimelightRunner {
         SmartDashboard.putNumber("ty", LimelightHelpers.getTY(LimelightConstants.LIMELIGHT_TURRET));
         // SmartDashboard.putNumber("", hasTargetClimber());
 
-        double distInInches = getTurretDistanceToTagTrig();
+        double distInInches = getTurretTagDistanceInchesTrig( LimelightHelpers.getTY(LimelightConstants.LIMELIGHT_TURRET) );
         SmartDashboard.putNumber("Turret AprilTag Dist w/Trig Inches", distInInches);
         SmartDashboard.putNumber("Turret AprilTag Dist w/Trig Feet", distInInches / 12.0);
         SmartDashboard.putNumber("Turret AprilTag Dist w/Trig Meters", distInInches * 0.0254);
@@ -271,16 +272,15 @@ public class LimelightRunner {
 
 
     // Returns Distance to scoring april tag in inches
-    public double getTurretDistanceToTagTrig(){
+    public double getTurretTagDistanceInchesTrig( double tagYOffset ){
         // distance from the center of the Limelight lens to the floor
-        double tagyOffset = LimelightHelpers.getTY(LimelightConstants.LIMELIGHT_TURRET);
         double limelightLensHeightInches = 21.48; // inches
         double limelightMountAngleDegrees = 25.0;
 
         // distance from the target to the floor
         double goalHeightInches = 44.25;
 
-        double angleToGoalDegrees = limelightMountAngleDegrees + tagyOffset;
+        double angleToGoalDegrees = limelightMountAngleDegrees + tagYOffset;
         double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
 
         //calculate distance in inches
@@ -334,6 +334,68 @@ public class LimelightRunner {
         LimelightHelpers.setFiducial3DOffset(limelightName, 0.0, 0.0, 0.0);
     }
 
+
+    /**
+     * For Limelight turret camera to grab distance info and offset relative to tag in view
+     *
+     * @return double array: { Response (-1 Fail, 0 Tag Found, 1 Success), xOffset to target, distance in feet }
+     */
+    public double[] getTurretTagBasicInfo(){
+        // Default values
+        double status = -1.0;
+        double dist = 0.0;
+        double txOffset = 0.0;
+
+        // is tag present and get tag id
+        if ( hasTargetTurret() ) {
+
+            status = 1.0;
+            dist = getTurretTagDistanceInchesTrig( LimelightHelpers.getTY( limelightTurret ) ) / 12.0;
+            txOffset = LimelightHelpers.getTX( limelightTurret );
+        }
+
+        SmartDashboard.putNumber("Turret_Pipeline_Status", status);
+
+        return new double[]{ status, txOffset, dist };
+    }
+
+
+    /**
+     * For Limelight turret camera targeting retrieves available tag, switches to pipeline, takes measurement,
+     * then resets pipeline back to general pipeline
+     *
+     * @return double array: { Response (-1 Fail, 0 Tag Found, 1 Success), xOffset to target, distance in feet }
+     */
+    public double[] getTurretTagInfoWithOffsetPipeline(){
+        // Default values
+        double status = -1.0;
+        double dist = 0.0;
+        double txOffset = 0.0;
+        int tagId = (int) getAprilTagId(limelightTurret);
+
+        // is tag present and get tag id
+        if ( hasTargetTurret() ) {
+            int pipelineId = Constants.StructureConstants.TURRET_FIDUCIAL_PIPELINE.get(tagId);
+
+            // swap to correct pipeline
+            switchToPipeline(limelightTurret, pipelineId);
+            status = 0.0;
+
+            // Double check target Tag is available in new pipeline
+            if (hasTargetTurret()) {
+                status = 1.0;
+                dist = getTurretTagDistanceInchesTrig( LimelightHelpers.getTY( limelightTurret ) ) / 12.0;
+                txOffset = LimelightHelpers.getTX( limelightTurret );
+            }
+        }
+
+        // Switch back to default pipeline
+        switchToPipeline(limelightTurret, 0);
+
+        SmartDashboard.putNumber("Turret_Pipeline_Status", status);
+
+        return new double[]{ status, txOffset, dist };
+    }
 
     // Close function required for Subscribers/Publishers
     public void close(){}

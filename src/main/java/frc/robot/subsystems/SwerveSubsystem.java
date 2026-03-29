@@ -179,7 +179,7 @@ public class SwerveSubsystem extends SubsystemBase
     vision.updatePoseEstimate(swerveDrive);
     SmartDashboard.putNumber("Swerve_X_Position", swerveDrive.getPose().getTranslation().getX());
     SmartDashboard.putNumber("Swerve_Y_Position", swerveDrive.getPose().getTranslation().getY());
-    SmartDashboard.putNumber("Swerve_Angle", swerveDrive.getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Swerve_Yaw_Angle", swerveDrive.getPose().getRotation().getDegrees());
   }
 
 

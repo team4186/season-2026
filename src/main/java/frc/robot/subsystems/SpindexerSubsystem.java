@@ -45,6 +45,9 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     public void feed(){
+        double shooterSpeed = SmartDashboard.getNumber( "Shooter_Velocity:", 0.0);
+
+
         feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
         rotateMotor.set(SpindexerConstants.ROTATE_MAX_SPEED);
     }

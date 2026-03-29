@@ -273,7 +273,10 @@ public final class Constants {
         public static final double HOOD_ERROR_THRESHOLD = 0.0;
 
         //  Key: Distance in Feet, Value: {ShooterSpeed, HoodAngle}
-        public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE = new HashMap<>(
+        /**
+         *  Lookup Table KEY: Distance in Feed  Value: { ShooterSpeed, HoodAngle}
+         */
+        public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE = new HashMap<Integer, Double[]>(
             Map.ofEntries(
                     entry(0, new Double[]{ 0.0, 0.0}),
                     entry(1, new Double[]{ 0.0, 0.0}), // expected lower bound
