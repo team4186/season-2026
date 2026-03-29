@@ -32,6 +32,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final SparkClosedLoopController extensionStarboardController;
     private final SparkClosedLoopController extensionPortController;
+    private final SparkClosedLoopController pickupController;
+
+    private enum Shuffle{
+        EXTEND,
+        RETRACT
+    }
+    private Shuffle ShuffleState = Shuffle.EXTEND;
 
     public IntakeSubsystem(
             SparkMax intakeExtensionStarboardMotor,
@@ -60,6 +67,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         this.extensionStarboardController =  intakeExtensionPortMotor.getClosedLoopController();
         this.extensionPortController = intakeExtensionPortMotor.getClosedLoopController();
+        this.pickupController = pickupMotor.getClosedLoopController();
     }
 
 
@@ -79,6 +87,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
         SmartDashboard.putBoolean("Intake_Starboard_is_at_setpoint",starboardAtSetpoint());
         SmartDashboard.putBoolean("Intake_Port_is_at_setpoint", portAtSetpoint());
+
+        automaticSetPickupSteed();
 
     }
 
@@ -189,6 +199,30 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+//    public void closedLoopPickup(){
+//        pickupController.setSetpoint(IntakeConstants.PICKUP_FAST_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+//    }
+
+    public void automaticSetPickupSteed(){
+        if(isPortRetracted() || isStarboardRetracted()){
+            pickupController.setSetpoint(0.0, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+        }else if(getPortPosition()<IntakeConstants.INTAKE_RAIL_END/2){
+            pickupController.setSetpoint(IntakeConstants.PICKUP_SLOW_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+        }else if(getPortPosition()>=IntakeConstants.INTAKE_RAIL_END/2){
+            pickupController.setSetpoint(IntakeConstants.PICKUP_FAST_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+        }
+    }
+
+    public void shufflePickup(){
+        if(getPortPosition()<IntakeConstants.INTAKE_RAIL_END/2 || getStarboardPosition()<IntakeConstants.INTAKE_RAIL_END/2){
+            simplePairExtension();
+        }else if(getPortPosition()< IntakeConstants.INTAKE_RAIL_END
+                || getStarboardPosition()<IntakeConstants.INTAKE_RAIL_END/2){
+
+        }
+    }
+
+
 
     public void pickupBallsSlow(){
         pickupMotor.set(IntakeConstants.PICKUP_SLOW_SPEED);
@@ -245,4 +279,24 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command retractIntake(){
         return Commands.runOnce(this::simplePairRetraction,this).repeatedly();
     }
+
+    public void shuffleIntake(){
+        if(getStarboardPosition()<IntakeConstants.INTAKE_RAIL_END/2 || getPortPosition()<IntakeConstants.INTAKE_RAIL_END/2){
+            ShuffleState = Shuffle.EXTEND;
+        }else if(isPortExtended() && isStarboardExtended()){
+            ShuffleState = Shuffle.RETRACT;
+        }
+
+        if(ShuffleState == Shuffle.EXTEND){
+            simplePairExtension();
+        }else if(ShuffleState == Shuffle.RETRACT){
+            simplePairRetraction();
+        }
+    }
+
+
+    public Command shuffleIntakeCommand(){
+        return (Commands.runOnce(this::shuffleIntake,this).repeatedly());
+    }
+
 }

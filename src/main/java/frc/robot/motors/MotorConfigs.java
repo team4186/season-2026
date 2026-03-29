@@ -246,6 +246,27 @@ public final class MotorConfigs {
                     .positionConversionFactor(IntakeConstants.PICKUP_POSITION_CONVERSION_FACTOR)
                     .velocityConversionFactor(IntakeConstants.PICKUP_VELOCITY_CONVERSION_FACTOR);
 
+            config.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pid(
+                        IntakeConstants.PICKUP_P,
+                        IntakeConstants.PICKUP_I,
+                        IntakeConstants.PICKUP_D,
+                        ClosedLoopSlot.kSlot1)
+                .outputRange(
+                        IntakeConstants.PICKUP_MIN_OUTPUT,
+                        IntakeConstants.PICKUP_MAX_OUTPUT,
+                        ClosedLoopSlot.kSlot1) // Range of total voltage
+                .allowedClosedLoopError(
+                        IntakeConstants.PICKUP_ERROR_THRESHOLD,
+                        ClosedLoopSlot.kSlot1)
+                .feedForward
+                .kS(IntakeConstants.PICKUP_KS,
+                        ClosedLoopSlot.kSlot1)
+                .kV(
+                        IntakeConstants.PICKUP_KV,
+                        ClosedLoopSlot.kSlot1);
+
             motor.configure(
                     config,
                     ResetMode.kResetSafeParameters,

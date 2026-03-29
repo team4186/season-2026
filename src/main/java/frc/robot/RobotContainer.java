@@ -329,6 +329,10 @@ public class RobotContainer {
             driverXbox.back().whileTrue(drivebase.centerModulesCommand());
             driverXbox.leftBumper().onTrue(Commands.none());
             driverXbox.rightBumper().onTrue(Commands.none());
+            //            joystickOperator.button(10)
+//                    .onTrue(Commands.runOnce(() -> drivebase.resetOdometry(startPose)));
+//
+//            joystickOperator.button(11).whileTrue(drivebase.driveToPose(targetPose));
 
             //joystickOperator.trigger().whileTrue(Commands.runOnce(spindexerSubsystem::feed, spindexerSubsystem).repeatedly());
 
@@ -343,10 +347,7 @@ public class RobotContainer {
             Pose2d targetPose = new Pose2d(new Translation2d(2.666, 4.179),
                     Rotation2d.fromDegrees(180));
 
-            joystickOperator.button(10)
-                    .onTrue(Commands.runOnce(() -> drivebase.resetOdometry(startPose)));
 
-            joystickOperator.button(11).whileTrue(drivebase.driveToPose(targetPose));
 
             joystickOperator.button(8)
                     .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
