@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import java.lang.Math.*;
 import java.util.Map;
@@ -229,4 +230,9 @@ public class TurretSubsystem extends SubsystemBase {
     public Command decreaseHoodMotorAngle() {
         return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() - 0.5), this);
     }
+
+    public Command setShooterMotor(double speed) {
+        return Commands.runOnce(() -> updateShooterSpeed((speed)), this).repeatedly();
+    }
+
 }

@@ -376,7 +376,7 @@ public final class Constants {
         public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
         //TODO: change current limit to lower?
-        public static final int FEED_CURRENT_LIMIT = 50;
+        public static final int FEED_CURRENT_LIMIT = 60;
         public static final int ROTATE_CURRENT_LIMIT = 50;
 
         // Spark ID'S
@@ -411,7 +411,7 @@ public final class Constants {
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;
 
-        public static final double FEED_MAX_SPEED = 0.80; // set between -1 to 1
+        public static final double FEED_MAX_SPEED = 0.7; // set between -1 to 1
         public static final double FEED_SLOW_SPEED = 0.5;
 
         public static final double ROTATE_MIN_OUTPUT = -0.75;

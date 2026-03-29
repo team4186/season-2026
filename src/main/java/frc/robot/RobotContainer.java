@@ -117,7 +117,7 @@ public class RobotContainer {
             () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * -1,
             () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * -1)
             .withControllerRotationAxis(
-                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * -1)
+                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
             .allianceRelativeControl(true);
 
@@ -126,7 +126,7 @@ public class RobotContainer {
             () -> attenuated( joystickDriver.getY(), 2, 0.15 ) * -1,
             () -> attenuated( joystickDriver.getX(), 2, 0.15 ) * -1)
         .withControllerRotationAxis(
-            () -> attenuated( joystickDriver.getTwist(), 3, 0.5 ) * -1)
+            () -> attenuated( joystickDriver.getTwist(), 3, 0.5 ) * 1)
         .deadband(OperatorConstants.DEADBAND)
         .allianceRelativeControl(true);
 
@@ -343,11 +343,11 @@ public class RobotContainer {
 
             joystickOperator.button(11).whileTrue(drivebase.driveToPose(targetPose));
 
-            joystickDriver.button(7)
+            joystickOperator.button(8)
                     .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
                     .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
 
-            joystickDriver.button(8)
+            joystickOperator.button(10)
                     .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
                     .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
 
@@ -398,22 +398,24 @@ public class RobotContainer {
                     .onTrue(turretSubsystem.decreaseHoodMotorAngle());
 
             // TODO: Orientation will depend on side it is approached from, give translation constant and set orientation here
-            joystickDriver.button(9).whileTrue(drivebase.driveToPose(
-                new Pose2d(
-                    Constants.StructureConstants.RED_CLIMB_NORTH_POLE.getX()+Constants.StructureConstants.ROBOT_X_CLIMBING_OFFSET,
-                    Constants.StructureConstants.RED_CLIMB_NORTH_POLE.getY(),
-                    Rotation2d.fromDegrees(0))));
+//            joystickDriver.button(9).whileTrue(drivebase.driveToPose(
+//                new Pose2d(
+//                    Constants.StructureConstants.RED_CLIMB_NORTH_POLE.getX()+Constants.StructureConstants.ROBOT_X_CLIMBING_OFFSET,
+//                    Constants.StructureConstants.RED_CLIMB_NORTH_POLE.getY(),
+//                    Rotation2d.fromDegrees(0))));
+
+            joystickOperator.trigger()
+                    .onTrue( turretSubsystem.setShooterMotor(5000) )
+                    .onFalse( turretSubsystem.setShooterMotor(0) );
 
             //TODO: Uncomment for drive team after subsystem testing
             //Intake Command keybind
-            joystickDriver.button(5).onTrue(extendIntakeCommand);
-            joystickDriver.button(3).onTrue(retractIntakeCommand);
-            joystickOperator.button(2).onTrue(intakeSubsystem.setSlowPickup(IntakeConstants.PICKUP_SLOW_SPEED));
-            joystickOperator.button(7).onTrue(intakeSubsystem.stopPickupMotor());
+//            joystickDriver.button(5).onTrue(extendIntakeCommand);
+//            joystickDriver.button(3).onTrue(retractIntakeCommand);
+//            joystickOperator.button(2).onTrue(intakeSubsystem.setSlowPickup(IntakeConstants.PICKUP_SLOW_SPEED));
+//            joystickOperator.button(7).onTrue(intakeSubsystem.stopPickupMotor());
 
             //Climb Command keybinds
-            joystickOperator.button(8).onTrue(deployClimbCommand);
-            joystickOperator.button(10).onTrue(retractClimbCommand);
 
 //            driverStadia.leftTrigger().whileTrue(driveFieldOrientedAngularVelocityStadia);
 

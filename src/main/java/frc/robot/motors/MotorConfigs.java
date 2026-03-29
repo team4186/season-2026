@@ -149,7 +149,6 @@ public final class MotorConfigs {
     public SparkFlex applyShooterSparkConfig(
         SparkFlex motorLeader,
         SparkFlex motorFollower,
-        boolean invertSecondMotor,
         boolean inverse
     ){
         SparkBaseConfig baseConfig = DefaultSparkFlexConfig;
@@ -194,15 +193,9 @@ public final class MotorConfigs {
 
         SparkBaseConfig followerConfig = new SparkFlexConfig();
 
-        // boolean invertFollower = invertSecondMotor ^ inverse; // using XOR boolean logic
-        boolean invertFollower = inverse;
-        if (invertSecondMotor) {
-            invertFollower = !invertFollower;
-        }
-
         followerConfig
             .apply(baseConfig)
-            .follow(motorLeader, invertFollower);
+            .follow(motorLeader, true);
 
         motorFollower.configure(
             followerConfig,
