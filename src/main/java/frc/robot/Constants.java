@@ -298,6 +298,9 @@ public final class Constants {
                     entry(20, new Double[]{ 0.0, 0.0}), // expected upper bound
                     entry(21, new Double[]{ 0.0, 0.0})
         ));
+
+        public static final double SHOOTER_TARGET_FAR_SPEED = 5000.0;
+        public static final double SHOOTER_TARGET_CLOSE_SPEED = 5000.0;
     }
 
 
