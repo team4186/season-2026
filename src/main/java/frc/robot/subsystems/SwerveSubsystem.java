@@ -58,7 +58,6 @@ public class SwerveSubsystem extends SubsystemBase
    */
    public SwerveSubsystem(File directory)
   {
-    // TODO: Decision -> change default setpoints for testing? / Also good example of how to set pose manually for testing auto later
     boolean blueAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
             Meter.of(4)),
@@ -136,7 +135,6 @@ public class SwerveSubsystem extends SubsystemBase
             // Boolean supplier that controls when the path will be mirrored for the red alliance
             // This will flip the path being followed to the red side of the field.
             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
             var alliance = DriverStation.getAlliance();
             if (alliance.isPresent()) {
               return alliance.get() == DriverStation.Alliance.Red;
