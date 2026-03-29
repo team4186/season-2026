@@ -103,28 +103,36 @@ public class TurretSubsystem extends SubsystemBase {
         if (getHoodLimitSwitch()) {
             hoodRelativeEncoder.setPosition(0.0);
         }
-    }
 
-
-    public void stopMotors() {
-        shooterMotor.stopMotor();
-        turretMotor.stopMotor();
-        hoodMotor.stopMotor();
+        // TODO: Measure angle when left and right are triggered and set them below
+        if (getLeftLimitSwitch()){
+            // TODO: Update to precise location
+        } else if (getRightLimitSwitch()) {
+            // TODO: Update to precise location
+        }
     }
 
 
     public void updateTurretRotation(double angle) {
-        turretClosedLoopController.setSetpoint(aimingFilter(angle), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        turretClosedLoopController.setSetpoint(
+                aimingFilter(angle),
+                SparkBase.ControlType.kPosition,
+                ClosedLoopSlot.kSlot0);
     }
 
 
     public void updateShooterSpeed(double rpm) {
-        shooterClosedLoopController.setSetpoint(rpm, SparkBase.ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+        shooterClosedLoopController.setSetpoint(
+                rpm,
+                SparkBase.ControlType.kVelocity,
+                ClosedLoopSlot.kSlot1);
     }
 
 
     public void updateHoodAngle(double angle) {
-        hoodClosedLoopController.setSetpoint(Math.max(minHoodRotation, Math.min(angle, maxHoodRotation)), SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        hoodClosedLoopController.setSetpoint(
+                Math.max( minHoodRotation, Math.min( angle, maxHoodRotation ) ),
+                SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
 
@@ -143,6 +151,13 @@ public class TurretSubsystem extends SubsystemBase {
         }
 
         return adjustedSetpoint;
+    }
+
+
+    public void stopMotors() {
+        shooterMotor.stopMotor();
+        turretMotor.stopMotor();
+        hoodMotor.stopMotor();
     }
 
 
@@ -180,59 +195,44 @@ public class TurretSubsystem extends SubsystemBase {
         /** Why is this worse than kinematics? Because I said so **/
     }
 
-    public boolean getLeftLimitSwitch() {
-        return !leftLimitSwitch.get();
+
+    public boolean getLeftLimitSwitch() { return !leftLimitSwitch.get(); }
+
+
+    public boolean getRightLimitSwitch() { return !rightLimitSwitch.get(); }
+
+
+    public boolean getHoodLimitSwitch() { return !hoodLimitSwitch.get(); }
+
+
+    public double getTurretPosition() { return turretRelativeEncoder.getPosition(); }
+
+
+    public double getShooterVelocity() { return shooterRelativeEncoder.getVelocity(); }
+
+
+    public double getHoodPosition() { return hoodRelativeEncoder.getPosition(); }
+
+
+    public boolean isTurretAtSetpoint() { return turretClosedLoopController.isAtSetpoint(); }
+
+
+    public boolean isShooterAtSetpoint() { return shooterClosedLoopController.isAtSetpoint(); }
+
+
+    public boolean isHoodAtSetpoint() { return hoodClosedLoopController.isAtSetpoint(); }
+
+
+    public Command increaseHoodMotorAngle() { return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() + 0.5), this); }
+
+
+    public Command decreaseHoodMotorAngle() { return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() - 0.5), this); }
+
+
+    public Command setShooterMotor(double speed) { return Commands.runOnce(() -> updateShooterSpeed((speed)), this).repeatedly(); }
+
+
+    public void returnTurretToZero() {
+        updateTurretRotation(0.0);
     }
-
-
-    public boolean getRightLimitSwitch() {
-        return !rightLimitSwitch.get();
-    }
-
-
-    public boolean getHoodLimitSwitch() {
-        return !hoodLimitSwitch.get();
-    }
-
-
-    public double getTurretPosition() {
-        return turretRelativeEncoder.getPosition();
-    }
-
-
-    public double getShooterVelocity() {
-        return shooterRelativeEncoder.getVelocity();
-    }
-
-
-    public double getHoodPosition() {
-        return hoodRelativeEncoder.getPosition();
-    }
-
-
-    public boolean isTurretAtSetpoint() {
-        return turretClosedLoopController.isAtSetpoint();
-    }
-
-
-    public boolean isShooterAtSetpoint() {
-        return shooterClosedLoopController.isAtSetpoint();
-    }
-
-    public boolean isHoodAtSetpoint() {
-        return hoodClosedLoopController.isAtSetpoint();
-    }
-
-    public Command increaseHoodMotorAngle() {
-        return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() + 0.5), this);
-    }
-
-    public Command decreaseHoodMotorAngle() {
-        return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() - 0.5), this);
-    }
-
-    public Command setShooterMotor(double speed) {
-        return Commands.runOnce(() -> updateShooterSpeed((speed)), this).repeatedly();
-    }
-
 }
