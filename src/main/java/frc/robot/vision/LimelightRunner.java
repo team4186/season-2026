@@ -107,6 +107,7 @@ public class LimelightRunner {
         SmartDashboard.putBoolean("Available Tag?", (limelightMeasurement.tagCount > 0));
         SmartDashboard.putNumber("Angular Velocity Gyro", Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)));
 
+        // 2 rotations per second
         if ( limelightMeasurement.tagCount > 0 &&
             Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) < 720.0) {
             // Add vision measurement, StdDevs larger number is lower confidence (0.01 - 0.05)
@@ -121,6 +122,7 @@ public class LimelightRunner {
             );
         }
     }
+
 
     public boolean hasTargetTurret(){
         return LimelightHelpers.getTV(LimelightConstants.LIMELIGHT_TURRET);
@@ -222,6 +224,11 @@ public class LimelightRunner {
     // Forward, Right, Height
     public void setFiducial3DOffset(String limelightName, double xOffset, double yOffset, double zOffset){
         LimelightHelpers.setFiducial3DOffset(limelightName, xOffset, yOffset, zOffset);
+    }
+
+
+    public void switchToPipeline(String limelightName, int pipelineNum) {
+        LimelightHelpers.setPipelineIndex(limelightName, pipelineNum);
     }
 
 

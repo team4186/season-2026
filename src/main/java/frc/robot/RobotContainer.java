@@ -29,6 +29,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.*;
 import frc.robot.motors.Components;
 import java.io.File;
+
+import frc.robot.vision.LimelightRunner;
 import swervelib.SwerveInputStream;
 import frc.robot.commands.climbCommand.*;
 import frc.robot.Constants.IntakeConstants;
@@ -260,6 +262,9 @@ public class RobotContainer {
         if (autoChooser.getSelected() == null) {
             RobotModeTriggers.autonomous().onTrue(Commands.runOnce(drivebase::zeroGyroWithAlliance));
         }
+
+        // Update Alliance Relevant info
+        updateDriverAllianceInfo();
     }
 
 
@@ -435,33 +440,99 @@ public class RobotContainer {
     //TODO: Finish at field
     public void updateDriverAllianceInfo(){
         var alliance = DriverStation.getAlliance();
+        LimelightRunner limelightRunner = LimelightRunner.getInstance();
+        String turret = Constants.LimelightConstants.LIMELIGHT_TURRET;
 
         // turret pipeline offsets, default, center, left, right
+        limelightRunner.switchToPipeline(turret, 0);
+        limelightRunner.resetFiducial3DOffset(turret);
+
+        limelightRunner.switchToPipeline(turret, 1);
+        limelightRunner.setFiducial3DOffset(
+                turret,
+                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
+                0,
+                0);
+
+        limelightRunner.switchToPipeline(turret, 2);
+        limelightRunner.setFiducial3DOffset(
+                turret,
+                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
+                Constants.StructureConstants.TURRET_TARGET_LEFT_SIDE_OFFSET,
+                0);
+
+        limelightRunner.switchToPipeline(turret, 3);
+        limelightRunner.setFiducial3DOffset(turret,
+                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
+                Constants.StructureConstants.TURRET_TARGET_RIGHT_SIDE_OFFSET,
+                0);
 
 
         if ( alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red ) {
             // Pipeline 0, all turret scoring ids
+            limelightRunner.switchToPipeline(turret, 0);
+            limelightRunner.fiducialIdFilterOverride(
+                    turret,
+                    Constants.StructureConstants.RED_FIDUCIAL_TURRET_IDS
+            );
 
             // Pipeline 1, all center ids
+            limelightRunner.switchToPipeline(turret, 1);
+            limelightRunner.fiducialIdFilterOverride(
+                    turret,
+                    Constants.StructureConstants.OFFSET_GROUP_CENTER_RED
+            );
 
             // Pipeline 2, all left ids
+            limelightRunner.switchToPipeline(turret, 2);
+            limelightRunner.fiducialIdFilterOverride(
+                    turret,
+                    Constants.StructureConstants.OFFSET_GROUP_LEFT_RED
+            );
 
             // Pipeline 3, all right ids
+            limelightRunner.switchToPipeline(turret, 3);
+            limelightRunner.fiducialIdFilterOverride(
+                    turret,
+                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_RED
+            );
 
-            // Controls
+            // Controls // TODO: Confirm blue and red
 
         } else {
             // Pipeline 0, all turret scoring ids
+            limelightRunner.switchToPipeline(turret, 0);
+            limelightRunner.fiducialIdFilterOverride(
+                    turret,
+                    Constants.StructureConstants.BLUE_FIDUCIAL_TURRET_IDS
+            );
 
             // Pipeline 1, all center ids
+            limelightRunner.switchToPipeline(turret, 1);
+            limelightRunner.fiducialIdFilterOverride(
+                    turret,
+                    Constants.StructureConstants.OFFSET_GROUP_CENTER_BLUE
+            );
 
             // Pipeline 2, all left ids
+            limelightRunner.switchToPipeline(turret, 2);
+            limelightRunner.fiducialIdFilterOverride(
+                    turret,
+                    Constants.StructureConstants.OFFSET_GROUP_LEFT_BLUE
+            );
 
             // Pipeline 3, all right ids
+            limelightRunner.switchToPipeline(turret, 3);
+            limelightRunner.fiducialIdFilterOverride(
+                    turret,
+                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_BLUE
+            );
 
-            // Controls
-
+            // Controls // TODO: Confirm blue and red
         }
+
+        // Set to capture all tags
+        limelightRunner.switchToPipeline(turret, 0);
     }
 
     /**
