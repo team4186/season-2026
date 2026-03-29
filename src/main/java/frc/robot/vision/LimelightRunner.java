@@ -4,12 +4,9 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.DoubleSubscriber;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.Constants.LimelightConstants;
 import swervelib.SwerveDrive;
 
@@ -23,6 +20,9 @@ public class LimelightRunner {
 
     public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(
         AprilTagFields.k2026RebuiltWelded);
+
+    public final String limelightTurret = LimelightConstants.LIMELIGHT_TURRET;
+    public final String limelightClimb = LimelightConstants.LIMELIGHT_ROBOT;
 
 //    private final DoubleSubscriber tvSub;
 //    private final DoubleSubscriber txSub;
@@ -40,6 +40,8 @@ public class LimelightRunner {
 //        txSub = turretTable.getDoubleTopic("tx").subscribe(0.0);
 //        tySub = turretTable.getDoubleTopic("ty").subscribe(0.0);
 //        ledPub = turretTable.getDoubleTopic("ledMode").publish();
+
+
     }
 
 //
@@ -56,15 +58,15 @@ public class LimelightRunner {
         SmartDashboard.putNumber("Turret AprilTag Dist w/Trig Inches", distInInches);
         SmartDashboard.putNumber("Turret AprilTag Dist w/Trig Feet", distInInches / 12.0);
         SmartDashboard.putNumber("Turret AprilTag Dist w/Trig Meters", distInInches * 0.0254);
-        SmartDashboard.putNumber("Turret AprilTag Dist w/Helper W.R.T. Camera Feet", getDistanceToTagWithHelperWRTCamera(LimelightConstants.LIMELIGHT_TURRET) * 3.28084);
-        SmartDashboard.putNumber("Turret AprilTag Dist w/Helper W.R.T. Robot Feet", getDistanceToTagWithHelperWRTRobot(LimelightConstants.LIMELIGHT_TURRET) * 3.28084);
+        SmartDashboard.putNumber("Turret AprilTag Dist w/Helper W.R.T. Camera Feet", getDistanceToTagWithHelperWRTCamera( limelightTurret ) * 3.28084);
+        SmartDashboard.putNumber("Turret AprilTag Dist w/Helper W.R.T. Robot Feet", getDistanceToTagWithHelperWRTRobot( limelightTurret ) * 3.28084);
 
-        SmartDashboard.putNumber("Turret-Tag-Id", getAprilTagId(LimelightConstants.LIMELIGHT_TURRET));
+        SmartDashboard.putNumber("Turret-Tag-Id", getAprilTagId( limelightTurret ));
 
-        if(LimelightHelpers.getTV(LimelightConstants.LIMELIGHT_ROBOT)){
-            LimelightHelpers.setLEDMode_ForceOn(LimelightConstants.LIMELIGHT_ROBOT);
+        if(LimelightHelpers.getTV( limelightClimb )){
+            LimelightHelpers.setLEDMode_ForceOn( limelightClimb );
         }else{
-            LimelightHelpers.setLEDMode_ForceOff(LimelightConstants.LIMELIGHT_ROBOT);
+            LimelightHelpers.setLEDMode_ForceOff( limelightClimb );
         }
     }
 
@@ -100,9 +102,9 @@ public class LimelightRunner {
     public void updatePoseEstimate(SwerveDrive swerveDrive) {
         double robotYaw = swerveDrive.getYaw().getDegrees();
         // TODO: Change to limelight robot when installed on chassis
-        LimelightHelpers.SetRobotOrientation(LimelightConstants.LIMELIGHT_ROBOT, robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+        LimelightHelpers.SetRobotOrientation( limelightClimb , robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(LimelightConstants.LIMELIGHT_ROBOT);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2( limelightClimb );
 
         SmartDashboard.putBoolean("Available Tag?", (limelightMeasurement.tagCount > 0));
         SmartDashboard.putNumber("Angular Velocity Gyro", Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)));
@@ -122,6 +124,102 @@ public class LimelightRunner {
             );
         }
     }
+
+
+    /**
+     * Setup Turret Limelight pipelines for offset ghost targeting
+     */
+    public void turretPipelineSetup( boolean isRedAlliance ) {
+        // turret pipeline offsets, default, center, left, right
+        switchToPipeline(limelightTurret, 0);
+        resetFiducial3DOffset(limelightTurret);
+
+        switchToPipeline(limelightTurret, 1);
+        setFiducial3DOffset(
+                limelightTurret,
+                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
+                0,
+                0);
+
+        switchToPipeline(limelightTurret, 2);
+        setFiducial3DOffset(
+                limelightTurret,
+                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
+                Constants.StructureConstants.TURRET_TARGET_LEFT_SIDE_OFFSET,
+                0);
+
+        switchToPipeline(limelightTurret, 3);
+        setFiducial3DOffset(limelightTurret,
+                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
+                Constants.StructureConstants.TURRET_TARGET_RIGHT_SIDE_OFFSET,
+                0);
+        
+
+        if ( isRedAlliance ) {
+            // Pipeline 0, all turret scoring ids
+            switchToPipeline(limelightTurret, 0);
+            fiducialIdFilterOverride(
+                    limelightTurret,
+                    Constants.StructureConstants.RED_FIDUCIAL_TURRET_IDS
+            );
+
+            // Pipeline 1, all center ids
+            switchToPipeline(limelightTurret, 1);
+            fiducialIdFilterOverride(
+                    limelightTurret,
+                    Constants.StructureConstants.OFFSET_GROUP_CENTER_RED
+            );
+
+            // Pipeline 2, all left ids
+            switchToPipeline(limelightTurret, 2);
+            fiducialIdFilterOverride(
+                    limelightTurret,
+                    Constants.StructureConstants.OFFSET_GROUP_LEFT_RED
+            );
+
+            // Pipeline 3, all right ids
+            switchToPipeline(limelightTurret, 3);
+            fiducialIdFilterOverride(
+                    limelightTurret,
+                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_RED
+            );
+
+            // Controls // TODO: Confirm blue and red
+
+        } else {
+            // Pipeline 0, all turret scoring ids
+            switchToPipeline(limelightTurret, 0);
+            fiducialIdFilterOverride(
+                    limelightTurret,
+                    Constants.StructureConstants.BLUE_FIDUCIAL_TURRET_IDS
+            );
+
+            // Pipeline 1, all center ids
+            switchToPipeline(limelightTurret, 1);
+            fiducialIdFilterOverride(
+                    limelightTurret,
+                    Constants.StructureConstants.OFFSET_GROUP_CENTER_BLUE
+            );
+
+            // Pipeline 2, all left ids
+            switchToPipeline(limelightTurret, 2);
+            fiducialIdFilterOverride(
+                    limelightTurret,
+                    Constants.StructureConstants.OFFSET_GROUP_LEFT_BLUE
+            );
+
+            // Pipeline 3, all right ids
+            switchToPipeline(limelightTurret, 3);
+            fiducialIdFilterOverride(
+                    limelightTurret,
+                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_BLUE
+            );
+        }
+
+        // Set to capture all tags
+        switchToPipeline(limelightTurret, 0);
+    }
+
 
 
     public boolean hasTargetTurret(){
