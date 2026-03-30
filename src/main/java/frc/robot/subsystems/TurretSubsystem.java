@@ -232,6 +232,15 @@ public class TurretSubsystem extends SubsystemBase {
     public Command setShooterMotor(double speed) { return Commands.runOnce(() -> updateShooterSpeed((speed)), this).repeatedly(); }
 
 
+    public void setHoodToBrake(){
+
+    }
+
+    public void setHoodToCoast(){
+
+    }
+
+
     public void returnTurretToZero() {
         updateTurretRotation(0.0);
     }
