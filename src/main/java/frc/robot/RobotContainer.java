@@ -384,9 +384,9 @@ public class RobotContainer {
                     .whileTrue(intakeSubsystem.stopPickupMotor());
 
 
-            joystickOperator.button(5)
-                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
-                    .whileFalse(intakeSubsystem.stopPickupMotor());
+//            joystickOperator.button(5)
+//                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
+//                    .whileFalse(intakeSubsystem.stopPickupMotor());
 
             joystickOperator.button(6)
                     .whileTrue(intakeSubsystem.extendIntake())
@@ -401,14 +401,20 @@ public class RobotContainer {
                     .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
             // TODO: Try this after testing setting hood angle direclty below
-//            joystickOperator.button(11)
-//                    .onTrue(turretSubsystem.increaseHoodMotorAngle());
-//
-//            joystickOperator.button(12)
-//                    .onTrue(turretSubsystem.decreaseHoodMotorAngle());
+            joystickOperator.button(11)
+                    .onTrue(Commands.runOnce(turretSubsystem::setHoodToCoast));
+
+            joystickOperator.button(12)
+                    .onTrue(Commands.runOnce(turretSubsystem::setHoodToBrake));
 
             joystickDriver.button(5).onTrue(turretSubsystem.increaseShooterSpeed());
             joystickDriver.button(3).onTrue(turretSubsystem.decreaseShooterSpeed());
+
+            joystickOperator.trigger()
+                    .onTrue( turretSubsystem.setShooterMotor(Constants.TurretConstants.SHOOTER_TARGET_FAR_SPEED) );
+            // .onFalse( turretSubsystem.setShooterMotor(0) );
+            joystickOperator.button(5)
+                    .onTrue( turretSubsystem.setShooterMotor(0) );
 
             // TODO: Test setting to specific hood angle
             // joystickOperator.button(12).onTrue(Commands.runOnce(() -> turretSubsystem.updateHoodAngle(20)));
@@ -419,10 +425,6 @@ public class RobotContainer {
 //                    Constants.StructureConstants.RED_CLIMB_NORTH_POLE.getX()+Constants.StructureConstants.ROBOT_X_CLIMBING_OFFSET,
 //                    Constants.StructureConstants.RED_CLIMB_NORTH_POLE.getY(),
 //                    Rotation2d.fromDegrees(0))));
-
-            joystickOperator.trigger()
-                    .onTrue( turretSubsystem.setShooterMotor(Constants.TurretConstants.SHOOTER_TARGET_FAR_SPEED) )
-                    .onFalse( turretSubsystem.setShooterMotor(0) );
 
             //TODO: Uncomment for drive team after subsystem testing
             //Intake Command keybind

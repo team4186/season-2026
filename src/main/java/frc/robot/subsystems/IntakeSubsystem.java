@@ -209,10 +209,10 @@ public class IntakeSubsystem extends SubsystemBase {
             pickupMotor.set(0.0);
         }else if(getPortPosition()<IntakeConstants.INTAKE_RAIL_END/2){
             // pickupController.setSetpoint(IntakeConstants.PICKUP_SLOW_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
-            pickupMotor.set(0.3);
+            pickupMotor.set(0.2);
         }else if(getPortPosition()>=IntakeConstants.INTAKE_RAIL_END/2){
             // pickupController.setSetpoint(IntakeConstants.PICKUP_FAST_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
-            pickupMotor.set(0.6);
+            pickupMotor.set(0.5);
         }
     }
 
