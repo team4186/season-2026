@@ -205,11 +205,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void automaticSetPickupSteed(){
         if(isPortRetracted() || isStarboardRetracted()){
-            pickupController.setSetpoint(0.0, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+            // pickupController.setSetpoint(0.0, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+            pickupMotor.set(0.0);
         }else if(getPortPosition()<IntakeConstants.INTAKE_RAIL_END/2){
-            pickupController.setSetpoint(IntakeConstants.PICKUP_SLOW_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+            // pickupController.setSetpoint(IntakeConstants.PICKUP_SLOW_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+            pickupMotor.set(0.3);
         }else if(getPortPosition()>=IntakeConstants.INTAKE_RAIL_END/2){
-            pickupController.setSetpoint(IntakeConstants.PICKUP_FAST_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+            // pickupController.setSetpoint(IntakeConstants.PICKUP_FAST_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+            pickupMotor.set(0.6);
         }
     }
 
@@ -292,11 +295,13 @@ public class IntakeSubsystem extends SubsystemBase {
         }else if(ShuffleState == Shuffle.RETRACT){
             simplePairRetraction();
         }
+
+        // automaticSetPickupSteed();
     }
 
 
     public Command shuffleIntakeCommand(){
-        return (Commands.runOnce(this::shuffleIntake,this).repeatedly());
+        return Commands.runOnce(this::shuffleIntake,this).repeatedly();
     }
 
 }

@@ -116,8 +116,8 @@ public class RobotContainer {
      */
     SwerveInputStream driveAngularVelocityBlueJoystick = SwerveInputStream.of(
                     drivebase.getSwerveDrive(),
-            () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * -1,
-            () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * -1)
+            () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * 1,
+            () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * 1)
             .withControllerRotationAxis(
                     () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
@@ -125,8 +125,8 @@ public class RobotContainer {
 
     SwerveInputStream driveAngularVelocitySlowBlueJoystick = SwerveInputStream.of(
             drivebase.getSwerveDrive(),
-            () -> attenuated( joystickDriver.getY(), 2, 0.15 ) * -1,
-            () -> attenuated( joystickDriver.getX(), 2, 0.15 ) * -1)
+            () -> attenuated( joystickDriver.getY(), 2, 0.15 ) * 1,
+            () -> attenuated( joystickDriver.getX(), 2, 0.15 ) * 1)
         .withControllerRotationAxis(
             () -> attenuated( joystickDriver.getTwist(), 3, 0.5 ) * 1)
         .deadband(OperatorConstants.DEADBAND)
@@ -381,8 +381,8 @@ public class RobotContainer {
                     .whileFalse(spindexerSubsystem.stopFeed());
 
             joystickOperator.button(2)
-                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_FAST))
-                            .whileFalse(intakeSubsystem.stopPickupMotor());
+                    .whileTrue(intakeSubsystem.stopPickupMotor());
+
 
             joystickOperator.button(5)
                     .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
@@ -396,12 +396,19 @@ public class RobotContainer {
                     .whileTrue(intakeSubsystem.retractIntake())
                     .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
+            joystickOperator.button(7)
+                    .whileTrue(intakeSubsystem.shuffleIntakeCommand())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+
             // TODO: Try this after testing setting hood angle direclty below
 //            joystickOperator.button(11)
 //                    .onTrue(turretSubsystem.increaseHoodMotorAngle());
 //
 //            joystickOperator.button(12)
 //                    .onTrue(turretSubsystem.decreaseHoodMotorAngle());
+
+            joystickDriver.button(5).onTrue(turretSubsystem.increaseShooterSpeed());
+            joystickDriver.button(3).onTrue(turretSubsystem.decreaseShooterSpeed());
 
             // TODO: Test setting to specific hood angle
             // joystickOperator.button(12).onTrue(Commands.runOnce(() -> turretSubsystem.updateHoodAngle(20)));

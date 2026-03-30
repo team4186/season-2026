@@ -229,6 +229,12 @@ public class TurretSubsystem extends SubsystemBase {
     public Command decreaseHoodMotorAngle() { return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() - 0.5), this); }
 
 
+    public Command increaseShooterSpeed() { return Commands.runOnce(() -> updateShooterSpeed(getShooterVelocity() + 200), this); }
+
+
+    public Command decreaseShooterSpeed() { return Commands.runOnce(() -> updateShooterSpeed(getShooterVelocity() - 200), this); }
+
+
     public Command setShooterMotor(double speed) { return Commands.runOnce(() -> updateShooterSpeed((speed)), this).repeatedly(); }
 
 

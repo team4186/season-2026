@@ -236,24 +236,24 @@ public final class Constants {
         public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.0;
 
-        public static final double HOOD_P = 0.0075;
+        public static final double HOOD_P = 0.005;
         public static final double HOOD_I = 0.0;
-        public static final double HOOD_D = 0.002;
+        public static final double HOOD_D = 0.0;
 
 
         // FeedForward // TODO: update
 
         public static final double ROTATE_KS = 0.51;
         public static final double SHOOTER_KS = 0.185;
-        public static final double HOOD_KS = 0; // TODO: Update
+        public static final double HOOD_KS = 1.9; // TODO: Update
 
 
         // public static final double ROTATE_KV = 0.0; // TODO: Update
         public static final double SHOOTER_KV = 0.001425;
-        // public static final double HOOD_KV = 0.0; // TODO: Update
+         public static final double HOOD_KV = 0.008; // TODO: Update
 
         public static final double ROTATE_KV =  NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED;
-        public static final double HOOD_KV = NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED; ;
+        //public static final double HOOD_KV = NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED; ;
 
         // Conversion factors and expected measured limits
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
@@ -307,7 +307,7 @@ public final class Constants {
                     entry(21, new Double[]{ 0.0, 0.0})
         ));
 
-        public static final double SHOOTER_TARGET_FAR_SPEED = 5000.0;
+        public static final double SHOOTER_TARGET_FAR_SPEED = 4000.0;
         public static final double SHOOTER_TARGET_CLOSE_SPEED = 5000.0;
     }
 
