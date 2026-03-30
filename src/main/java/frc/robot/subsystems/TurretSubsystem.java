@@ -140,6 +140,26 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
 
+    //TODO: will using an elif here affect things? is the absolute value necessary, since the elif makes it so we only consider the case above
+    public void moveHoodUp(double angle){
+        if(Math.abs(angle - getHoodPosition) <=  TurretConstants.HOOD_ERROR_THRESHOLD){
+            setHoodToBrake();
+        }else if(getHoodPosition()<angle) {
+            setHoodToCoast();
+            hoodMotor.set(0.2);
+        }
+    }
+
+    public void moveHoodDown(double angle){
+        if(Math.abs(angle - getHoodPosition) <=  TurretConstants.HOOD_ERROR_THRESHOLD){
+            setHoodToBrake();
+        }else if(getHoodPosition()<angle) {
+            setHoodToCoast();
+            hoodMotor.set(-0.2);
+        }
+    }
+
+
     // switch this to switch case
     private double aimingFilter(double reqSetpoint) {
         double adjustedSetpoint = 0.0;

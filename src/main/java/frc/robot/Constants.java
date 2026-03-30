@@ -380,6 +380,7 @@ public final class Constants {
         public static final double INTAKE_RAIL_START = 0.0;
 
 
+
     }
 
 
@@ -434,6 +435,7 @@ public final class Constants {
 
         public static final double ROTATE_ERROR_THRESHOLD = 0.0;
         public static final double FEED_ERROR_THRESHOLD = 0.0;
+        public static final double HOOD_ERROR_THRESHOLD = 1.0;//Unit should be degrees? - Shing
     }
 
 
