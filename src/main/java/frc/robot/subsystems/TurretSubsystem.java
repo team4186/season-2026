@@ -16,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.TurretConstants;
 import java.lang.Math.*;
 import java.util.Map;
+import frc.robot.vision.LimelightRunner;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.vision.LimelightRunner;
@@ -109,7 +110,7 @@ public class TurretSubsystem extends SubsystemBase {
         }
 
         // TODO: Measure angle when left and right are triggered and set them below
-        if (getLeftLimitSwitch()){
+        if (getLeftLimitSwitch()) {
             // TODO: Update to precise location
         } else if (getRightLimitSwitch()) {
             // TODO: Update to precise location
@@ -135,25 +136,25 @@ public class TurretSubsystem extends SubsystemBase {
 
     public void updateHoodAngle(double angle) {
         hoodClosedLoopController.setSetpoint(
-                Math.max( minHoodRotation, Math.min( angle, maxHoodRotation ) ),
+                Math.max(minHoodRotation, Math.min(angle, maxHoodRotation)),
                 SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
 
     //TODO: will using an elif here affect things? is the absolute value necessary, since the elif makes it so we only consider the case above
-    public void moveHoodUp(double angle){
-        if(Math.abs(angle - getHoodPosition) <=  TurretConstants.HOOD_ERROR_THRESHOLD){
+    public void moveHoodUp(double angle) {
+        if (Math.abs(angle - getHoodPosition()) <= TurretConstants.HOOD_ERROR_THRESHOLD) {
             setHoodToBrake();
-        }else if(getHoodPosition()<angle) {
+        } else if (getHoodPosition() < angle) {
             setHoodToCoast();
             hoodMotor.set(0.2);
         }
     }
 
-    public void moveHoodDown(double angle){
-        if(Math.abs(angle - getHoodPosition) <=  TurretConstants.HOOD_ERROR_THRESHOLD){
+    public void moveHoodDown(double angle) {
+        if (Math.abs(angle - getHoodPosition()) <= TurretConstants.HOOD_ERROR_THRESHOLD) {
             setHoodToBrake();
-        }else if(getHoodPosition()<angle) {
+        } else if (getHoodPosition() < angle) {
             setHoodToCoast();
             hoodMotor.set(-0.2);
         }
@@ -220,60 +221,98 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
 
-    public boolean getLeftLimitSwitch() { return !leftLimitSwitch.get(); }
+    public boolean getLeftLimitSwitch() {
+        return !leftLimitSwitch.get();
+    }
 
 
-    public boolean getRightLimitSwitch() { return !rightLimitSwitch.get(); }
+    public boolean getRightLimitSwitch() {
+        return !rightLimitSwitch.get();
+    }
 
 
-    public boolean getHoodLimitSwitch() { return !hoodLimitSwitch.get(); }
+    public boolean getHoodLimitSwitch() {
+        return !hoodLimitSwitch.get();
+    }
 
 
-    public double getTurretPosition() { return turretRelativeEncoder.getPosition(); }
+    public double getTurretPosition() {
+        return turretRelativeEncoder.getPosition();
+    }
 
 
-    public double getShooterVelocity() { return shooterRelativeEncoder.getVelocity(); }
+    public double getShooterVelocity() {
+        return shooterRelativeEncoder.getVelocity();
+    }
 
 
-    public double getHoodPosition() { return hoodRelativeEncoder.getPosition(); }
+    public double getHoodPosition() {
+        return hoodRelativeEncoder.getPosition();
+    }
 
 
-    public boolean isTurretAtSetpoint() { return turretClosedLoopController.isAtSetpoint(); }
+    public boolean isTurretAtSetpoint() {
+        return turretClosedLoopController.isAtSetpoint();
+    }
 
 
-    public boolean isShooterAtSetpoint() { return shooterClosedLoopController.isAtSetpoint(); }
+    public boolean isShooterAtSetpoint() {
+        return shooterClosedLoopController.isAtSetpoint();
+    }
 
 
-    public boolean isHoodAtSetpoint() { return hoodClosedLoopController.isAtSetpoint(); }
+    public boolean isHoodAtSetpoint() {
+        return hoodClosedLoopController.isAtSetpoint();
+    }
 
 
-    public Command increaseHoodMotorAngle() { return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() + 0.5), this); }
+    public Command increaseHoodMotorAngle() {
+        return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() + 0.5), this);
+    }
 
 
-    public Command decreaseHoodMotorAngle() { return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() - 0.5), this); }
+    public Command decreaseHoodMotorAngle() {
+        return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() - 0.5), this);
+    }
 
 
-    public Command increaseShooterSpeed() { return Commands.runOnce(() -> updateShooterSpeed(getShooterVelocity() + 200), this); }
+    public Command increaseShooterSpeed() {
+        return Commands.runOnce(() -> updateShooterSpeed(getShooterVelocity() + 200), this);
+    }
 
 
-    public Command decreaseShooterSpeed() { return Commands.runOnce(() -> updateShooterSpeed(getShooterVelocity() - 200), this); }
+    public Command decreaseShooterSpeed() {
+        return Commands.runOnce(() -> updateShooterSpeed(getShooterVelocity() - 200), this);
+    }
 
 
-    public Command setShooterMotor(double speed) { return Commands.runOnce(() -> updateShooterSpeed((speed)), this).repeatedly(); }
+    public Command setShooterMotor(double speed) {
+        return Commands.runOnce(() -> updateShooterSpeed((speed)), this).repeatedly();
+    }
 
+    public Command moveHoodUpCommand(){
+        double angle = TurretConstants.TURRET_LOOKUP_TABLE.get(LimelightRunner.getDistanceToTagWithHelperWRTCamera(LimelightRunner.getInstance().limelightTurret)
+                * 3.28084)[1];
+        return Commands.runOnce(()->moveHoodUp(angle)).repeatedly();
+    }
 
-    public void setHoodToBrake(){
+    public Command moveHoodDownCommand(){
+        double angle = TurretConstants.TURRET_LOOKUP_TABLE.get(LimelightRunner.getDistanceToTagWithHelperWRTCamera(LimelightRunner.getInstance().limelightTurret)
+                * 3.28084)[1];
+        return Commands.runOnce(()->moveHoodDown(angle)).repeatedly();
+    }
+
+    public void setHoodToBrake() {
         SparkMaxConfig config = new SparkMaxConfig();
         config.idleMode(SparkBaseConfig.IdleMode.kBrake);
         hoodMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
-    public void setHoodToCoast(){
+    public void setHoodToCoast() {
         SparkMaxConfig config = new SparkMaxConfig();
         config.idleMode(SparkBaseConfig.IdleMode.kCoast);
         hoodMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     }
-
 
     public void returnTurretToZero() {
         updateTurretRotation(0.0);
