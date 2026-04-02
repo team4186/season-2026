@@ -104,6 +104,7 @@ public class TurretSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Hood_is_at_set_angle", isHoodAtSetpoint());
         SmartDashboard.putBoolean("Turret_is_at_target_position", isTurretAtSetpoint());
         SmartDashboard.putNumber("Print something to smart dashboard", lookupTable.get(2)[0]);
+        SmartDashboard.putNumber("Hood Motor Voltage",hoodMotor.getAppliedOutput());
 
         if (getHoodLimitSwitch()) {
             hoodRelativeEncoder.setPosition(0.0);
@@ -143,20 +144,20 @@ public class TurretSubsystem extends SubsystemBase {
 
     //TODO: will using an elif here affect things? is the absolute value necessary, since the elif makes it so we only consider the case above
     public void moveHoodUp(double angle) {
-        if (Math.abs(angle - getHoodPosition()) <= TurretConstants.HOOD_ERROR_THRESHOLD) {
-            setHoodToBrake();
-        } else if (getHoodPosition() < angle) {
-            setHoodToCoast();
-            hoodMotor.set(0.2);
+        double currentValue = getHoodPosition();
+        if (currentValue>=angle || currentValue >= TurretConstants.HOOD_MAX_POSITION) {
+            hoodMotor.stopMotor();
+        } else if (currentValue < angle) {
+            hoodMotor.set(TurretConstants.HOOD_UP_SPEED);
         }
     }
 
     public void moveHoodDown(double angle) {
-        if (Math.abs(angle - getHoodPosition()) <= TurretConstants.HOOD_ERROR_THRESHOLD) {
-            setHoodToBrake();
-        } else if (getHoodPosition() < angle) {
-            setHoodToCoast();
-            hoodMotor.set(-0.2);
+        double currentValue = getHoodPosition();
+        if (currentValue<=angle || getHoodLimitSwitch()) {
+            hoodMotor.stopMotor();
+        } else if (currentValue > angle) {
+            hoodMotor.set(TurretConstants.HOOD_DOWN_SPEED);
         }
     }
 
@@ -287,19 +288,30 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     public Command setShooterMotor(double speed) {
-        return Commands.runOnce(() -> updateShooterSpeed((speed)), this).repeatedly();
+        return Commands.runOnce(() -> updateShooterSpeed((speed)), this);
     }
 
-    public Command moveHoodUpCommand(){
-        double angle = TurretConstants.TURRET_LOOKUP_TABLE.get(LimelightRunner.getDistanceToTagWithHelperWRTCamera(LimelightRunner.getInstance().limelightTurret)
-                * 3.28084)[1];
-        return Commands.runOnce(()->moveHoodUp(angle)).repeatedly();
-    }
+//    public Command moveHoodUpCommand(){
+//        double angle = TurretConstants.TURRET_LOOKUP_TABLE.get(LimelightRunner.getDistanceToTagWithHelperWRTCamera(LimelightRunner.getInstance().limelightTurret)
+//                * 3.28084)[1];
+//        return Commands.runOnce(()->moveHoodUp(angle)).repeatedly();
+//    }
+//
+//    public Command moveHoodDownCommand(){
+//        double angle = TurretConstants.TURRET_LOOKUP_TABLE.get(LimelightRunner.getDistanceToTagWithHelperWRTCamera(LimelightRunner.getInstance().limelightTurret)
+//                * 3.28084)[1];
+//        return Commands.runOnce(()->moveHoodDown(angle)).repeatedly();
+//    }
 
-    public Command moveHoodDownCommand(){
-        double angle = TurretConstants.TURRET_LOOKUP_TABLE.get(LimelightRunner.getDistanceToTagWithHelperWRTCamera(LimelightRunner.getInstance().limelightTurret)
-                * 3.28084)[1];
-        return Commands.runOnce(()->moveHoodDown(angle)).repeatedly();
+    public Command moveHoodSimple(double desiredAngle) {
+        double currentPosition = getHoodPosition();
+        if (currentPosition < desiredAngle) {
+            return Commands.runOnce(() -> moveHoodUp(desiredAngle)).repeatedly();
+        } else if (currentPosition > desiredAngle) {
+            return Commands.runOnce(() -> moveHoodDown(desiredAngle)).repeatedly();
+        }else{
+            return Commands.none(); //does nothing-shing
+        }
     }
 
     public void setHoodToBrake() {

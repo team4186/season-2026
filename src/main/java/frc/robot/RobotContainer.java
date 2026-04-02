@@ -310,8 +310,7 @@ public class RobotContainer {
             drivebase.setDefaultCommand(driveFieldOrientedBlueAlliance);
             joystickDriver.button(11).whileTrue(driveFieldOrientedBlueAllianceSlow);
 
-            joystickDriver.button(5).whileTrue(drivebase.centerModulesCommand());
-            joystickDriver.button(6).whileTrue(Commands.runOnce(drivebase::lock));
+
         }
 
         if (Robot.isSimulation()) {
@@ -347,17 +346,62 @@ public class RobotContainer {
             Pose2d targetPose = new Pose2d(new Translation2d(2.666, 4.179),
                     Rotation2d.fromDegrees(180));
 
+        //         PLACE ALL TELEOP KEYBINDS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+       //DRIVER:
+       joystickDriver.trigger()
+               .whileTrue(spindexerSubsystem.rotateMotors())
+               .whileFalse(spindexerSubsystem.stopFeed());
+//       joystickDriver.button(2)
+//                       .whileTrue()      TODO:  create command to set pickup speed reverse, has priority over auto set
+       //TODO: create command to rotate turret maually for buttons 3,4,and5
+       joystickDriver.button(6)
+                 .onTrue(turretSubsystem.moveHoodSimple(0));
+
+       joystickDriver.button(7)
+                .whileTrue(Commands.runOnce(()->climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED)))
+                .whileFalse(Commands.runOnce(climbSubsystem::climbStop));
+       joystickDriver.button(8)
+                .whileTrue(Commands.runOnce(()->climbSubsystem.simpleClimbMoveDown(Constants.ClimbConstants.CLIMB_MAX_SPEED)))
+                .whileFalse(Commands.runOnce(climbSubsystem::climbStop));
+       //joystickDriver.button(9).whileTrue(drivebase.centerModulesCommand());TODO: might be useful for testing?
+       joystickDriver.button(9).whileTrue(Commands.runOnce(drivebase::lock));
+       joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
 
 
-            joystickOperator.button(8)
-                    .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
-                    .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
 
-            joystickOperator.button(10)
-                    .whileTrue(Commands.runOnce(() -> climbSubsystem.simpleClimbMoveDown(-Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
-                    .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
 
-            joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
+        //OPERATOR:
+        joystickOperator.button(3)
+                .whileTrue(turretSubsystem.setShooterMotor(0.0));
+        joystickOperator.button(4)
+                .whileTrue(intakeSubsystem.retractIntake())
+                .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+        joystickOperator.button(5)
+                .whileTrue(turretSubsystem.moveHoodSimple(0.0));
+        joystickOperator.button(6)
+                .whileTrue(intakeSubsystem.extendIntake())
+                .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+
+        joystickOperator.button(7)
+                .whileTrue(turretSubsystem.moveHoodSimple(35.0));
+        joystickOperator.button(9)
+                .whileTrue(turretSubsystem.moveHoodSimple(25.0));
+        joystickOperator.button(11)
+                .whileTrue(turretSubsystem.moveHoodSimple(15.0));
+
+        joystickOperator.button(8)
+                        .whileTrue(turretSubsystem.setShooterMotor(4000.0));
+        joystickOperator.button(10)
+                        .whileTrue(turretSubsystem.setShooterMotor(3000.0));
+        joystickOperator.button(12)
+                        .whileTrue(turretSubsystem.setShooterMotor(2000.0));
+
+
+
+
+
+
             joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
             // TODO: Shuffle Intake
@@ -376,45 +420,27 @@ public class RobotContainer {
 
             // TODO: Shooting aka spindexer and motor feed balls if shooter wheel is spinning (we should also force the shooter wheel to be kcoast by default anyways)
 
-            joystickOperator.button(3)
-                    .whileTrue(spindexerSubsystem.rotateMotors())
-                    .whileFalse(spindexerSubsystem.stopFeed());
 
-            joystickOperator.button(2)
-                    .whileTrue(intakeSubsystem.stopPickupMotor());
+
+//            joystickOperator.button(2)
+//                    .whileTrue(intakeSubsystem.stopPickupMotor());
 
 
 //            joystickOperator.button(5)
 //                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
 //                    .whileFalse(intakeSubsystem.stopPickupMotor());
 
-            joystickOperator.button(6)
-                    .whileTrue(intakeSubsystem.extendIntake())
-                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
-            joystickOperator.button(4)
-                    .whileTrue(intakeSubsystem.retractIntake())
-                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
-            joystickOperator.button(7)
-                    .whileTrue(intakeSubsystem.shuffleIntakeCommand())
-                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
-            // TODO: Try this after testing setting hood angle direclty below
-            joystickOperator.button(11)
-                    .onTrue(Commands.runOnce(turretSubsystem::setHoodToCoast));
+//
+//            joystickOperator.button(7)
+//                    .whileTrue(intakeSubsystem.shuffleIntakeCommand())
+//                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
-            joystickOperator.button(12)
-                    .onTrue(Commands.runOnce(turretSubsystem::setHoodToBrake));
 
-            joystickDriver.button(5).onTrue(turretSubsystem.increaseShooterSpeed());
-            joystickDriver.button(3).onTrue(turretSubsystem.decreaseShooterSpeed());
 
-            joystickOperator.trigger()
-                    .onTrue( turretSubsystem.setShooterMotor(Constants.TurretConstants.SHOOTER_TARGET_FAR_SPEED) );
-            // .onFalse( turretSubsystem.setShooterMotor(0) );
-            joystickOperator.button(5)
-                    .onTrue( turretSubsystem.setShooterMotor(0) );
+
 
             // TODO: Test setting to specific hood angle
             // joystickOperator.button(12).onTrue(Commands.runOnce(() -> turretSubsystem.updateHoodAngle(20)));

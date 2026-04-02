@@ -273,6 +273,11 @@ public final class Constants {
         public static final double HOOD_MIN_OUTPUT = -0.25;
         public static final double HOOD_MAX_OUTPUT = 0.25;
 
+        public static final double HOOD_UP_SPEED = 0.35;
+        public static final double HOOD_DOWN_SPEED = -0.3;
+
+        public static final double HOOD_MAX_POSITION = 35.0;
+
         public static final double ROTATE_ERROR_THRESHOLD = 0.13;
         public static final double SHOOTER_ERROR_THRESHOLD = 0.0;
         public static final double HOOD_ERROR_THRESHOLD = 0.0;
