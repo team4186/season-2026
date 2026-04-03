@@ -254,8 +254,25 @@ public class RobotContainer {
 
         // Add a simple auto option to have the robot drive forward for 1 second then
         // stop
-        autoChooser.addOption("Drive Forward", Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
+        autoChooser.addOption("Drive Forward",
+                Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
                 .andThen(drivebase.driveForward().withTimeout(1)));
+
+        autoChooser.addOption(
+                "Back Up and Shoot",
+                Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
+                        .andThen( turretSubsystem.setShooterMotor(3000) ).withTimeout(0.25)
+                        .andThen(Commands.runOnce(() -> turretSubsystem.updateTurretRotation(0.0)).repeatedly()).withTimeout(0.25)
+                        .andThen(Commands.runOnce(spindexerSubsystem::feed).repeatedly()).withTimeout(3)
+                        .andThen(Commands.runOnce(intakeSubsystem::extendIntake).repeatedly()).withTimeout(1)
+                        .andThen(Commands.runOnce(intakeSubsystem::retractIntake).repeatedly()).withTimeout(1)
+                        .andThen(Commands.runOnce(spindexerSubsystem::feed).repeatedly()).withTimeout(3)
+                // .andThen(Commands.runOnce(()-> turretSubsystem.moveHoodUp())))
+                        //.alongWith()-
+//                        .andThen().withTimeout(1.0)
+//                        .andThen().withTimeout(1.0)
+//                        .andThen().withTimeout(1.0)
+        );
 
         // Put the autoChooser on the SmartDashboard
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -357,7 +374,7 @@ public class RobotContainer {
                    .whileTrue(spindexerSubsystem.rotateMotors())
                    .whileFalse(spindexerSubsystem.stopFeed());
             joystickDriver.button(2)
-                    .whileTrue(intakeSubsystem.outake(0.5))
+                    .whileTrue(intakeSubsystem.outake(0.2))
                     .whileFalse(intakeSubsystem.autoSetPickupSpeed());  //   TODO:  create command to set pickup speed reverse, has priority over auto set
            //TODO: create command to rotate turret maually for buttons 3,4,and5
            joystickDriver.button(6)
