@@ -258,18 +258,26 @@ public class RobotContainer {
                 Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
                 .andThen(drivebase.driveForward().withTimeout(1)));
 
+        autoChooser.addOption("Drive Backward",
+                Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
+                        .andThen(drivebase.driveBackward().withTimeout(1)));
+
         autoChooser.addOption(
                 "Back Up and Shoot",
                 Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
-                        .andThen( turretSubsystem.setShooterMotor(3000) ).withTimeout(0.25)
-                        .andThen(Commands.runOnce(() -> turretSubsystem.updateTurretRotation(0.0)).repeatedly()).withTimeout(0.25)
-                        .andThen(Commands.runOnce(spindexerSubsystem::feed).repeatedly()).withTimeout(3)
-                        .andThen(Commands.runOnce(intakeSubsystem::extendIntake).repeatedly()).withTimeout(1)
-                        .andThen(Commands.runOnce(intakeSubsystem::retractIntake).repeatedly()).withTimeout(1)
-                        .andThen(Commands.runOnce(spindexerSubsystem::feed).repeatedly()).withTimeout(3)
+                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(0.25))
+                        .andThen(drivebase.driveBackward().withTimeout(1))
+                        .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
+                        //.andThen(Commands.runOnce(() -> turretSubsystem.updateTurretRotation(20.0), turretSubsystem)).withTimeout(0.25)
+                        .andThen(Commands.runOnce(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(1.0))
+                        //.andThen(Commands.runOnce(() -> turretSubsystem.updateTurretRotation(-20.0)).withTimeout(0.25))
+
+//                        .andThen(Commands.runOnce(intakeSubsystem::extendIntake).repeatedly().withTimeout(1))
+//                        .andThen(Commands.runOnce(intakeSubsystem::retractIntake).repeatedly().withTimeout(1))
+//                        .andThen(Commands.runOnce(spindexerSubsystem::feed).repeatedly().withTimeout(3))
                 // .andThen(Commands.runOnce(()-> turretSubsystem.moveHoodUp())))
                         //.alongWith()-
-//                        .andThen().withTimeout(1.0)
+                //                        .andThen().withTimeout(1.0)
 //                        .andThen().withTimeout(1.0)
 //                        .andThen().withTimeout(1.0)
         );

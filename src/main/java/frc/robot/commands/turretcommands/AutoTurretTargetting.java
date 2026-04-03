@@ -69,32 +69,37 @@ public class AutoTurretTargetting extends Command {
 
         double[] targetingInfo = limelightRunner.getTurretTagBasicInfo();
         // double[] targetingInfoWithOffset = limelightRunner.getTurretTagInfoWithOffsetPipeline();
+        turretSubsystem.moveHoodUp(15,0.18);
 
         double status = targetingInfo[0];
         double xOffset = targetingInfo[1];
         double distance = targetingInfo[2];
-        // -1 is Failure, skip adjustment
+
+        // -1 is Failure to find tag, skip adjustment
         SmartDashboard.putNumber("Limelight Tracking STATUS", status);
         if ( status >= 0.0) {
             lastTagTimestamp.restart();
             SmartDashboard.putNumber("Limelight Tracking Tx", xOffset);
-
             try {
                 int adjustedDist = (int) distance;
                 double currTurretPosition = turretSubsystem.getTurretPosition();
                 double desiredAngle = currTurretPosition + (xOffset * kp);
+
                 SmartDashboard.putNumber("Limelight Tracking Tx_ADJUSTED", desiredAngle );
+
                 // Double[] results = Constants.TurretConstants.TURRET_LOOKUP_TABLE.getOrDefault( adjustedDist , new Double[]{0.0, 0.0});
                 turretSubsystem.updateTurretRotation(desiredAngle);
                 // turretSubsystem.updateHoodAngle( results[1] ); // TODO: Modify to bang bang control
                 // turretSubsystem.updateShooterSpeed( results[0] );
+
+                turretSubsystem.updateShooterSpeed(3000);
             } catch ( NullPointerException e ) {
                 SmartDashboard.getNumber("Error_LookupTable", distance);
             }
         }
 
         // Last target seen > 1 second ago
-        SmartDashboard.putBoolean("Limelight Tracking TimeElapsed", lastTagTimestamp.hasElapsed(1.0));
+        SmartDashboard.putBoolean("Limelight Tracking TimeElapsed", lastTagTimestamp.hasElapsed(0.5));
         if (lastTagTimestamp.hasElapsed(0.5)){
             // reset to zero
             //turretSubsystem.updateShooterSpeed(0.0);
@@ -112,7 +117,7 @@ public class AutoTurretTargetting extends Command {
     @Override
     public void end(boolean interrupted) {
         //turretSubsystem.updateShooterSpeed(0.0);
-        //turretSubsystem.updateHoodAngle(0.0); // TODO: Hood angle is bang bang controller
+        //turretSubsystem.moveHoodDown(0.0); // TODO: Hood angle is bang bang controller
         turretSubsystem.updateTurretRotation(0.0);
     }
 
