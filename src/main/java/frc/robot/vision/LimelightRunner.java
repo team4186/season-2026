@@ -130,96 +130,97 @@ public class LimelightRunner {
     /**
      * Setup Turret Limelight pipelines for offset ghost targeting
      */
-    public void turretPipelineSetup( boolean isRedAlliance ) {
-        // turret pipeline offsets, default, center, left, right
-        switchToPipeline(limelightTurret, 0);
-        resetFiducial3DOffset(limelightTurret);
-
-        switchToPipeline(limelightTurret, 1);
-        setFiducial3DOffset(
-                limelightTurret,
-                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
-                0,
-                0);
-
-        switchToPipeline(limelightTurret, 2);
-        setFiducial3DOffset(
-                limelightTurret,
-                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
-                Constants.StructureConstants.TURRET_TARGET_LEFT_SIDE_OFFSET,
-                0);
-
-        switchToPipeline(limelightTurret, 3);
-        setFiducial3DOffset(limelightTurret,
-                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
-                Constants.StructureConstants.TURRET_TARGET_RIGHT_SIDE_OFFSET,
-                0);
-        
-
-        if ( isRedAlliance ) {
-            // Pipeline 0, all turret scoring ids
-            switchToPipeline(limelightTurret, 0);
-            fiducialIdFilterOverride(
-                    limelightTurret,
-                    Constants.StructureConstants.RED_FIDUCIAL_TURRET_IDS
-            );
-
-            // Pipeline 1, all center ids
-            switchToPipeline(limelightTurret, 1);
-            fiducialIdFilterOverride(
-                    limelightTurret,
-                    Constants.StructureConstants.OFFSET_GROUP_CENTER_RED
-            );
-
-            // Pipeline 2, all left ids
-            switchToPipeline(limelightTurret, 2);
-            fiducialIdFilterOverride(
-                    limelightTurret,
-                    Constants.StructureConstants.OFFSET_GROUP_LEFT_RED
-            );
-
-            // Pipeline 3, all right ids
-            switchToPipeline(limelightTurret, 3);
-            fiducialIdFilterOverride(
-                    limelightTurret,
-                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_RED
-            );
-
-            // Controls // TODO: Confirm blue and red
-
-        } else {
-            // Pipeline 0, all turret scoring ids
-            switchToPipeline(limelightTurret, 0);
-            fiducialIdFilterOverride(
-                    limelightTurret,
-                    Constants.StructureConstants.BLUE_FIDUCIAL_TURRET_IDS
-            );
-
-            // Pipeline 1, all center ids
-            switchToPipeline(limelightTurret, 1);
-            fiducialIdFilterOverride(
-                    limelightTurret,
-                    Constants.StructureConstants.OFFSET_GROUP_CENTER_BLUE
-            );
-
-            // Pipeline 2, all left ids
-            switchToPipeline(limelightTurret, 2);
-            fiducialIdFilterOverride(
-                    limelightTurret,
-                    Constants.StructureConstants.OFFSET_GROUP_LEFT_BLUE
-            );
-
-            // Pipeline 3, all right ids
-            switchToPipeline(limelightTurret, 3);
-            fiducialIdFilterOverride(
-                    limelightTurret,
-                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_BLUE
-            );
-        }
-
-        // Set to capture all tags
-        switchToPipeline(limelightTurret, 0);
-    }
+//    public void turretPipelineSetup( boolean isRedAlliance ) {
+//        switchToPipeline(limelightTurret,0);
+//        resetFiducial3DOffset(limelightTurret);
+//
+//        switchToPipeline(limelightTurret, 1);
+//        setFiducial3DOffset(limelightTurret, 1.0,1.0,1.000);
+//
+//        switchToPipeline(limelightTurret, 0);
+//        setFiducial3DOffset(limelightTurret, 2.0, 2.0,2.0);
+//
+////        switchToPipeline(limelightTurret, 1);
+////        setFiducial3DOffset(
+////                limelightTurret,
+////                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
+////                0,
+////                0);
+////
+////        switchToPipeline(limelightTurret, 2);
+////        setFiducial3DOffset(
+////                limelightTurret,
+////                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
+////                Constants.StructureConstants.TURRET_TARGET_LEFT_SIDE_OFFSET,
+////                0);
+////
+////        switchToPipeline(limelightTurret, 3);
+////        setFiducial3DOffset(limelightTurret,
+////                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
+////                Constants.StructureConstants.TURRET_TARGET_RIGHT_SIDE_OFFSET,
+////                0);
+//
+//
+//        if ( isRedAlliance ) {
+//            fiducialIdFilterOverride(
+//                    limelightTurret,
+//                    Constants.StructureConstants.RED_FIDUCIAL_TURRET_IDS
+//            );
+//
+////            // Pipeline 1, all center ids
+////            switchToPipeline(limelightTurret, 1);
+////            fiducialIdFilterOverride(
+////                    limelightTurret,
+////                    Constants.StructureConstants.OFFSET_GROUP_CENTER_RED
+////            );
+////
+////            // Pipeline 2, all left ids
+////            switchToPipeline(limelightTurret, 2);
+////            fiducialIdFilterOverride(
+////                    limelightTurret,
+////                    Constants.StructureConstants.OFFSET_GROUP_LEFT_RED
+////            );
+////
+////            // Pipeline 3, all right ids
+////            switchToPipeline(limelightTurret, 3);
+////            fiducialIdFilterOverride(
+////                    limelightTurret,
+////                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_RED
+////            );
+//
+//            // Controls // TODO: Confirm blue and red
+//
+//        } else {
+//            fiducialIdFilterOverride(
+//                    limelightTurret,
+//                    Constants.StructureConstants.BLUE_FIDUCIAL_TURRET_IDS
+//            );
+////
+////            // Pipeline 1, all center ids
+////            switchToPipeline(limelightTurret, 1);
+////            fiducialIdFilterOverride(
+////                    limelightTurret,
+////                    Constants.StructureConstants.OFFSET_GROUP_CENTER_BLUE
+////            );
+////
+////            // Pipeline 2, all left ids
+////            switchToPipeline(limelightTurret, 2);
+////            fiducialIdFilterOverride(
+////                    limelightTurret,
+////                    Constants.StructureConstants.OFFSET_GROUP_LEFT_BLUE
+////            );
+////
+////            // Pipeline 3, all right ids
+////            switchToPipeline(limelightTurret, 3);
+////            fiducialIdFilterOverride(
+////                    limelightTurret,
+////                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_BLUE
+////            );
+//        }
+//
+////        // Set to capture all tags
+////        switchToPipeline(limelightTurret, 0);
+//    }
 
 
 

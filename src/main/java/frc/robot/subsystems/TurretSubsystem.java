@@ -152,6 +152,7 @@ public class TurretSubsystem extends SubsystemBase {
         }
     }
 
+
     public void moveHoodDown(double angle) {
         double currentValue = getHoodPosition();
         if (currentValue<=angle || getHoodLimitSwitch()) {
@@ -186,6 +187,10 @@ public class TurretSubsystem extends SubsystemBase {
         hoodMotor.stopMotor();
     }
 
+
+    public void stopHoodMotor(){
+        hoodMotor.stopMotor();
+    }
 
     // TODO: Simple table first then regression with enough data with high confidence
     public void getRegression(double detectedDistance) {
@@ -305,10 +310,12 @@ public class TurretSubsystem extends SubsystemBase {
 
     public Command moveHoodSimple(double desiredAngle) {
         double currentPosition = getHoodPosition();
+        SmartDashboard.putNumber("HOOD_DESIRED_ANGLE", desiredAngle);
+
         if (currentPosition < desiredAngle) {
-            return Commands.runOnce(() -> moveHoodUp(desiredAngle)).repeatedly();
+            return Commands.runOnce(() -> moveHoodUp(desiredAngle), this).repeatedly();
         } else if (currentPosition > desiredAngle) {
-            return Commands.runOnce(() -> moveHoodDown(desiredAngle)).repeatedly();
+            return Commands.runOnce(() -> moveHoodDown(desiredAngle), this).repeatedly();
         }else{
             return Commands.none(); //does nothing-shing
         }

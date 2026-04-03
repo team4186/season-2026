@@ -359,11 +359,13 @@ public class RobotContainer {
                  .onTrue(turretSubsystem.moveHoodSimple(0));
 
        joystickDriver.button(7)
-                .whileTrue(Commands.runOnce(()->climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED)))
-                .whileFalse(Commands.runOnce(climbSubsystem::climbStop));
+                .whileTrue(Commands.runOnce(
+                        ()->climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
+                .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
        joystickDriver.button(8)
-                .whileTrue(Commands.runOnce(()->climbSubsystem.simpleClimbMoveDown(Constants.ClimbConstants.CLIMB_MAX_SPEED)))
-                .whileFalse(Commands.runOnce(climbSubsystem::climbStop));
+                .whileTrue(Commands.runOnce(
+                        ()->climbSubsystem.simpleClimbMoveDown(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
+                .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
        //joystickDriver.button(9).whileTrue(drivebase.centerModulesCommand());TODO: might be useful for testing?
        joystickDriver.button(9).whileTrue(Commands.runOnce(drivebase::lock));
        joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
@@ -384,11 +386,14 @@ public class RobotContainer {
                 .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
         joystickOperator.button(7)
-                .whileTrue(turretSubsystem.moveHoodSimple(35.0));
+                .whileTrue(turretSubsystem.moveHoodSimple(35.0))
+                .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
         joystickOperator.button(9)
-                .whileTrue(turretSubsystem.moveHoodSimple(25.0));
+                .whileTrue(turretSubsystem.moveHoodSimple(25.0))
+                .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor,turretSubsystem));
         joystickOperator.button(11)
-                .whileTrue(turretSubsystem.moveHoodSimple(15.0));
+                .whileTrue(turretSubsystem.moveHoodSimple(15.0))
+                .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor,turretSubsystem));
 
         joystickOperator.button(8)
                         .whileTrue(turretSubsystem.setShooterMotor(4000.0));
@@ -484,14 +489,7 @@ public class RobotContainer {
 
         boolean isRedAlliance = (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red);
 
-        limelightRunner.turretPipelineSetup( isRedAlliance );
-
-        // TODO: Control inversion for red side (if needed)
-//        if (isRedAlliance){
-//
-//        } else {
-//
-//        }
+        // limelightRunner.turretPipelineSetup( isRedAlliance );
     }
 
 

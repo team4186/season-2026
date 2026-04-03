@@ -202,7 +202,7 @@ public final class Constants {
         // NEO 550
         public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
         public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
-        public static final SparkBaseConfig.IdleMode HOOD_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final SparkBaseConfig.IdleMode HOOD_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
 
         public static final int ROTATE_MOTOR_ID = 38;
         public static final int SHOOTER_LEAD_MOTOR_ID = 31;
@@ -270,11 +270,11 @@ public final class Constants {
         public static final double SHOOTER_MIN_OUTPUT = -0.75;
         public static final double SHOOTER_MAX_OUTPUT = 0.75;
 
-        public static final double HOOD_MIN_OUTPUT = -0.25;
-        public static final double HOOD_MAX_OUTPUT = 0.25;
+        public static final double HOOD_MIN_OUTPUT = -0.4;
+        public static final double HOOD_MAX_OUTPUT = 0.4;
 
-        public static final double HOOD_UP_SPEED = 0.35;
-        public static final double HOOD_DOWN_SPEED = -0.3;
+        public static final double HOOD_UP_SPEED = 0.4;
+        public static final double HOOD_DOWN_SPEED = -0.35;
 
         public static final double HOOD_MAX_POSITION = 35.0;
 
