@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.intakecommands.ExtendIntakeCommand;
 import frc.robot.commands.intakecommands.RetractIntakeCommand;
+import frc.robot.commands.turretcommands.AutoTurretTargetting;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.*;
@@ -107,7 +108,7 @@ public class RobotContainer {
     DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem, Constants.ClimbConstants.CLIMB_SLOW_SPEED);
     RetractClimbCommand retractClimbCommand = new RetractClimbCommand(climbSubsystem, Constants.ClimbConstants.CLIMB_SLOW_SPEED);
 
-
+    AutoTurretTargetting simpleTurretTracking = new AutoTurretTargetting(turretSubsystem);
 
     // NOTE:  Coords are odd for Joysticks: https://docs.wpilib.org/en/stable/docs/software/basic-programming/joystick.html
     /**
@@ -348,61 +349,66 @@ public class RobotContainer {
 
         //         PLACE ALL TELEOP KEYBINDS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-       //DRIVER:
-       joystickDriver.trigger()
-               .whileTrue(spindexerSubsystem.rotateMotors())
-               .whileFalse(spindexerSubsystem.stopFeed());
-        joystickDriver.button(2)
-                .whileTrue(intakeSubsystem.outake(0.5))
-                .whileFalse(intakeSubsystem.autoSetPickupSpeed());  //   TODO:  create command to set pickup speed reverse, has priority over auto set
-       //TODO: create command to rotate turret maually for buttons 3,4,and5
-       joystickDriver.button(6)
-               .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly());
-       joystickDriver.button(7)
-                .whileTrue(Commands.runOnce(
-                        ()->climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
-                .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
-       joystickDriver.button(8)
-                .whileTrue(Commands.runOnce(
-                        ()->climbSubsystem.simpleClimbMoveDown(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
-                .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
-       //joystickDriver.button(9).whileTrue(drivebase.centerModulesCommand());TODO: might be useful for testing?
-       joystickDriver.button(9).whileTrue(Commands.runOnce(drivebase::lock));
-       joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
+            turretSubsystem.setDefaultCommand(Commands.runOnce(turretSubsystem::returnTurretToZero, turretSubsystem));
+
+
+           //DRIVER:
+           joystickDriver.trigger()
+                   .whileTrue(spindexerSubsystem.rotateMotors())
+                   .whileFalse(spindexerSubsystem.stopFeed());
+            joystickDriver.button(2)
+                    .whileTrue(intakeSubsystem.outake(0.5))
+                    .whileFalse(intakeSubsystem.autoSetPickupSpeed());  //   TODO:  create command to set pickup speed reverse, has priority over auto set
+           //TODO: create command to rotate turret maually for buttons 3,4,and5
+           joystickDriver.button(6)
+                   .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly());
+           joystickDriver.button(7)
+                    .whileTrue(Commands.runOnce(
+                            ()->climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
+                    .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
+           joystickDriver.button(8)
+                    .whileTrue(Commands.runOnce(
+                            ()->climbSubsystem.simpleClimbMoveDown(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
+                    .onFalse(Commands.runOnce(climbSubsystem::climbStop, climbSubsystem));
+           //joystickDriver.button(9).whileTrue(drivebase.centerModulesCommand());TODO: might be useful for testing?
+           joystickDriver.button(9).whileTrue(Commands.runOnce(drivebase::lock));
+           joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
 
 
 
 
-        //OPERATOR:
+            //OPERATOR:
+            joystickOperator.trigger()
+                    .whileTrue(simpleTurretTracking);
 
-        joystickOperator.button(3)
-            .whileTrue(turretSubsystem.setShooterMotor(0.0));
-        joystickOperator.button(4)
-                .whileTrue(intakeSubsystem.retractIntake())
-                .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
-        joystickOperator.button(5)
-                .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly())
-                .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
-        joystickOperator.button(6)
-                .whileTrue(intakeSubsystem.extendIntake())
-                .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+            joystickOperator.button(3)
+                .whileTrue(turretSubsystem.setShooterMotor(0.0));
+            joystickOperator.button(4)
+                    .whileTrue(intakeSubsystem.retractIntake())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+            joystickOperator.button(5)
+                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly())
+                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
+            joystickOperator.button(6)
+                    .whileTrue(intakeSubsystem.extendIntake())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
-        joystickOperator.button(7)
-                .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(35.0,0.4),turretSubsystem).repeatedly())
-                .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
-        joystickOperator.button(9)
-                .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(25.0,0.225),turretSubsystem).repeatedly())
-                .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
-        joystickOperator.button(11)
-                .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(15.0,0.18),turretSubsystem).repeatedly())
-                .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
+            joystickOperator.button(7)
+                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(35.0,0.4),turretSubsystem).repeatedly())
+                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
+            joystickOperator.button(9)
+                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(25.0,0.225),turretSubsystem).repeatedly())
+                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
+            joystickOperator.button(11)
+                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(15.0,0.18),turretSubsystem).repeatedly())
+                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
 
-        joystickOperator.button(8)
-                        .whileTrue(turretSubsystem.setShooterMotor(4500.0));
-        joystickOperator.button(10)
-                        .whileTrue(turretSubsystem.setShooterMotor(3750.0));
-        joystickOperator.button(12)
-                        .whileTrue(turretSubsystem.setShooterMotor(3000.0));
+            joystickOperator.button(8)
+                            .whileTrue(turretSubsystem.setShooterMotor(4500.0));
+            joystickOperator.button(10)
+                            .whileTrue(turretSubsystem.setShooterMotor(3750.0));
+            joystickOperator.button(12)
+                            .whileTrue(turretSubsystem.setShooterMotor(3000.0));
 
 
 

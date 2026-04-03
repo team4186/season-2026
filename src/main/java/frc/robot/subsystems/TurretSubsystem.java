@@ -167,14 +167,12 @@ public class TurretSubsystem extends SubsystemBase {
     private double aimingFilter(double reqSetpoint) {
         double adjustedSetpoint = 0.0;
 
-        if (reqSetpoint > maxTurretRotation + turretDeadZone) {
-            adjustedSetpoint = Math.max(reqSetpoint - 360, minTurretRotation);
-        } else if (reqSetpoint < minTurretRotation - turretDeadZone) {
-            adjustedSetpoint = Math.min(reqSetpoint + 360, maxTurretRotation);
-        } else if (reqSetpoint >= maxTurretRotation) {
+        if (reqSetpoint >= maxTurretRotation) {
             adjustedSetpoint = maxTurretRotation;
         } else if (reqSetpoint <= minTurretRotation) {
             adjustedSetpoint = minTurretRotation;
+        } else {
+            adjustedSetpoint = reqSetpoint;
         }
 
         return adjustedSetpoint;

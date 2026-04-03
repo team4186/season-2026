@@ -28,6 +28,7 @@ public class AutoTurretTargetting extends Command {
     private LimelightRunner limelightRunner;
     private Translation2d stationLocation;
     private double homeFieldYaw;
+    private final double kp = 0.85;
 
     public AutoTurretTargetting(TurretSubsystem turretSubsystem)
     {
@@ -63,8 +64,8 @@ public class AutoTurretTargetting extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+
         // Adjust based on portion of full adjustment
-        double kp = 1.0;
 
         double[] targetingInfo = limelightRunner.getTurretTagBasicInfo();
         // double[] targetingInfoWithOffset = limelightRunner.getTurretTagInfoWithOffsetPipeline();
@@ -72,27 +73,32 @@ public class AutoTurretTargetting extends Command {
         double status = targetingInfo[0];
         double xOffset = targetingInfo[1];
         double distance = targetingInfo[2];
-
         // -1 is Failure, skip adjustment
+        SmartDashboard.putNumber("Limelight Tracking STATUS", status);
         if ( status >= 0.0) {
             lastTagTimestamp.restart();
+            SmartDashboard.putNumber("Limelight Tracking Tx", xOffset);
 
             try {
                 int adjustedDist = (int) distance;
-                Double[] results = Constants.TurretConstants.TURRET_LOOKUP_TABLE.get( adjustedDist );
-                turretSubsystem.updateTurretRotation( turretSubsystem.getTurretPosition() + (xOffset * kp));
-                turretSubsystem.updateHoodAngle( results[1] );
-                turretSubsystem.updateShooterSpeed( results[0] );
+                double currTurretPosition = turretSubsystem.getTurretPosition();
+                double desiredAngle = currTurretPosition + (xOffset * kp);
+                SmartDashboard.putNumber("Limelight Tracking Tx_ADJUSTED", desiredAngle );
+                // Double[] results = Constants.TurretConstants.TURRET_LOOKUP_TABLE.getOrDefault( adjustedDist , new Double[]{0.0, 0.0});
+                turretSubsystem.updateTurretRotation(desiredAngle);
+                // turretSubsystem.updateHoodAngle( results[1] ); // TODO: Modify to bang bang control
+                // turretSubsystem.updateShooterSpeed( results[0] );
             } catch ( NullPointerException e ) {
                 SmartDashboard.getNumber("Error_LookupTable", distance);
             }
         }
 
         // Last target seen > 1 second ago
-        if (lastTagTimestamp.get() > 1.0){
+        SmartDashboard.putBoolean("Limelight Tracking TimeElapsed", lastTagTimestamp.hasElapsed(1.0));
+        if (lastTagTimestamp.hasElapsed(1.0)){
             // reset to zero
             turretSubsystem.updateShooterSpeed(0.0);
-            turretSubsystem.updateHoodAngle(0.0);
+            // turretSubsystem.updateHoodAngle(0.0);
             turretSubsystem.updateTurretRotation(0.0);
 
             // Use Swerve Location and angle
@@ -104,7 +110,11 @@ public class AutoTurretTargetting extends Command {
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        turretSubsystem.updateShooterSpeed(0.0);
+        //turretSubsystem.updateHoodAngle(0.0); // TODO: Hood angle is bang bang controller
+        turretSubsystem.updateTurretRotation(0.0);
+    }
 
     // Returns true when the command should end.
     @Override

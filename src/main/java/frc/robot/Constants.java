@@ -217,8 +217,8 @@ public final class Constants {
         // Max rotation
         public static final double TURRET_MAX_ROTATION = 100.0; // Degrees
         public static final double TURRET_MIN_ROTATION = -100.0;
-        public static final double TURRET_ROTATION_DEAD_ZONE = Math.max( 0.0,
-            360 - (Math.abs(TURRET_MAX_ROTATION) + Math.abs(TURRET_MIN_ROTATION)));
+        public static final double TURRET_ROTATION_DEAD_ZONE = 360 - (TURRET_MAX_ROTATION - TURRET_MIN_ROTATION);
+                // Math.max( 0.0, 360 - (Math.abs(TURRET_MAX_ROTATION) + Math.abs(TURRET_MIN_ROTATION)));
 
         public static final double HOOD_MAX_ROTATION = 35.0; // Degrees
         public static final double HOOD_MIN_ROTATION = 0.0;

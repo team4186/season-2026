@@ -351,7 +351,8 @@ public class LimelightRunner {
         if ( hasTargetTurret() ) {
 
             status = 1.0;
-            dist = getTurretTagDistanceInchesTrig( LimelightHelpers.getTY( limelightTurret ) ) / 12.0;
+            dist = getDistanceToTagWithHelperWRTCamera( limelightTurret ) * 3.28084;
+                    //getTurretTagDistanceInchesTrig( LimelightHelpers.getTY( limelightTurret ) ) / 12.0;
             txOffset = LimelightHelpers.getTX( limelightTurret );
         }
 
@@ -385,7 +386,8 @@ public class LimelightRunner {
             // Double check target Tag is available in new pipeline
             if (hasTargetTurret()) {
                 status = 1.0;
-                dist = getTurretTagDistanceInchesTrig( LimelightHelpers.getTY( limelightTurret ) ) / 12.0;
+                dist = getDistanceToTagWithHelperWRTCamera( limelightTurret ) * 3.28084;
+                        // getTurretTagDistanceInchesTrig( LimelightHelpers.getTY( limelightTurret ) ) / 12.0;
                 txOffset = LimelightHelpers.getTX( limelightTurret );
             }
         }
