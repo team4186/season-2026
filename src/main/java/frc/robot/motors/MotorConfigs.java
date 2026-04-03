@@ -78,6 +78,7 @@ public final class MotorConfigs {
                 TurretConstants.ROTATE_MIN_OUTPUT,
                 TurretConstants.ROTATE_MAX_OUTPUT,
                 ClosedLoopSlot.kSlot0)
+            .allowedClosedLoopError(TurretConstants.TURRET_ROTATE_ALLOWED_ERROR,ClosedLoopSlot.kSlot0)
             .feedForward
             .kS(
                 TurretConstants.ROTATE_KS,
@@ -85,6 +86,7 @@ public final class MotorConfigs {
             .kV(
                 TurretConstants.ROTATE_KV,
                 ClosedLoopSlot.kSlot0);
+
 
         motor.configure(
             config,

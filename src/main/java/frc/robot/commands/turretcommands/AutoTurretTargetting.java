@@ -28,7 +28,7 @@ public class AutoTurretTargetting extends Command {
     private LimelightRunner limelightRunner;
     private Translation2d stationLocation;
     private double homeFieldYaw;
-    private final double kp = 0.85;
+    private final double kp = 0.9;
 
     public AutoTurretTargetting(TurretSubsystem turretSubsystem)
     {
@@ -52,9 +52,9 @@ public class AutoTurretTargetting extends Command {
     @Override
     public void initialize() {
         // reset
-        turretSubsystem.updateHoodAngle(0.0);
+    //    turretSubsystem.updateHoodAngle(0.0);
         turretSubsystem.updateTurretRotation(0.0);
-        turretSubsystem.updateShooterSpeed(0.0);
+    //    turretSubsystem.updateShooterSpeed(0.0);
 
         // start timer
         lastTagTimestamp.start();
@@ -95,9 +95,9 @@ public class AutoTurretTargetting extends Command {
 
         // Last target seen > 1 second ago
         SmartDashboard.putBoolean("Limelight Tracking TimeElapsed", lastTagTimestamp.hasElapsed(1.0));
-        if (lastTagTimestamp.hasElapsed(1.0)){
+        if (lastTagTimestamp.hasElapsed(0.5)){
             // reset to zero
-            turretSubsystem.updateShooterSpeed(0.0);
+            //turretSubsystem.updateShooterSpeed(0.0);
             // turretSubsystem.updateHoodAngle(0.0);
             turretSubsystem.updateTurretRotation(0.0);
 
@@ -111,7 +111,7 @@ public class AutoTurretTargetting extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        turretSubsystem.updateShooterSpeed(0.0);
+        //turretSubsystem.updateShooterSpeed(0.0);
         //turretSubsystem.updateHoodAngle(0.0); // TODO: Hood angle is bang bang controller
         turretSubsystem.updateTurretRotation(0.0);
     }

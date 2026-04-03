@@ -240,7 +240,7 @@ public final class Constants {
         public static final double HOOD_I = 0.0;
         public static final double HOOD_D = 0.0;
 
-
+        public static final double TURRET_ROTATE_ALLOWED_ERROR = 0.4;
         // FeedForward // TODO: update
 
         public static final double ROTATE_KS = 0.51;
