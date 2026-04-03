@@ -105,7 +105,7 @@ public final class MotorConfigs {
 
         config
                 .inverted(inverse)
-                .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_550)
+                .smartCurrentLimit(TurretConstants.HOOD_SMART_CURRENT_LIMIT)
                 .idleMode(TurretConstants.HOOD_IDLE_MODE);
 
         config.encoder

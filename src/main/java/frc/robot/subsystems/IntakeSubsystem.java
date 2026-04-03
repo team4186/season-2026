@@ -88,7 +88,7 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Intake_Starboard_is_at_setpoint",starboardAtSetpoint());
         SmartDashboard.putBoolean("Intake_Port_is_at_setpoint", portAtSetpoint());
 
-        automaticSetPickupSteed();
+       // automaticSetPickupSteed();
 
     }
 
@@ -268,6 +268,13 @@ public class IntakeSubsystem extends SubsystemBase {
         return Commands.runOnce(()->pickupBalls(speed),this).repeatedly();
     }
 
+    public Command outake(double speed){
+        return Commands.runOnce(()->pickupBalls(-speed),this).repeatedly();
+    }
+
+    public Command autoSetPickupSpeed(){
+        return Commands.runOnce(this::automaticSetPickupSteed).repeatedly();
+    }
 
     public Command stopPickupMotor(){
         return Commands.runOnce(this::stopPickup,this);

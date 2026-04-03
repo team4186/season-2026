@@ -252,6 +252,8 @@ public final class Constants {
         public static final double SHOOTER_KV = 0.001425;
          public static final double HOOD_KV = 0.008; // TODO: Update
 
+        public static final int HOOD_SMART_CURRENT_LIMIT = 40;
+
         public static final double ROTATE_KV =  NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED;
         //public static final double HOOD_KV = NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED; ;
 

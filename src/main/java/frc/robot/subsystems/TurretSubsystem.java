@@ -143,12 +143,12 @@ public class TurretSubsystem extends SubsystemBase {
 
 
     //TODO: will using an elif here affect things? is the absolute value necessary, since the elif makes it so we only consider the case above
-    public void moveHoodUp(double angle) {
+    public void moveHoodUp(double angle,double speed) {
         double currentValue = getHoodPosition();
         if (currentValue>=angle || currentValue >= TurretConstants.HOOD_MAX_POSITION) {
             hoodMotor.stopMotor();
         } else if (currentValue < angle) {
-            hoodMotor.set(TurretConstants.HOOD_UP_SPEED);
+            hoodMotor.set(speed);
         }
     }
 
@@ -308,18 +308,10 @@ public class TurretSubsystem extends SubsystemBase {
 //        return Commands.runOnce(()->moveHoodDown(angle)).repeatedly();
 //    }
 
-    public Command moveHoodSimple(double desiredAngle) {
-        double currentPosition = getHoodPosition();
-        SmartDashboard.putNumber("HOOD_DESIRED_ANGLE", desiredAngle);
-
-        if (currentPosition < desiredAngle) {
-            return Commands.runOnce(() -> moveHoodUp(desiredAngle), this).repeatedly();
-        } else if (currentPosition > desiredAngle) {
-            return Commands.runOnce(() -> moveHoodDown(desiredAngle), this).repeatedly();
-        }else{
-            return Commands.none(); //does nothing-shing
-        }
-    }
+//    public Command moveHoodSimple(double desiredAngle) {
+//            return Commands.runOnce(() -> moveHoodUp(desiredAngle), this).repeatedly();
+//
+//    }
 
     public void setHoodToBrake() {
         SparkMaxConfig config = new SparkMaxConfig();
