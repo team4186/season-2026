@@ -89,6 +89,12 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Intake_Port_is_at_setpoint", portAtSetpoint());
 
        // automaticSetPickupSteed();
+        if(isPortRetracted()){
+            extensionPortRelativeEncoder.setPosition(0.0);
+        }
+        if(isStarboardRetracted()){
+            extensionStarboardRelativeEncoder.setPosition(0.0);
+        }
 
     }
 
