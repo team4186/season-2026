@@ -404,7 +404,9 @@ public class RobotContainer {
 
             //OPERATOR:
             joystickOperator.trigger()
-                    .whileTrue(simpleTurretTracking);
+                    .whileTrue(simpleTurretTracking)
+                    .onFalse(Commands.run(
+                            () -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).withTimeout(0.5));
 
             joystickOperator.button(3)
                 .whileTrue(turretSubsystem.setShooterMotor(0.0));
