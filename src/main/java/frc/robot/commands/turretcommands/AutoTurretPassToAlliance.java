@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.function.DoubleSupplier;
 
 
-public class AutoTurretTargetting extends Command {
+public class AutoTurretPassToAlliance extends Command {
 
     private TurretSubsystem turretSubsystem;
     private Timer lastTagTimestamp;
@@ -30,7 +30,7 @@ public class AutoTurretTargetting extends Command {
     private double homeFieldYaw;
     private final double kp = 0.9;
 
-    public AutoTurretTargetting(TurretSubsystem turretSubsystem)
+    public AutoTurretPassToAlliance(TurretSubsystem turretSubsystem)
     {
         this.lastTagTimestamp = new Timer();
         this.turretSubsystem = turretSubsystem;
@@ -52,9 +52,9 @@ public class AutoTurretTargetting extends Command {
     @Override
     public void initialize() {
         // reset
-    //    turretSubsystem.updateHoodAngle(0.0);
+        //    turretSubsystem.updateHoodAngle(0.0);
         turretSubsystem.updateTurretRotation(0.0);
-    //    turretSubsystem.updateShooterSpeed(0.0);
+        //    turretSubsystem.updateShooterSpeed(0.0);
 
         // start timer
         lastTagTimestamp.start();
