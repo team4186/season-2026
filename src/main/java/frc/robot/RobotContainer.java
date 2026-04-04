@@ -101,6 +101,7 @@ public class RobotContainer {
     //Intake Commands
     ExtendIntakeCommand extendIntakeCommand = new ExtendIntakeCommand(intakeSubsystem);
     RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
+    //Me AND Rishab goon to femboys but no one will ever see this comment becasue it's at the bottom 3.
 
     //Climb Commands
     DeployClimbCommand deployClimbCommand = new DeployClimbCommand(climbSubsystem, Constants.ClimbConstants.CLIMB_SLOW_SPEED);
@@ -264,18 +265,18 @@ public class RobotContainer {
         autoChooser.addOption(
                 "Back Up and Shoot",
                 Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
+                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(1))
                         .andThen(drivebase.driveForward().withTimeout(1.0))
                         .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
-                        .andThen( turretSubsystem.setShooterMotor(2500).withTimeout(0.25))
                         .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(10.0))
 
         );
         autoChooser.addOption(
                 "Back Up and Shoot with shuffle",
                 Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
+                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(1))
                         .andThen(drivebase.driveForward().withTimeout(1.0))
                         .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
-                        .andThen( turretSubsystem.setShooterMotor(2500).withTimeout(0.25))
                         .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(7.0))
                         .andThen(Commands.run(intakeSubsystem::extendIntake,intakeSubsystem).withTimeout(1.0))
                         .andThen(Commands.run(intakeSubsystem::retractIntake,intakeSubsystem).withTimeout(1.0))
