@@ -267,23 +267,13 @@ public class RobotContainer {
                         .andThen(drivebase.driveForward().withTimeout(1.5))
                         .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
                         .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(0.25))
-                        //.andThen(Commands.runOnce(() -> turretSubsystem.updateTurretRotation(20.0), turretSubsystem)).withTimeout(0.25)
                         .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(10.0))
-                        //.andThen(Commands.runOnce(() -> turretSubsystem.updateTurretRotation(-20.0)).withTimeout(0.25))
 
-//                        .andThen(Commands.runOnce(intakeSubsystem::extendIntake).repeatedly().withTimeout(1))
-//                        .andThen(Commands.runOnce(intakeSubsystem::retractIntake).repeatedly().withTimeout(1))
-//                        .andThen(Commands.runOnce(spindexerSubsystem::feed).repeatedly().withTimeout(3))
-                // .andThen(Commands.runOnce(()-> turretSubsystem.moveHoodUp())))
-                        //.alongWith()-
-                //                        .andThen().withTimeout(1.0)
-//                        .andThen().withTimeout(1.0)
-//                        .andThen().withTimeout(1.0)
         );
         autoChooser.addOption(
                 "Back Up and Shoot with shuffle",
                 Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
-                        .andThen(drivebase.driveForward().withTimeout(1))
+                        .andThen(drivebase.driveForward().withTimeout(1.5))
                         .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
                         .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(0.25))
                         .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(7.0))
