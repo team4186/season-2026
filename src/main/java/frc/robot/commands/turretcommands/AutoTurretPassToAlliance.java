@@ -24,7 +24,7 @@ import java.util.function.DoubleSupplier;
 public class AutoTurretPassToAlliance extends Command {
 
     private TurretSubsystem turretSubsystem;
-    private final double kp = 0.9;
+    private final double kp = 0.95;
     private ALLIANCE alliance;
 
     private enum ALLIANCE {
@@ -63,7 +63,7 @@ public class AutoTurretPassToAlliance extends Command {
 
         double swerve_yaw = SmartDashboard.getNumber("Swerve_Yaw_Angle", 0.0);
 
-        turretSubsystem.moveHoodUp(35,0.4);
+        turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L3_POSITION, Constants.TurretConstants.HOOD_L3_SPEED);
         double xOffset = 0.0;
 
 
@@ -90,7 +90,7 @@ public class AutoTurretPassToAlliance extends Command {
         // turretSubsystem.updateHoodAngle( results[1] ); // TODO: Modify to bang bang control
         // turretSubsystem.updateShooterSpeed( results[0] );
 
-        turretSubsystem.updateShooterSpeed(3000);
+        turretSubsystem.updateShooterSpeed(5000);
 
     }
 

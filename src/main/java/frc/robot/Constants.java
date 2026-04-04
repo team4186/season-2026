@@ -284,6 +284,15 @@ public final class Constants {
         public static final double SHOOTER_ERROR_THRESHOLD = 0.0;
         public static final double HOOD_ERROR_THRESHOLD = 0.0;
 
+
+
+        public static final double HOOD_L1_POSITION = 15;
+        public static final double HOOD_L2_POSITION = 25;
+        public static final double HOOD_L3_POSITION = 35;
+
+        public static final double HOOD_L1_SPEED = 0.16;
+        public static final double HOOD_L2_SPEED = 0.19;
+        public static final double HOOD_L3_SPEED = 0.35;
         //  Key: Distance in Feet, Value: {ShooterSpeed, HoodAngle}
         /**
          *  Lookup Table KEY: Distance in Feed  Value: { ShooterSpeed, HoodAngle}
@@ -431,7 +440,7 @@ public final class Constants {
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;
 
-        public static final double FEED_MAX_SPEED = 0.7; // set between -1 to 1
+        public static final double FEED_MAX_SPEED = 0.9; // set between -1 to 1
         public static final double FEED_SLOW_SPEED = 0.5;
 
         public static final double ROTATE_MIN_OUTPUT = -0.75;

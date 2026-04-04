@@ -21,13 +21,14 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.intakecommands.ExtendIntakeCommand;
 import frc.robot.commands.intakecommands.RetractIntakeCommand;
+import frc.robot.commands.turretcommands.AutoTurretPassToAlliance;
 import frc.robot.commands.turretcommands.AutoTurretTargeting;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.*;
 import frc.robot.motors.Components;
 import java.io.File;
-
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.vision.LimelightRunner;
 import swervelib.SwerveInputStream;
 import frc.robot.commands.climbCommand.*;
@@ -106,6 +107,7 @@ public class RobotContainer {
     RetractClimbCommand retractClimbCommand = new RetractClimbCommand(climbSubsystem, Constants.ClimbConstants.CLIMB_SLOW_SPEED);
 
     AutoTurretTargeting simpleTurretTracking = new AutoTurretTargeting(turretSubsystem);
+    AutoTurretPassToAlliance simplePassing = new AutoTurretPassToAlliance(turretSubsystem);
 
     // NOTE:  Coords are odd for Joysticks: https://docs.wpilib.org/en/stable/docs/software/basic-programming/joystick.html
     /**
@@ -262,11 +264,11 @@ public class RobotContainer {
         autoChooser.addOption(
                 "Back Up and Shoot",
                 Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
-                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(0.25))
-                        .andThen(drivebase.driveBackward().withTimeout(1))
+                        .andThen(drivebase.driveForward().withTimeout(1.5))
                         .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
+                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(0.25))
                         //.andThen(Commands.runOnce(() -> turretSubsystem.updateTurretRotation(20.0), turretSubsystem)).withTimeout(0.25)
-                        .andThen(Commands.runOnce(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(1.0))
+                        .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(10.0))
                         //.andThen(Commands.runOnce(() -> turretSubsystem.updateTurretRotation(-20.0)).withTimeout(0.25))
 
 //                        .andThen(Commands.runOnce(intakeSubsystem::extendIntake).repeatedly().withTimeout(1))
@@ -278,6 +280,18 @@ public class RobotContainer {
 //                        .andThen().withTimeout(1.0)
 //                        .andThen().withTimeout(1.0)
         );
+        autoChooser.addOption(
+                "Back Up and Shoot with shuffle",
+                Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
+                        .andThen(drivebase.driveForward().withTimeout(1))
+                        .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
+                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(0.25))
+                        .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(7.0))
+                        .andThen(Commands.run(intakeSubsystem::extendIntake,intakeSubsystem).withTimeout(1.0))
+                        .andThen(Commands.run(intakeSubsystem::retractIntake,intakeSubsystem).withTimeout(1.0))
+                        .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(5.0))
+        );
+
 
         // Put the autoChooser on the SmartDashboard
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -382,7 +396,9 @@ public class RobotContainer {
                     .whileTrue(intakeSubsystem.outake(0.2))
                     .whileFalse(intakeSubsystem.autoSetPickupSpeed());  //   TODO:  create command to set pickup speed reverse, has priority over auto set
            //TODO: create command to rotate turret maually for buttons 3,4,and5
-           joystickDriver.button(6)
+            joystickDriver.button(3)
+                    .whileTrue(simplePassing);
+            joystickDriver.button(6)
                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly());
            joystickDriver.button(7)
                     .whileTrue(Commands.runOnce(
@@ -404,7 +420,6 @@ public class RobotContainer {
                     .whileTrue(simpleTurretTracking)
                     .onFalse(Commands.run(
                             () -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).withTimeout(0.5));
-
             joystickOperator.button(3)
                 .whileTrue(turretSubsystem.setShooterMotor(0.0));
             joystickOperator.button(4)
@@ -418,13 +433,13 @@ public class RobotContainer {
                     .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
             joystickOperator.button(7)
-                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(35.0,0.4),turretSubsystem).repeatedly())
+                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L3_POSITION, Constants.TurretConstants.HOOD_L3_SPEED),turretSubsystem).repeatedly())
                     .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
             joystickOperator.button(9)
-                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(25.0,0.225),turretSubsystem).repeatedly())
+                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L2_POSITION,Constants.TurretConstants.HOOD_L2_SPEED),turretSubsystem).repeatedly())
                     .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
             joystickOperator.button(11)
-                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(15.0,0.18),turretSubsystem).repeatedly())
+                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L1_POSITION,Constants.TurretConstants.HOOD_L1_SPEED),turretSubsystem).repeatedly())
                     .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
 
             joystickOperator.button(8)
