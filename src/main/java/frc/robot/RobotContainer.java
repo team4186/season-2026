@@ -553,4 +553,10 @@ public class RobotContainer {
         if ( value < 0 ) { res *= -1; }
         return res;
     }
+
+    public void resetSubsystems(){
+        turretSubsystem.updateShooterSpeed(0.0);
+        spindexerSubsystem.stopMotors();
+        turretSubsystem.updateTurretRotation(0.0);
+    }
 }

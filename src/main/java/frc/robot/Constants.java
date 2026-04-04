@@ -286,7 +286,7 @@ public final class Constants {
 
 
 
-        public static final double HOOD_L1_POSITION = 15;
+        public static final double HOOD_L1_POSITION = 15; //original L1 (pos/speed): 15/0.16
         public static final double HOOD_L2_POSITION = 25;
         public static final double HOOD_L3_POSITION = 35;
 
@@ -300,11 +300,11 @@ public final class Constants {
         public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE = new HashMap<Integer, Double[]>(
             Map.ofEntries(
                     entry(0, new Double[]{ 0.0, 0.0}),
-                    entry(1, new Double[]{ 0.0, 0.0}), // expected lower bound
+                    entry(1, new Double[]{ 30000.0, 0.0}), // expected lower bound
                     entry(2, new Double[]{ 0.0, 0.0}),
                     entry(3, new Double[]{ 0.0, 0.0}),
                     entry(4, new Double[]{ 0.0, 0.0}),
-                    entry(5, new Double[]{ 0.0, 0.0}),
+                    entry(5, new Double[]{ 3000.0, 7.5}),
                     entry(6, new Double[]{ 0.0, 0.0}),
                     entry(7, new Double[]{ 0.0, 0.0}),
                     entry(8, new Double[]{ 0.0, 0.0}),
