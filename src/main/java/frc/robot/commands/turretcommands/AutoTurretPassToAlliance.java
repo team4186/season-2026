@@ -24,25 +24,23 @@ import java.util.function.DoubleSupplier;
 public class AutoTurretPassToAlliance extends Command {
 
     private TurretSubsystem turretSubsystem;
-    private Timer lastTagTimestamp;
-    private LimelightRunner limelightRunner;
-    private Translation2d stationLocation;
-    private double homeFieldYaw;
     private final double kp = 0.9;
+    private ALLIANCE alliance;
+
+    private enum ALLIANCE {
+        RED,
+        BLUE
+    }
 
     public AutoTurretPassToAlliance(TurretSubsystem turretSubsystem)
     {
-        this.lastTagTimestamp = new Timer();
         this.turretSubsystem = turretSubsystem;
-        this.limelightRunner = LimelightRunner.getInstance();
 
         boolean isRedAlliance = (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red);
-        if (isRedAlliance) {
-            this.stationLocation = Constants.StructureConstants.RED_SCORING_LOCATION;
-            // homeFieldYaw = 0.0;
+       if (isRedAlliance) {
+            this.alliance = ALLIANCE.RED;
         } else {
-            this.stationLocation = Constants.StructureConstants.BLUE_SCORING_LOCATION;
-            // homeFieldYaw = 0.0;
+            this.alliance = ALLIANCE.BLUE;
         }
 
         addRequirements(this.turretSubsystem);
@@ -56,8 +54,6 @@ public class AutoTurretPassToAlliance extends Command {
         turretSubsystem.updateTurretRotation(0.0);
         //    turretSubsystem.updateShooterSpeed(0.0);
 
-        // start timer
-        lastTagTimestamp.start();
     }
 
 
@@ -65,58 +61,43 @@ public class AutoTurretPassToAlliance extends Command {
     @Override
     public void execute() {
 
-        // Adjust based on portion of full adjustment
+        double swerve_yaw = SmartDashboard.getNumber("Swerve_Yaw_Angle", 0.0);
 
-        double[] targetingInfo = limelightRunner.getTurretTagBasicInfo();
-        // double[] targetingInfoWithOffset = limelightRunner.getTurretTagInfoWithOffsetPipeline();
-        turretSubsystem.moveHoodUp(15,0.18);
+        turretSubsystem.moveHoodUp(35,0.4);
+        double xOffset = 0.0;
 
-        double status = targetingInfo[0];
-        double xOffset = targetingInfo[1];
-        double distance = targetingInfo[2];
 
-        // -1 is Failure to find tag, skip adjustment
-        SmartDashboard.putNumber("Limelight Tracking STATUS", status);
-        if ( status >= 0.0) {
-            lastTagTimestamp.restart();
-            SmartDashboard.putNumber("Limelight Tracking Tx", xOffset);
-            try {
-                int adjustedDist = (int) distance;
-                double currTurretPosition = turretSubsystem.getTurretPosition();
-                double desiredAngle = currTurretPosition + (xOffset * kp);
+        if (this.alliance == ALLIANCE.RED) {
+            xOffset = Math.min(Math.max( swerve_yaw, 100.0), -100.0);
+        }
 
-                SmartDashboard.putNumber("Limelight Tracking Tx_ADJUSTED", desiredAngle );
-
-                // Double[] results = Constants.TurretConstants.TURRET_LOOKUP_TABLE.getOrDefault( adjustedDist , new Double[]{0.0, 0.0});
-                turretSubsystem.updateTurretRotation(desiredAngle);
-                // turretSubsystem.updateHoodAngle( results[1] ); // TODO: Modify to bang bang control
-                // turretSubsystem.updateShooterSpeed( results[0] );
-
-                turretSubsystem.updateShooterSpeed(3000);
-            } catch ( NullPointerException e ) {
-                SmartDashboard.getNumber("Error_LookupTable", distance);
+        if (this.alliance == ALLIANCE.BLUE) {
+            // Positive angle = 180 - 100 (goal - maximumTurretRotation)
+            if ( swerve_yaw >= 80.0) {
+                // Difference * -1 for proper direction
+                xOffset = (180 - swerve_yaw) * -1;
+            } else if ( swerve_yaw <= -80.0) {
+                xOffset = (-180 - swerve_yaw) * -1;
             }
         }
 
-        // Last target seen > 1 second ago
-        SmartDashboard.putBoolean("Limelight Tracking TimeElapsed", lastTagTimestamp.hasElapsed(0.5));
-        if (lastTagTimestamp.hasElapsed(0.5)){
-            // reset to zero
-            //turretSubsystem.updateShooterSpeed(0.0);
-            // turretSubsystem.updateHoodAngle(0.0);
-            turretSubsystem.updateTurretRotation(0.0);
+        double desiredAngle = (xOffset * kp);
 
-            // Use Swerve Location and angle
-//            double x_robot = SmartDashboard.getNumber("Swerve_X_Position", 0.0);
-//            double y_robot = SmartDashboard.getNumber("Swerve_Y_Position", 0.0);
-//            double yaw_robot = SmartDashboard.getNumber("Swerve_Yaw_Angle", 0.0);
-        }
+        SmartDashboard.putNumber("Limelight Tracking Tx_ADJUSTED", desiredAngle );
+
+        // Double[] results = Constants.TurretConstants.TURRET_LOOKUP_TABLE.getOrDefault( adjustedDist , new Double[]{0.0, 0.0});
+        turretSubsystem.updateTurretRotation(desiredAngle);
+        // turretSubsystem.updateHoodAngle( results[1] ); // TODO: Modify to bang bang control
+        // turretSubsystem.updateShooterSpeed( results[0] );
+
+        turretSubsystem.updateShooterSpeed(3000);
+
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        //turretSubsystem.updateShooterSpeed(0.0);
+        turretSubsystem.updateShooterSpeed(0.0);
         //turretSubsystem.moveHoodDown(0.0); // TODO: Hood angle is bang bang controller
         turretSubsystem.updateTurretRotation(0.0);
     }
@@ -127,6 +108,4 @@ public class AutoTurretPassToAlliance extends Command {
     {
         return false;
     }
-
-
 }
