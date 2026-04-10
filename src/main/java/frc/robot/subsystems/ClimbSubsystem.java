@@ -47,33 +47,23 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
 
-    // Generic updateClimb function, setpoint can be some angle where the arm needs to be deployed.
-    // Setpoint could also be some angle where the arm is clamped down.
-//    public void updateClimb(double angleSetpoint){
-//        climbMotorController.setSetpoint(angleSetpoint, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-//    }
-
     public void climbStop(){
         climbMotor.stopMotor();
     }
+
 
     public double getPosition(){
         return climbEncoder.getPosition();
     }
 
 
-//    public void resetClimb() {
-//        if (!getLimitSwitch()) {
-//            climbMotorController.setSetpoint(0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-//        } else {
-//            climbStop();
-//            resetEncoder();
-//        }
-//    }
-
-
     public void simpleClimbDeploy(double speed) {
-        if (ClimbConstants.CLIMB_DEPLOY_ANGLE >= climbEncoder.getPosition()) {
+        // expecting positive number - confirm speed is in correct direction
+        if (speed < 0) {
+            speed = speed * -1;
+        }
+
+        if (ClimbConstants.CLIMB_DEPLOY_ANGLE > climbEncoder.getPosition()) {
             climbMotor.set(speed);
         } else {
             climbMotor.stopMotor();
@@ -82,6 +72,11 @@ public class ClimbSubsystem extends SubsystemBase {
 
 
     public void simpleClimbMoveDown(double speed) {
+        // expecting negative number - confirm speed is in correct direction
+        if (speed > 0) {
+            speed = speed * -1;
+        }
+
         if (getLimitSwitch()) {
             climbMotor.stopMotor();
         } else {
@@ -89,11 +84,18 @@ public class ClimbSubsystem extends SubsystemBase {
         }
     }
 
+    public void thresholdClimbMoveDown(double speed) {
+        // expecting negative number - confirm speed is in correct direction
+        if (speed > 0) {
+            speed = speed * -1;
+        }
 
-
-//    public boolean isClimbAtSetpoint() {
-//        return climbMotorController.isAtSetpoint();
-//    }
+        if (getLimitSwitch() || climbEncoder.getPosition()<0) { //0 is placeholder for now
+            climbMotor.stopMotor();
+        } else {
+            climbMotor.set(speed);
+        }
+    }
 
 
     public void resetEncoder() {
@@ -104,6 +106,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public boolean getLimitSwitch(){
         return !homeSwitch.get();
     }
+
 
 //commented out for push, uncomment if needed ziyao. - Shing and Rishab
 //    public Command deployClimbCommand() {

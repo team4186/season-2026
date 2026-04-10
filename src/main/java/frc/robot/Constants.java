@@ -9,10 +9,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
+import edu.wpi.first.wpilibj.DriverStation;
 import swervelib.math.Matter;
 import com.revrobotics.spark.config.SparkBaseConfig;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static edu.wpi.first.units.Units.Meter;
+import static java.util.Map.entry;
 
 
 /**
@@ -30,40 +36,109 @@ import static edu.wpi.first.units.Units.Meter;
 public final class Constants {
 
     // public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-    public static final double ROBOT_MASS = (109.2) * 0.453592; // 32lbs * kg per pound
+    public static final double ROBOT_MASS = (112.72) * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag // TODO: Modify?
-    public static final double MAX_SPEED = Units.feetToMeters(18.0); //orig value 14.5
+    public static final double MAX_SPEED = Units.feetToMeters(13.76); //orig value 14.5
     public static final double NOMINAL_VOLTAGE = 12.0;
 
     // Improving Velocity Based Control
     public static final int VELOCITY_AVERAGE_DEPTH = 5; // 5 Sample Count
     public static final int VELOCITY_MEASUREMENT_PERIOD = 1; // 1ms Moving Avg Window
 
-    // Maximum speed of the robot in meters per second, used to limit acceleration.
-     public static final class AutonConstants {
-//         public static final PIDConstants TRANSLATION_PID = new PIDConstants(
-//                 0.7,
-//                 0,
-//                 0);
-//         public static final PIDConstants ANGLE_PID = new PIDConstants(
-//                 0.4,
-//                 0,
-//                 0.01);
-    //Left and right are relative to robot looking at tags.
-/**Red Left :  TX: 15.00 Ty: 4.84
-Red Right   Tx: 14.99 Ty: 4.10 (difference between ty's should be 0.82m, red right seemed inaccurate
- so i based red right ty off of red left
- **/
-public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(15.00),
-        Meter.of(4.84)),
-        Rotation2d.fromDegrees(0));
-     public static final Pose2d RedRightPole = new Pose2d(new Translation2d(Meter.of(15.00),
-            Meter.of(4.02)),
-            Rotation2d.fromDegrees(0));
-     public static final Pose2d BlueLeftPole = new Pose2d();
-     public static final Pose2d BlueRightPole = new Pose2d();
-     }
+        // Maximum speed of the robot in meters per second, used to limit acceleration.
+    public static final class AutonConstants {
+            //         public static final PIDConstants TRANSLATION_PID = new PIDConstants(
+            //                 0.7,
+            //                 0,
+            //                 0);
+            //         public static final PIDConstants ANGLE_PID = new PIDConstants(
+            //                 0.4,
+            //                 0,
+            //                 0.01);
+            //Left and right are relative to robot looking at tags.
+    }
+
+
+    public static final class StructureConstants {
+        //TODO Constants: Tag ids for red and blue side, and static locations in meters of center of structure
+        public static final int[] BLUE_FIDUCIAL_TURRET_IDS = { 18, 19, 20, 21, 24, 25, 26, 27 };
+        public static final int[] RED_FIDUCIAL_TURRET_IDS =  { 2, 3, 4, 5, 8, 9, 10, 11 };
+
+        // OFFSETS Offset to the side, back is the same regardless, height is always the same, +- 14 inches
+        // TODO: Setup at start of match for pipeline 1, 2, 3 (center, left, right)
+        public static final double TURRET_TARGET_FORWARD_OFFSET = Units.inchesToMeters(-23.51);
+
+        public static final double TURRET_TARGET_RIGHT_SIDE_OFFSET = Units.inchesToMeters(14.0);
+        public static final double TURRET_TARGET_LEFT_SIDE_OFFSET = -TURRET_TARGET_RIGHT_SIDE_OFFSET;
+
+        public static final int[] OFFSET_GROUP_CENTER_RED = { 2, 4, 5, 10 };
+        public static final int[] OFFSET_GROUP_LEFT_RED = { 3, 9, 11 };
+        public static final int[] OFFSET_GROUP_RIGHT_RED = { 8 };
+
+        public static final int[] OFFSET_GROUP_CENTER_BLUE = { 18, 20, 21, 26 };
+        public static final int[] OFFSET_GROUP_LEFT_BLUE = { 19, 25, 27 };
+        public static final int[] OFFSET_GROUP_RIGHT_BLUE = { 24 };
+
+        // Key: Turret Tag Id, Value: POI RightOffset
+        public static final Map<Integer, Integer> TURRET_FIDUCIAL_PIPELINE = new HashMap<>(
+            Map.ofEntries(
+                entry(2, 1 ), // 0.0
+                entry(3, 2 ), // TURRET_TARGET_LEFT_SIDE_OFFSET
+                entry(4, 1 ), // 0.0
+                entry(5, 1 ), //0.0),
+                entry(8, 3 ), //TURRET_TARGET_RIGHT_SIDE_OFFSET),
+                entry(9, 2 ), //TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(10, 1 ), //0.0),
+                entry(11, 2 ), //TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(18, 1 ), //0.0),
+                entry(19, 2 ), //TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(20, 1 ), //0.0),
+                entry(21, 1 ), //0.0),
+                entry(24, 3 ), //TURRET_TARGET_RIGHT_SIDE_OFFSET),
+                entry(25, 2 ), //TURRET_TARGET_LEFT_SIDE_OFFSET),
+                entry(26, 1 ), //0.0),
+                entry(27, 2 ) //TURRET_TARGET_LEFT_SIDE_OFFSET))
+            ));
+
+
+        // NOTE: All translations are based on Blue Origin
+        public static final Translation2d BLUE_SCORING_LOCATION =
+            new Translation2d(
+                Meter.of( Units.inchesToMeters(182.11) ),
+                Meter.of( Units.inchesToMeters(158.84) ));
+
+
+        public static final Translation2d RED_SCORING_LOCATION =
+            new Translation2d(
+                Meter.of( Units.inchesToMeters(651.22 - 182.11) ),
+                Meter.of( Units.inchesToMeters(158.84) ));
+
+
+        // ~34in difference between poles, Perspective based blue origin
+        public static final Translation2d RED_CLIMB_NORTH_POLE =
+            new Translation2d(
+                Meter.of( Units.inchesToMeters(651.22-40.0) ),
+                Meter.of( Units.inchesToMeters(187.22)));
+
+        public static final Translation2d RED_CLIMB_SOUTH_POLE =
+            new Translation2d(
+                Meter.of( Units.inchesToMeters(651.22-40.0) ),
+                Meter.of( Units.inchesToMeters(153.22) ));
+
+
+        public static final Translation2d BLUE_CLIMB_NORTH_POLE =
+            new Translation2d(
+                Meter.of( Units.inchesToMeters(40.0) ),
+                Meter.of( Units.inchesToMeters(187.22) ));
+
+        public static final Translation2d BLUE_CLIMB_SOUTH_POLE =
+            new Translation2d(
+                Meter.of( Units.inchesToMeters(40.0) ),
+                Meter.of( Units.inchesToMeters(153.22) ));
+
+        public static final double ROBOT_X_CLIMBING_OFFSET = 0.0; // TODO: How far does it need to be in either direction to be lined up
+    }
 
 
     public static final class DrivebaseConstants {
@@ -86,19 +161,19 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         // SMART CURRENT LIMIT (50A - 60A)
         public static final int SMART_CURRENT_LIMIT_REGULAR = 50;
         public static final double NEO_REG_FREE_SPEED = 5676;
-        public static final double NEO_REG_KV = NOMINAL_VOLTAGE / NEO_REG_FREE_SPEED; // kv 473
+        public static final double NEO_REG_RATING_KV = 473.0; // kv 473
 
         // NEO 550
         // SMART CURRENT LIMIT (20A - 40A)
         public static final int SMART_CURRENT_LIMIT_550 = 30;
         public static final double NEO_550_FREE_SPEED = 11000;
-        public static final double NEO_550_KV = NOMINAL_VOLTAGE / NEO_550_FREE_SPEED; // kv 915
+        public static final double NEO_550_RATING_KV = 915.0; // Neo Vortex KV rating under no load
 
         // NEO VORTEX
         // SMART CURRENT LIMIT 80A
         public static final int SMART_CURRENT_LIMIT_VORTEX = 80;
-        public static final double NEO_VORTEX_FREE_SPEED = 6784; // kv 560
-        public static final double NEO_VORTEX_KV = NOMINAL_VOLTAGE / NEO_VORTEX_FREE_SPEED; // kv 560
+        public static final double NEO_VORTEX_FREE_SPEED = 6784;
+        public static final double NEO_VORTEX_RATING_KV = 560.0; // Neo Vortex KV rating under no load
     }
 
 
@@ -111,6 +186,15 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double LIMELIGHT_X_STD_DEVS = 0.5;
         public static final double LIMELIGHT_Y_STD_DEVS = 0.5;
         public static final double LIMELIGHT_HEADING_STD_DEVS = 9999999; // StdDevs (x, y, heading)
+
+        public static final double[] LIMELIGHT_ROBOT_CAMERA_POSITION = {
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+            };
     }
 
 
@@ -118,7 +202,7 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         // NEO 550
         public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
         public static final SparkBaseConfig.IdleMode SHOOTER_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
-        public static final SparkBaseConfig.IdleMode HOOD_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final SparkBaseConfig.IdleMode HOOD_IDLE_MODE = SparkBaseConfig.IdleMode.kBrake;
 
         public static final int ROTATE_MOTOR_ID = 38;
         public static final int SHOOTER_LEAD_MOTOR_ID = 31;
@@ -133,13 +217,14 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         // Max rotation
         public static final double TURRET_MAX_ROTATION = 100.0; // Degrees
         public static final double TURRET_MIN_ROTATION = -100.0;
-        public static final double TURRET_ROTATION_DEAD_ZONE = Math.max(0.0, 360 - (TURRET_MAX_ROTATION - TURRET_MIN_ROTATION));
+        public static final double TURRET_ROTATION_DEAD_ZONE = 360 - (TURRET_MAX_ROTATION - TURRET_MIN_ROTATION);
+                // Math.max( 0.0, 360 - (Math.abs(TURRET_MAX_ROTATION) + Math.abs(TURRET_MIN_ROTATION)));
 
         public static final double HOOD_MAX_ROTATION = 35.0; // Degrees
         public static final double HOOD_MIN_ROTATION = 0.0;
 
         public static final double ROTATE_GEAR_RATIO = ((216.0/57.0) * 20.0); // 216:57 * 20:1
-        public static final double SHOOTER_GEAR_RATIO = (1.0/1.25); // 1:1.25 (increase)
+        public static final double SHOOTER_GEAR_RATIO = (1/1.25); // 1:1.25 (increase)
         public static final double HOOD_GEAR_RATIO = 20;
 
         // PID
@@ -147,27 +232,34 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double ROTATE_I = 0.0;
         public static final double ROTATE_D = 0.0085;
 
-        public static final double SHOOTER_P = 0.0075;
+        public static final double SHOOTER_P = 0.00075;
         public static final double SHOOTER_I = 0.0;
-        public static final double SHOOTER_D = 0.002;
+        public static final double SHOOTER_D = 0.0;
 
-        public static final double HOOD_P = 0.0075;
+        public static final double HOOD_P = 0.005;
         public static final double HOOD_I = 0.0;
-        public static final double HOOD_D = 0.002;
+        public static final double HOOD_D = 0.0;
 
+        public static final double TURRET_ROTATE_ALLOWED_ERROR = 0.4;
         // FeedForward // TODO: update
 
         public static final double ROTATE_KS = 0.51;
         public static final double SHOOTER_KS = 0.185;
-        public static final double HOOD_KS = 0;
+        public static final double HOOD_KS = 1.9; // TODO: Update
 
-        public static final double ROTATE_KV = NeoMotorConstants.NEO_550_KV;
-        public static final double SHOOTER_KV = NeoMotorConstants.NEO_VORTEX_KV;
-        public static final double HOOD_KV = NeoMotorConstants.NEO_550_KV;
+
+        // public static final double ROTATE_KV = 0.0; // TODO: Update
+        public static final double SHOOTER_KV = 0.001425;
+         public static final double HOOD_KV = 0.008; // TODO: Update
+
+        public static final int HOOD_SMART_CURRENT_LIMIT = 40;
+
+        public static final double ROTATE_KV =  NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED;
+        //public static final double HOOD_KV = NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED; ;
 
         // Conversion factors and expected measured limits
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = (1 / ROTATE_GEAR_RATIO) * 360; // Convert to degrees
-        public static final double SHOOTER_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double SHOOTER_POSITION_CONVERSION_FACTOR = ( 1/ SHOOTER_GEAR_RATIO );
         public static final double HOOD_POSITION_CONVERSION_FACTOR = (1 / HOOD_GEAR_RATIO) * 360;
 
         public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -180,22 +272,70 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double SHOOTER_MIN_OUTPUT = -0.75;
         public static final double SHOOTER_MAX_OUTPUT = 0.75;
 
-        public static final double HOOD_MIN_OUTPUT = -0.25;
-        public static final double HOOD_MAX_OUTPUT = 0.25;
+        public static final double HOOD_MIN_OUTPUT = -0.4;
+        public static final double HOOD_MAX_OUTPUT = 0.4;
+
+        public static final double HOOD_UP_SPEED = 0.4;
+        public static final double HOOD_DOWN_SPEED = -0.35;
+
+        public static final double HOOD_MAX_POSITION = 35.0;
 
         public static final double ROTATE_ERROR_THRESHOLD = 0.13;
         public static final double SHOOTER_ERROR_THRESHOLD = 0.0;
         public static final double HOOD_ERROR_THRESHOLD = 0.0;
-    }
 
+
+
+        public static final double HOOD_L1_POSITION = 15; //original L1 (pos/speed): 15/0.16
+        public static final double HOOD_L2_POSITION = 25;
+        public static final double HOOD_L3_POSITION = 35;
+
+        public static final double HOOD_L1_SPEED = 0.16;
+        public static final double HOOD_L2_SPEED = 0.19;
+        public static final double HOOD_L3_SPEED = 0.35;
+        //  Key: Distance in Feet, Value: {ShooterSpeed, HoodAngle}
+        /**
+         *  Lookup Table KEY: Distance in Feed  Value: { ShooterSpeed, HoodAngle}
+         */
+        public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE = new HashMap<Integer, Double[]>(
+            Map.ofEntries(
+                    entry(0, new Double[]{ 0.0, 0.0}),
+                    entry(1, new Double[]{ 30000.0, 0.0}), // expected lower bound
+                    entry(2, new Double[]{ 0.0, 0.0}),
+                    entry(3, new Double[]{ 0.0, 0.0}),
+                    entry(4, new Double[]{ 0.0, 0.0}),
+                    entry(5, new Double[]{ 3000.0, 7.5}),
+                    entry(6, new Double[]{ 0.0, 0.0}),
+                    entry(7, new Double[]{ 0.0, 0.0}),
+                    entry(8, new Double[]{ 0.0, 0.0}),
+                    entry(9, new Double[]{ 0.0, 0.0}),
+                    entry(10, new Double[]{ 0.0, 0.0}),
+                    entry(11, new Double[]{ 0.0, 0.0}),
+                    entry(12, new Double[]{ 0.0, 0.0}),
+                    entry(13, new Double[]{ 0.0, 0.0}),
+                    entry(14, new Double[]{ 0.0, 0.0}),
+                    entry(15, new Double[]{ 0.0, 0.0}),
+                    entry(16, new Double[]{ 0.0, 0.0}),
+                    entry(17, new Double[]{ 0.0, 0.0}),
+                    entry(18, new Double[]{ 0.0, 0.0}),
+                    entry(19, new Double[]{ 0.0, 0.0}),
+                    entry(20, new Double[]{ 0.0, 0.0}), // expected upper bound
+                    entry(21, new Double[]{ 0.0, 0.0})
+        ));
+
+        public static final double SHOOTER_TARGET_FAR_SPEED = 3000.0;
+        // public static final double SHOOTER_TARGET_CLOSE_SPEED = 5000.0;
+    }
 
     public static final class IntakeConstants {
         // Extension idle modes & Pickup idle modes
         public static final SparkBaseConfig.IdleMode EXTENSION_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast; //TODO: set back to kBrake once we're done testing inverses-SHing
         public static final SparkBaseConfig.IdleMode PICKUP_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
-        public static final double INTAKE_SPEED_SLOW = 0.1;
-        public static final double INTAKE_SPEED_FAST = 0.65;
+        //"intake" refers to the intake rollers
+        public static final double INTAKE_SPEED_SLOW = 0.2;
+        public static final double INTAKE_SPEED_FAST = 0.6;
+
              // ID's
         public static final int STARBOARD_EXTENSION_MOTOR_ID = 14;
         public static final int PORT_EXTENSION_MOTOR_ID = 13;//TODO: set values here
@@ -214,8 +354,8 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double EXTENSION_FULL_FREE_SPEED = 11000; //
         public static final double PICKUP_FAST_SPEED_SETPOINT = 2500; //in rpm, about half of max rpm for a neo brushless
         public static final double PICKUP_SLOW_SPEED_SETPOINT = 500; //TODO: change to an actual number
-        public static final double PICKUP_FAST_SPEED = 0.50; //in rpm, about half of max rpm for a neo brushless
-        public static final double PICKUP_SLOW_SPEED = 0.10; //TODO: change to an actual number
+
+        public static final double PICKUP_SLOW_SPEED = 0.10; //TODO: change to an actual number, also what is this even used for
 
         // Extension PID
         public static final double EXTENSION_P = 0.0; //TODO: set PID values
@@ -228,17 +368,17 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
 
         // Extension FeedForward
         public static final double EXTENSION_KS = 0.0;
-        public static final double EXTENSION_KV = NeoMotorConstants.NEO_550_KV;
+        public static final double EXTENSION_KV = 0.0;
 
         public static final double PICKUP_KS = 0.0;
-        public static final double PICKUP_KV = NeoMotorConstants.NEO_550_KV; // TODO: Double check
+        public static final double PICKUP_KV = 0.0;
 
         public static final double EXTENSION_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
         public static final double EXTENSION_VELOCITY_CONVERSION_FACTOR = 1.0;
         public static final double EXTENSION_MIN_OUTPUT = -0.75;
         public static final double EXTENSION_MAX_OUTPUT = 0.75;
         public static final double EXTENSION_SLOW_SPEED = 0.10;
-        public static final double EXTENSION_FAST_SPEED = 0.40;
+        public static final double EXTENSION_FAST_SPEED = 0.30;
         public static final double EXTENSION_MAX_ANGLE = 0.00; //TODO: find angles
         public static final double MIN_ANGLE = 0.00;
 
@@ -254,6 +394,9 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         //End of Rail values
         public static final double INTAKE_RAIL_END = 31.0; //
         public static final double INTAKE_RAIL_START = 0.0;
+
+
+
     }
 
 
@@ -262,7 +405,7 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
         //TODO: change current limit to lower?
-        public static final int FEED_CURRENT_LIMIT = 50;
+        public static final int FEED_CURRENT_LIMIT = 60;
         public static final int ROTATE_CURRENT_LIMIT = 50;
 
         // Spark ID'S
@@ -296,16 +439,19 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
 
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;
-        public static final double FEED_MAX_SPEED = 0.75; // set between -1 to 1
-        public static final double FEED_SLOW_SPEED = 0.1;
+
+        public static final double FEED_MAX_SPEED = 0.9; // set between -1 to 1
+        public static final double FEED_SLOW_SPEED = 0.5;
 
         public static final double ROTATE_MIN_OUTPUT = -0.75;
         public static final double ROTATE_MAX_OUTPUT = 0.75;
+
         public static final double ROTATE_SLOW_SPEED = 0.01;
         public static final double ROTATE_MAX_SPEED = 0.75; // set between -1 to 1
 
         public static final double ROTATE_ERROR_THRESHOLD = 0.0;
         public static final double FEED_ERROR_THRESHOLD = 0.0;
+        public static final double HOOD_ERROR_THRESHOLD = 1.0;//Unit should be degrees? - Shing
     }
 
 
@@ -327,7 +473,7 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
 
         // NEO REG
         public static final double CLIMB_KS = 0.0;
-        public static final double CLIMB_KV = NeoMotorConstants.NEO_REG_KV;
+        public static final double CLIMB_KV = 0.0;
 
         public static final double CLIMB_MIN_OUTPUT = -0.75;
         public static final double CLIMB_MAX_OUTPUT = 0.75;
@@ -338,9 +484,14 @@ public static final Pose2d RedLeftPole = new Pose2d(new Translation2d(Meter.of(1
         public static final double CLIMB_MIN_ANGLE = 0.0;
         public static final double CLIMB_MAX_ANGLE = 0.0;
         public static final double CLIMB_DEPLOY_ANGLE = 6600.0; //no idea what units these are in. AHS kids, ask mr,joo about the shing rule
+        public static final double CLIMB_THRESHOLD_ANGLE = 5700.0;
         public static final double CLIMB_UP_ANGLE = 0.0; // Placeholder, please change.
         public static final double CLIMB_DOWN_ANGLE = 0.0; // Placeholder, please change.
         public static final double CLIMB_L1_ANGLE = 0.0;
 
+
+        public static final double CLIMB_FAST_SPEED = 0.8;
+        public static final double CLIMB_MAX_SPEED = 1.0;
+        public static final double CLIMB_SLOW_SPEED = 0.3;
     }
 }

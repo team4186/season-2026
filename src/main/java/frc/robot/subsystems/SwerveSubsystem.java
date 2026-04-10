@@ -5,17 +5,13 @@
 package frc.robot.subsystems;
 
 
-import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Meter;
-import static frc.robot.Constants.LimelightConstants;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -34,8 +30,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-
-import frc.robot.vision.LimelightHelpers;
 import frc.robot.vision.LimelightRunner;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -64,24 +58,13 @@ public class SwerveSubsystem extends SubsystemBase
    */
    public SwerveSubsystem(File directory)
   {
-    // TODO: Decision -> change default setpoints for testing? / Also good example of how to set pose manually for testing auto later
-    boolean blueAlliance = true;
-
-    Pose2d startingPose;
-
-    if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-      startingPose = new Pose2d(new Translation2d(Meter.of(16),
-              Meter.of(4)),
-              Rotation2d.fromDegrees(180));
-    } else if( DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      startingPose = new Pose2d(new Translation2d(Meter.of(1),
-              Meter.of(4)),
-              Rotation2d.fromDegrees(0));
-    } else { // Driver Station unavailable
-      startingPose = new Pose2d(new Translation2d(Meter.of(5),
-              Meter.of(5)),
-              Rotation2d.fromDegrees(0));
-    }
+    boolean blueAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
+    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
+            Meter.of(4)),
+            Rotation2d.fromDegrees(0))
+            : new Pose2d(new Translation2d(Meter.of(16),
+            Meter.of(4)),
+            Rotation2d.fromDegrees(180));
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -105,6 +88,7 @@ public class SwerveSubsystem extends SubsystemBase
 
     setupPathPlanner();
   }
+
 
   public void setupPathPlanner()
   {
@@ -151,7 +135,6 @@ public class SwerveSubsystem extends SubsystemBase
             // Boolean supplier that controls when the path will be mirrored for the red alliance
             // This will flip the path being followed to the red side of the field.
             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
             var alliance = DriverStation.getAlliance();
             if (alliance.isPresent()) {
               return alliance.get() == DriverStation.Alliance.Red;
@@ -170,7 +153,7 @@ public class SwerveSubsystem extends SubsystemBase
 
     //Preload PathPlanner Path finding
     // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
-    PathfindingCommand.warmupCommand().schedule();
+    PathfindingCommand.warmupCommand();
   }
 
 
@@ -196,7 +179,7 @@ public class SwerveSubsystem extends SubsystemBase
     vision.updatePoseEstimate(swerveDrive);
     SmartDashboard.putNumber("Swerve_X_Position", swerveDrive.getPose().getTranslation().getX());
     SmartDashboard.putNumber("Swerve_Y_Position", swerveDrive.getPose().getTranslation().getY());
-    SmartDashboard.putNumber("Swerve_Angle", swerveDrive.getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Swerve_Yaw_Angle", swerveDrive.getPose().getRotation().getDegrees());
   }
 
 
@@ -257,6 +240,13 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return run(() -> {
       swerveDrive.drive(new Translation2d(1, 0), 0, false, false);
+    }).finallyDo(() -> swerveDrive.drive(new Translation2d(0, 0), 0, false, false));
+  }
+
+  public Command driveBackward()
+  {
+    return run(() -> {
+      swerveDrive.drive(new Translation2d(-1, 0), 0, false, false);
     }).finallyDo(() -> swerveDrive.drive(new Translation2d(0, 0), 0, false, false));
   }
 
@@ -630,9 +620,9 @@ public class SwerveSubsystem extends SubsystemBase
   public Command driveToPose(Pose2d pose){
     PathConstraints constraints = new PathConstraints(
             swerveDrive.getMaximumChassisVelocity(),
-            4.0,
+            2.0,
             swerveDrive.getMaximumChassisAngularVelocity(),
-            Units.degreesToRadians(720)
+            Units.degreesToRadians(180)
     );
 
     return AutoBuilder.pathfindToPose(

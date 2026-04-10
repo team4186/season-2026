@@ -118,6 +118,8 @@ public class Robot extends TimedRobot {
         m_robotContainer.setMotorBrake(true);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+        m_robotContainer.updateDriverAllianceInfo();
+
         // Print the selected autonomous command upon autonomous init
         System.out.println("Auto selected: " + m_autonomousCommand);
 
@@ -146,7 +148,8 @@ public class Robot extends TimedRobot {
         } else {
             CommandScheduler.getInstance().cancelAll();
         }
-        m_robotContainer.updateDriverAllianceControls();
+        m_robotContainer.updateDriverAllianceInfo();
+        m_robotContainer.resetSubsystems();
     }
 
 
@@ -154,13 +157,15 @@ public class Robot extends TimedRobot {
      * This function is called periodically during operator control.
      */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+    }
 
 
     @Override
     public void testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
+        m_robotContainer.updateDriverAllianceInfo();
     }
 
 

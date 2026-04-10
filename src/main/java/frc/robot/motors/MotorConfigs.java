@@ -78,6 +78,7 @@ public final class MotorConfigs {
                 TurretConstants.ROTATE_MIN_OUTPUT,
                 TurretConstants.ROTATE_MAX_OUTPUT,
                 ClosedLoopSlot.kSlot0)
+            .allowedClosedLoopError(TurretConstants.TURRET_ROTATE_ALLOWED_ERROR,ClosedLoopSlot.kSlot0)
             .feedForward
             .kS(
                 TurretConstants.ROTATE_KS,
@@ -85,6 +86,7 @@ public final class MotorConfigs {
             .kV(
                 TurretConstants.ROTATE_KV,
                 ClosedLoopSlot.kSlot0);
+
 
         motor.configure(
             config,
@@ -105,7 +107,7 @@ public final class MotorConfigs {
 
         config
                 .inverted(inverse)
-                .smartCurrentLimit(Constants.NeoMotorConstants.SMART_CURRENT_LIMIT_550)
+                .smartCurrentLimit(TurretConstants.HOOD_SMART_CURRENT_LIMIT)
                 .idleMode(TurretConstants.HOOD_IDLE_MODE);
 
         config.encoder
@@ -149,7 +151,6 @@ public final class MotorConfigs {
     public SparkFlex applyShooterSparkConfig(
         SparkFlex motorLeader,
         SparkFlex motorFollower,
-        boolean invertSecondMotor,
         boolean inverse
     ){
         SparkBaseConfig baseConfig = DefaultSparkFlexConfig;
@@ -174,7 +175,6 @@ public final class MotorConfigs {
                         TurretConstants.SHOOTER_ERROR_THRESHOLD,
                         ClosedLoopSlot.kSlot0)
                 .feedForward
-                // kV is now in Volts, so we multiply by the nominal voltage (12V)
                 .kS(TurretConstants.SHOOTER_KS,
                 ClosedLoopSlot.kSlot1)
                 .kV(
@@ -195,15 +195,9 @@ public final class MotorConfigs {
 
         SparkBaseConfig followerConfig = new SparkFlexConfig();
 
-        // boolean invertFollower = invertSecondMotor ^ inverse; // using XOR boolean logic
-        boolean invertFollower = inverse;
-        if (invertSecondMotor) {
-            invertFollower = !invertFollower;
-        }
-
         followerConfig
             .apply(baseConfig)
-            .follow(motorLeader, invertFollower);
+            .follow(motorLeader, true);
 
         motorFollower.configure(
             followerConfig,
@@ -228,30 +222,6 @@ public final class MotorConfigs {
             config.encoder
                     .positionConversionFactor(IntakeConstants.EXTENSION_POSITION_CONVERSION_FACTOR)
                     .velocityConversionFactor(IntakeConstants.EXTENSION_VELOCITY_CONVERSION_FACTOR);
-
-//            config.closedLoop
-//                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-//                    // Set PID values for position control. We don't need to pass a closed loop
-//                    // slot, as it will default to slot 0.
-//                    .pid(
-//                            IntakeConstants.EXTENSION_P,
-//                            IntakeConstants.EXTENSION_I,
-//                            IntakeConstants.EXTENSION_D,
-//                            ClosedLoopSlot.kSlot0)
-//                    .outputRange(
-//                            IntakeConstants.EXTENSION_MIN_OUTPUT,
-//                            IntakeConstants.EXTENSION_MAX_OUTPUT,
-//                            ClosedLoopSlot.kSlot0)
-//                    .allowedClosedLoopError(
-//                            IntakeConstants.EXTENSION_ERROR_THRESHOLD,
-//                            ClosedLoopSlot.kSlot0)
-//                    .feedForward
-//                    .kS(
-//                            IntakeConstants.EXTENSION_KS,
-//                            ClosedLoopSlot.kSlot0)
-//                    .kV(
-//                            IntakeConstants.EXTENSION_KV,
-//                            ClosedLoopSlot.kSlot0);
 
             motor.configure(
                     config,
@@ -278,30 +248,26 @@ public final class MotorConfigs {
                     .positionConversionFactor(IntakeConstants.PICKUP_POSITION_CONVERSION_FACTOR)
                     .velocityConversionFactor(IntakeConstants.PICKUP_VELOCITY_CONVERSION_FACTOR);
 
-        //Add if we decide to use closed loop for the intake pickup - Shing
-//            config.closedLoop
-//                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-//                    // Set PID values for position control. We don't need to pass a closed loop
-//                    // slot, as it will default to slot 0.
-//                    .pid(
-//                            IntakeConstants.PICKUP_P,
-//                            IntakeConstants.PICKUP_I,
-//                            IntakeConstants.PICKUP_D,
-//                            ClosedLoopSlot.kSlot1)
-//                    .outputRange(
-//                            IntakeConstants.PICKUP_MIN_OUTPUT,
-//                            IntakeConstants.PICKUP_MAX_OUTPUT,
-//                            ClosedLoopSlot.kSlot1)
-//                    .allowedClosedLoopError(
-//                            IntakeConstants.PICKUP_ERROR_THRESHOLD,
-//                            ClosedLoopSlot.kSlot1)
-//                    .feedForward
-//                    .kS(
-//                            IntakeConstants.PICKUP_KS,
-//                            ClosedLoopSlot.kSlot1)
-//                    .kV(
-//                            IntakeConstants.PICKUP_KV,
-//                            ClosedLoopSlot.kSlot1);
+            config.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pid(
+                        IntakeConstants.PICKUP_P,
+                        IntakeConstants.PICKUP_I,
+                        IntakeConstants.PICKUP_D,
+                        ClosedLoopSlot.kSlot1)
+                .outputRange(
+                        IntakeConstants.PICKUP_MIN_OUTPUT,
+                        IntakeConstants.PICKUP_MAX_OUTPUT,
+                        ClosedLoopSlot.kSlot1) // Range of total voltage
+                .allowedClosedLoopError(
+                        IntakeConstants.PICKUP_ERROR_THRESHOLD,
+                        ClosedLoopSlot.kSlot1)
+                .feedForward
+                .kS(IntakeConstants.PICKUP_KS,
+                        ClosedLoopSlot.kSlot1)
+                .kV(
+                        IntakeConstants.PICKUP_KV,
+                        ClosedLoopSlot.kSlot1);
 
             motor.configure(
                     config,
@@ -326,30 +292,6 @@ public final class MotorConfigs {
             config.encoder
                     .positionConversionFactor(ClimbConstants.CLIMB_POSITION_CONVERSION_FACTOR)
                     .velocityConversionFactor(ClimbConstants.CLIMB_VELOCITY_CONVERSION_FACTOR);
-
-//            config.closedLoop
-//                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-//                    // Set PID values for position control. We don't need to pass a closed loop
-//                    // slot, as it will default to slot 0.
-//                    .pid(
-//                            ClimbConstants.CLIMB_P,
-//                            ClimbConstants.CLIMB_I,
-//                            ClimbConstants.CLIMB_D,
-//                            ClosedLoopSlot.kSlot0)
-//                    .outputRange(
-//                            ClimbConstants.CLIMB_MIN_OUTPUT,
-//                            ClimbConstants.CLIMB_MAX_OUTPUT,
-//                            ClosedLoopSlot.kSlot0)
-//                    .allowedClosedLoopError(
-//                            ClimbConstants.CLIMB_ERROR_THRESHOLD,
-//                            ClosedLoopSlot.kSlot0)
-//                    .feedForward
-//                    .kS(
-//                            ClimbConstants.CLIMB_KS,
-//                            ClosedLoopSlot.kSlot0)
-//                    .kV(
-//                            ClimbConstants.CLIMB_KV,
-//                            ClosedLoopSlot.kSlot0);
 
             motor.configure(
                     config,
@@ -377,28 +319,6 @@ public final class MotorConfigs {
                     .positionConversionFactor(SpindexerConstants.ROTATE_POSITION_CONVERSION_FACTOR)
                     .velocityConversionFactor(SpindexerConstants.ROTATE_VELOCITY_CONVERSION_FACTOR);
 
-            // Add if we decide to use PIDS for spindexer, instead of feeding a velocity - Shing
-//            config.closedLoop
-//                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-//                    // Set PID values for position control. We don't need to pass a closed loop
-//                    // slot, as it will default to slot 0.
-//                    .pid(
-//                            SpindexerConstants.ROTATE_P,
-//                            SpindexerConstants.ROTATE_I,
-//                            SpindexerConstants.ROTATE_D,
-//                            ClosedLoopSlot.kSlot0)
-//                    .outputRange(
-//                            SpindexerConstants.ROTATE_MIN_OUTPUT,
-//                            SpindexerConstants.ROTATE_MAX_OUTPUT,
-//                            ClosedLoopSlot.kSlot0)
-//                    .feedForward
-//                    .kS(
-//                            SpindexerConstants.ROTATE_KS,
-//                            ClosedLoopSlot.kSlot0)
-//                    .kV(
-//                            SpindexerConstants.ROTATE_KV,
-//                            ClosedLoopSlot.kSlot0);
-
             motor.configure(
                     config,
                     ResetMode.kResetSafeParameters,
@@ -424,27 +344,6 @@ public final class MotorConfigs {
             config.encoder
                     .positionConversionFactor(SpindexerConstants.FEED_POSITION_CONVERSION_FACTOR)
                     .velocityConversionFactor(SpindexerConstants.FEED_VELOCITY_CONVERSION_FACTOR);
-
-//            config.closedLoop
-//                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-//                    // Set PID values for position control. We don't need to pass a closed loop
-//                    // slot, as it will default to slot 0.
-//                    .pid(
-//                            SpindexerConstants.FEED_P,
-//                            SpindexerConstants.FEED_I,
-//                            SpindexerConstants.FEED_D,
-//                            ClosedLoopSlot.kSlot0)
-//                    .outputRange(
-//                            SpindexerConstants.FEED_MIN_OUTPUT,
-//                            SpindexerConstants.FEED_MAX_OUTPUT,
-//                            ClosedLoopSlot.kSlot0)
-//                    .feedForward
-//                    .kS(
-//                            SpindexerConstants.FEED_KS,
-//                            ClosedLoopSlot.kSlot0)
-//                    .kV(
-//                            SpindexerConstants.FEED_KV,
-//                            ClosedLoopSlot.kSlot0);
 
             motor.configure(
                     config,

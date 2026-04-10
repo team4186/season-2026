@@ -32,6 +32,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final SparkClosedLoopController extensionStarboardController;
     private final SparkClosedLoopController extensionPortController;
+    private final SparkClosedLoopController pickupController;
+
+    private enum Shuffle{
+        EXTEND,
+        RETRACT
+    }
+    private Shuffle ShuffleState = Shuffle.EXTEND;
 
     public IntakeSubsystem(
             SparkMax intakeExtensionStarboardMotor,
@@ -60,6 +67,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         this.extensionStarboardController =  intakeExtensionPortMotor.getClosedLoopController();
         this.extensionPortController = intakeExtensionPortMotor.getClosedLoopController();
+        this.pickupController = pickupMotor.getClosedLoopController();
     }
 
 
@@ -80,11 +88,20 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Intake_Starboard_is_at_setpoint",starboardAtSetpoint());
         SmartDashboard.putBoolean("Intake_Port_is_at_setpoint", portAtSetpoint());
 
+       // automaticSetPickupSteed();
+        if(isPortRetracted()){
+            extensionPortRelativeEncoder.setPosition(0.0);
+        }
+        if(isStarboardRetracted()){
+            extensionStarboardRelativeEncoder.setPosition(0.0);
+        }
+
     }
 
     public boolean starboardAtSetpoint(){
         return extensionStarboardController.isAtSetpoint();
     }
+
 
     public boolean portAtSetpoint(){
         return extensionPortController.isAtSetpoint();
@@ -105,19 +122,20 @@ public class IntakeSubsystem extends SubsystemBase {
         return !UnitsUtility.isBeamBroken(retractedSwitchStarboard, false, "Intake Retracted Switch Starboard");
     }
 
+
     private boolean isPortRetracted(){
         return !UnitsUtility.isBeamBroken(retractedSwitchPort, false, "Intake Retracted Switch Port");
     }
+
 
     public boolean isIntakeExtended(){
         return isStarboardExtended() && isPortExtended();
     }
 
+
     public boolean isIntakeRetracted(){
         return isPortRetracted() && isStarboardRetracted();
     }
-
-
 
 
     //TODO: MAKE SURE THE MOTORS ARE INVERTED,AND OPPOSITE CORRECTLY!!!!!! VERY IMPORTANT OR STUFF WILL BREAK!!!!! -Shing
@@ -140,20 +158,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
-    // \/\/\/\/\/Is this needed? Not sure how to feed one value into two controllers, to keep both sides in sync. If there's a better way, delete \/\/\/\/\/
-//    public void extendIntake() {
-////        if(isStarboardExtended() && isPortExtended()){
-////            extensionStarboardController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-////            extensionPortController.setSetpoint(31.0, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
-////        }else{
-////            extensionStarboardMotor.stopMotor();
-////            extensionPortMotor.stopMotor();
-////        }
-//        extendIntakePort();
-//        extendIntakeStarboard();
-//    }
-
-
     private void retractIntakeStarboard(){
         if(!isStarboardRetracted()){
             extensionStarboardController.setSetpoint(IntakeConstants.INTAKE_RAIL_START, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
@@ -173,22 +177,15 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
-    // TODO: intake using CLOSED LOOP
-//    public void retractIntake(){
-//        retractIntakePort();
-//        retractIntakeStarboard();
-//    }
-
-
     //just feeding a velocity
     public void simplePairExtension(){
         if(!isStarboardExtended()){
-            extensionStarboardMotor.set(IntakeConstants.EXTENSION_SLOW_SPEED);
+            extensionStarboardMotor.set(IntakeConstants.EXTENSION_FAST_SPEED);
         }else{
             extensionStarboardMotor.stopMotor();
         }
         if(!isPortExtended()){
-            extensionPortMotor.set(IntakeConstants.EXTENSION_SLOW_SPEED);
+            extensionPortMotor.set(IntakeConstants.EXTENSION_FAST_SPEED);
         }else{
             extensionPortMotor.stopMotor();
         }
@@ -197,44 +194,64 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void simplePairRetraction(){
         if(!isStarboardRetracted()){
-            extensionStarboardMotor.set(-IntakeConstants.EXTENSION_SLOW_SPEED);
+            extensionStarboardMotor.set(-IntakeConstants.EXTENSION_FAST_SPEED);
         }else{
             extensionStarboardMotor.stopMotor();
         }
         if(!isPortRetracted()){
-            extensionPortMotor.set(-IntakeConstants.EXTENSION_SLOW_SPEED);
+            extensionPortMotor.set(-IntakeConstants.EXTENSION_FAST_SPEED);
         }else{
             extensionPortMotor.stopMotor();
         }
     }
 
+//    public void closedLoopPickup(){
+//        pickupController.setSetpoint(IntakeConstants.PICKUP_FAST_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+//    }
 
-
-    public void pickupBallsFast(){
-        pickupMotor.set(IntakeConstants.PICKUP_FAST_SPEED);
+    public void automaticSetPickupSteed(){
+        if(isPortRetracted() || isStarboardRetracted()){
+            // pickupController.setSetpoint(0.0, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+            pickupMotor.set(0.0);
+        }else if(getPortPosition()<IntakeConstants.INTAKE_RAIL_END/2){
+            // pickupController.setSetpoint(IntakeConstants.PICKUP_SLOW_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+            pickupMotor.set(0.2);
+        }else if(getPortPosition()>=IntakeConstants.INTAKE_RAIL_END/2){
+            // pickupController.setSetpoint(IntakeConstants.PICKUP_FAST_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+            pickupMotor.set(0.5);
+        }
     }
+
+    public void shufflePickup(){
+        if(getPortPosition()<IntakeConstants.INTAKE_RAIL_END/2 || getStarboardPosition()<IntakeConstants.INTAKE_RAIL_END/2){
+            simplePairExtension();
+        }else if(getPortPosition()< IntakeConstants.INTAKE_RAIL_END
+                || getStarboardPosition()<IntakeConstants.INTAKE_RAIL_END/2){
+
+        }
+    }
+
+
 
     public void pickupBallsSlow(){
         pickupMotor.set(IntakeConstants.PICKUP_SLOW_SPEED);
     }
+
 
     public void pickupBalls(double speed){
         pickupMotor.set(speed);
     }
 
 
-
-    // TODO: Possible Close Loop Implmentation for pickup. Low Priority
-    public void updateIntakePickupSpeed() {}
-    public void updateIntakePosition() {}
-
     public void stopTranslation() {
         extensionPortMotor.stopMotor();
         extensionStarboardMotor.stopMotor();    }
 
+
     public void stopPickup(){
         pickupMotor.stopMotor();
     }
+
 
     public void stop(){
         extensionPortMotor.stopMotor();
@@ -243,19 +260,26 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
-
     public double getStarboardPosition(){
         return extensionStarboardRelativeEncoder.getPosition();
     }
+
 
     public double getPortPosition(){
         return extensionPortRelativeEncoder.getPosition();
     }
 
 
-
     public Command setSlowPickup(double speed){
         return Commands.runOnce(()->pickupBalls(speed),this).repeatedly();
+    }
+
+    public Command outake(double speed){
+        return Commands.runOnce(()->pickupBalls(-speed),this).repeatedly();
+    }
+
+    public Command autoSetPickupSpeed(){
+        return Commands.runOnce(this::automaticSetPickupSteed).repeatedly();
     }
 
     public Command stopPickupMotor(){
@@ -263,12 +287,34 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
-
     public Command extendIntake(){
         return Commands.runOnce(this::simplePairExtension,this).repeatedly();
     }
 
+
     public Command retractIntake(){
         return Commands.runOnce(this::simplePairRetraction,this).repeatedly();
     }
+
+    public void shuffleIntake(){
+        if(getStarboardPosition()<IntakeConstants.INTAKE_RAIL_END/2 || getPortPosition()<IntakeConstants.INTAKE_RAIL_END/2){
+            ShuffleState = Shuffle.EXTEND;
+        }else if(isPortExtended() && isStarboardExtended()){
+            ShuffleState = Shuffle.RETRACT;
+        }
+
+        if(ShuffleState == Shuffle.EXTEND){
+            simplePairExtension();
+        }else if(ShuffleState == Shuffle.RETRACT){
+            simplePairRetraction();
+        }
+
+        // automaticSetPickupSteed();
+    }
+
+
+    public Command shuffleIntakeCommand(){
+        return Commands.runOnce(this::shuffleIntake,this).repeatedly();
+    }
+
 }
