@@ -361,7 +361,7 @@ public class RobotContainer {
 //
 //            joystickOperator.button(11).whileTrue(drivebase.driveToPose(targetPose));
 
-            //joystickOperator.trigger().whileTrue(Commands.runOnce(spindexerSubsystem::feed, spindexerSubsystem).repeatedly());
+            joystickOperator.trigger().whileTrue(Commands.runOnce(spindexerSubsystem::feed, spindexerSubsystem).repeatedly());
 
         } else {
            //Teleop Command Keybinds
@@ -389,8 +389,8 @@ public class RobotContainer {
            //TODO: create command to rotate turret maually for buttons 3,4,and5
             joystickDriver.button(3)
                     .whileTrue(simplePassing);
-            joystickDriver.button(6)
-                   .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly());
+//            joystickDriver.button(6)
+//                   .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly());
            joystickDriver.button(7)
                     .whileTrue(Commands.runOnce(
                             ()->climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
@@ -407,38 +407,42 @@ public class RobotContainer {
 
 
             //OPERATOR:
-            joystickOperator.trigger()
-                    .whileTrue(simpleTurretTracking)
-                    .onFalse(Commands.run(
-                            () -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).withTimeout(0.5));
+//            joystickOperator.trigger()
+//                    .whileTrue(simpleTurretTracking)
+//                    .onFalse(Commands.run(
+//                            () -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).withTimeout(0.5));
             joystickOperator.button(3)
                 .whileTrue(turretSubsystem.setShooterMotor(0.0));
             joystickOperator.button(4)
                     .whileTrue(intakeSubsystem.retractIntake())
                     .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
-            joystickOperator.button(5)
-                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly())
-                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
+//            joystickOperator.button(5)
+//                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly())
+//                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
             joystickOperator.button(6)
                     .whileTrue(intakeSubsystem.extendIntake())
                     .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
-            joystickOperator.button(7)
-                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L3_POSITION, Constants.TurretConstants.HOOD_L3_SPEED),turretSubsystem).repeatedly())
-                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
-            joystickOperator.button(9)
-                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L2_POSITION,Constants.TurretConstants.HOOD_L2_SPEED),turretSubsystem).repeatedly())
-                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
-            joystickOperator.button(11)
-                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L1_POSITION,Constants.TurretConstants.HOOD_L1_SPEED),turretSubsystem).repeatedly())
-                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
+//            joystickOperator.button(7)
+//                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L3_POSITION, Constants.TurretConstants.HOOD_L3_SPEED),turretSubsystem).repeatedly())
+//                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
+//            joystickOperator.button(9)
+//                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L2_POSITION,Constants.TurretConstants.HOOD_L2_SPEED),turretSubsystem).repeatedly())
+//                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
+//            joystickOperator.button(11)
+//                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L1_POSITION,Constants.TurretConstants.HOOD_L1_SPEED),turretSubsystem).repeatedly())
+//                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
 
             joystickOperator.button(8)
                             .whileTrue(turretSubsystem.setShooterMotor(4500.0));
             joystickOperator.button(10)
                             .whileTrue(turretSubsystem.setShooterMotor(3750.0));
+            joystickOperator.button(11)
+                    .whileTrue(turretSubsystem.setShooterMotor(4000.0)).whileFalse(turretSubsystem.setShooterMotor(0.0));
             joystickOperator.button(12)
                             .whileTrue(turretSubsystem.setShooterMotor(3000.0));
+            joystickOperator.button(9)
+                    .onTrue(turretSubsystem.setShooterMotor(0.0));
 
 
 
