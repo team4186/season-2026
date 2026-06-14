@@ -362,7 +362,7 @@ public final class Constants {
         public static final double EXTENSION_I = 0.0;
         public static final double EXTENSION_D = 0.0;
 
-        public static final double PICKUP_P = 0.0;
+        public static final double PICKUP_P = 0.00005;
         public static final double PICKUP_I = 0.0;
         public static final double PICKUP_D = 0.0;
 
@@ -370,8 +370,8 @@ public final class Constants {
         public static final double EXTENSION_KS = 0.0;
         public static final double EXTENSION_KV = 0.0;
 
-        public static final double PICKUP_KS = 0.0;
-        public static final double PICKUP_KV = 0.0;
+        public static final double PICKUP_KS = 0.021;
+        public static final double PICKUP_KV = 0.00171;
 
         public static final double EXTENSION_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
         public static final double EXTENSION_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -386,8 +386,8 @@ public final class Constants {
         public static final double PICKUP_ERROR_THRESHOLD = 0.0;
 
         // Pickup values
-        public static final double PICKUP_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
-        public static final double PICKUP_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double PICKUP_POSITION_CONVERSION_FACTOR = 1.0; // Convert to rev to cm. 0.762 in radius of gear in cm
+        public static final double PICKUP_VELOCITY_CONVERSION_FACTOR = 1.25;
         public static final double PICKUP_MIN_OUTPUT = -0.75;
         public static final double PICKUP_MAX_OUTPUT = 0.75;
 
