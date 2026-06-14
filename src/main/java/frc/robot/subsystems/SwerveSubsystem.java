@@ -176,10 +176,13 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
+    ChassisSpeeds chassisSpeeds = swerveDrive.getRobotVelocity();
+    double speed = Math.sqrt( Math.pow(chassisSpeeds.vxMetersPerSecond, 2) + Math.pow( chassisSpeeds.vyMetersPerSecond, 2 ) );
     vision.updatePoseEstimate(swerveDrive);
     SmartDashboard.putNumber("Swerve_X_Position", swerveDrive.getPose().getTranslation().getX());
     SmartDashboard.putNumber("Swerve_Y_Position", swerveDrive.getPose().getTranslation().getY());
     SmartDashboard.putNumber("Swerve_Yaw_Angle", swerveDrive.getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Swerve_Chassis_Velocity", speed);
   }
 
 
