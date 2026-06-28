@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,11 +46,16 @@ public class SpindexerSubsystem extends SubsystemBase {
     // (Hint) How much do we care about maintaining consistent feeding and rotation speed?
     public void rotateSpindexerSlow(){
         rotateMotor.set(SpindexerConstants.ROTATE_SLOW_SPEED);
+        setAssistMotorSpeed(300.0); // RPM
     }
 
+    public void setAssistMotorSpeed(double speed){
+        assistCLController.setSetpoint(speed, SparkBase.ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+    }
 
     public void rotateSpindexerFast(){
         rotateMotor.set(SpindexerConstants.ROTATE_MAX_SPEED);
+        setAssistMotorSpeed(300.0); // RPM
         //can create new constant that's different if needed
     }
 
@@ -57,15 +63,16 @@ public class SpindexerSubsystem extends SubsystemBase {
     public void feed(){
         double shooterSpeed = SmartDashboard.getNumber( "Shooter_Velocity:", 0.0);
 
-
         feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
         rotateMotor.set(SpindexerConstants.ROTATE_MAX_SPEED);
+        setAssistMotorSpeed(300.0);
     }
 
 
     public void stopMotors(){
         feedMotor.stopMotor();
         rotateMotor.stopMotor();
+        assistCLController.setSetpoint(0.0, SparkBase.ControlType.kVelocity, ClosedLoopSlot.kSlot1);
     }
 
 

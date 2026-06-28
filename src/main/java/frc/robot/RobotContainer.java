@@ -409,9 +409,11 @@ public class RobotContainer {
             ChassisSpeeds fastSpeed = new ChassisSpeeds(0.0,0,Rotation2d.fromDegrees(180).getRadians());
             ChassisSpeeds findMaxSpeed = new ChassisSpeeds(0.0, 0,Rotation2d.fromDegrees(720.0).getRadians());
 
-            joystickDriver.button(4).whileTrue(Commands.runOnce(()->drivebase.drive(findMaxSpeed), drivebase).repeatedly());
-            joystickDriver.button(5).whileTrue(Commands.runOnce(()->drivebase.drive(slowSpeed), drivebase).repeatedly());
-            joystickDriver.button(6).whileTrue(Commands.runOnce(()->drivebase.drive(fastSpeed), drivebase).repeatedly());
+
+            //drive motor testing functions
+//            joystickDriver.button(4).whileTrue(Commands.runOnce(()->drivebase.drive(findMaxSpeed), drivebase).repeatedly());
+//            joystickDriver.button(5).whileTrue(Commands.runOnce(()->drivebase.drive(slowSpeed), drivebase).repeatedly());
+//            joystickDriver.button(6).whileTrue(Commands.runOnce(()->drivebase.drive(fastSpeed), drivebase).repeatedly());
 
 
 
