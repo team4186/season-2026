@@ -434,10 +434,10 @@ public final class Constants {
         // FeedForward // TODO: UPDATE
         public static final double FEED_KV = 0;
         public static final double ROTATE_KV = 0;
-        public static final double ASSIST_KV = 0;
+        public static final double ASSIST_KV = 0.022;
         public static final double FEED_KS = 0.185;
         public static final double ROTATE_KS = 0.185;
-        public static final double ASSIST_KS = 0.0;
+        public static final double ASSIST_KS = 0.225;
 
 
         public static final double FEED_POSITION_CONVERSION_FACTOR = 1.0;
