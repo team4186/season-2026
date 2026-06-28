@@ -394,23 +394,24 @@ public final class Constants {
         //End of Rail values
         public static final double INTAKE_RAIL_END = 31.0; //
         public static final double INTAKE_RAIL_START = 0.0;
-
-
-
     }
 
 
     public static final class SpindexerConstants {
         public static final SparkBaseConfig.IdleMode FEED_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
         public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final SparkBaseConfig.IdleMode ASSIST_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
         //TODO: change current limit to lower?
         public static final int FEED_CURRENT_LIMIT = 60;
         public static final int ROTATE_CURRENT_LIMIT = 50;
+        public static final int ASSIST_CURRENT_LIMIT = 40;
 
         // Spark ID'S
         public static final int ROTATE_MOTOR_ID = 25;
         public static final int FEED_MOTOR_ID = 26;
+        public static final int ASSIST_MOTOR_ID = 24;
+
 
         // Feed gear ratios & Rotate gear ratios TODO: UPDATE
         public static final double FEED_GEAR_RATIO = 1; // 1:1
@@ -425,17 +426,27 @@ public final class Constants {
         public static final double ROTATE_I = 0.0;
         public static final double ROTATE_D = 0.0;
 
+        public static final double ASSIST_P = 0.0;
+        public static final double ASSIST_I = 0.0;
+        public static final double ASSIST_D = 0.0;
+
+
         // FeedForward // TODO: UPDATE
         public static final double FEED_KV = 0;
         public static final double ROTATE_KV = 0;
+        public static final double ASSIST_KV = 0;
         public static final double FEED_KS = 0.185;
         public static final double ROTATE_KS = 0.185;
+        public static final double ASSIST_KS = 0.0;
+
 
         public static final double FEED_POSITION_CONVERSION_FACTOR = 1.0;
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double ASSIST_POSITION_CONVERSION_FACTOR = 1.0;
 
         public static final double FEED_VELOCITY_CONVERSION_FACTOR = 1.0; // RPM
         public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0; // RPM
+        public static final double ASSIST_VELOCITY_CONVERSION_FACTOR = 1.0; // RPM
 
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;

@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.ClimbConstants;
@@ -26,7 +27,7 @@ public class Components {
 
     private SparkMax spindexerRotateMotor;
     private SparkMax spindexerFeedMotor;
-
+    private SparkMax spindexerAssistMotor;
     private SparkMax climbMotor;
 
 
@@ -136,4 +137,14 @@ public class Components {
         }
         return spindexerFeedMotor;
     }
+
+    public SparkMax getSpindexerAssist(){
+        if(spindexerAssistMotor == null){
+            spindexerAssistMotor = customConfigs.applySpindexerAssistSparkConfig(
+                    new SparkMax(SpindexerConstants.ASSIST_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
+                    false);
+        }
+        return spindexerAssistMotor;
+    }
+
 }

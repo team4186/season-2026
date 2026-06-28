@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,15 +14,23 @@ import frc.robot.Constants.SpindexerConstants;
 public class SpindexerSubsystem extends SubsystemBase {
     private final SparkMax rotateMotor;
     private final SparkMax feedMotor;
+    private final SparkMax assistMotor;
     private final RelativeEncoder feedEncoder;
     private final RelativeEncoder rotateEncoder;
+    private final RelativeEncoder assistEncoder;
 
-    public SpindexerSubsystem(SparkMax rotateMotor, SparkMax feedMotor) {
+    private final SparkClosedLoopController assistCLController;
+
+    public SpindexerSubsystem(SparkMax rotateMotor, SparkMax feedMotor, SparkMax assistMotor) {
         this.rotateMotor = rotateMotor;
         this.feedMotor = feedMotor;
+        this.assistMotor = assistMotor;
 
         this.feedEncoder = feedMotor.getEncoder();
         this.rotateEncoder = rotateMotor.getEncoder();
+        this.assistEncoder = assistMotor.getEncoder();
+
+        this.assistCLController = assistMotor.getClosedLoopController();
     }
 
 

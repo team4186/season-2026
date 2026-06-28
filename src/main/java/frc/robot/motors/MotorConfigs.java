@@ -353,4 +353,43 @@ public final class MotorConfigs {
 
             return motor;
     }
+
+    public SparkMax applySpindexerAssistSparkConfig(
+            SparkMax motor,
+            boolean inverse
+    ) {
+        SparkBaseConfig config = DefaultSparkMaxConfig;
+
+        config
+                .inverted(inverse)
+                .smartCurrentLimit(SpindexerConstants.ASSIST_CURRENT_LIMIT)
+                .idleMode(SpindexerConstants.ASSIST_IDLE_MODE);
+
+        config.encoder
+                .positionConversionFactor(SpindexerConstants.ASSIST_POSITION_CONVERSION_FACTOR)
+                .velocityConversionFactor(SpindexerConstants.ASSIST_VELOCITY_CONVERSION_FACTOR);
+
+        config.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pid(
+                        SpindexerConstants.ASSIST_P,
+                        SpindexerConstants.ASSIST_I,
+                        SpindexerConstants.ASSIST_D,
+                        ClosedLoopSlot.kSlot1)
+                .feedForward
+                .kS(
+                        SpindexerConstants.ASSIST_KS,
+                        ClosedLoopSlot.kSlot1)
+                .kV(
+                        SpindexerConstants.ASSIST_KV,
+                        ClosedLoopSlot.kSlot1);
+
+        motor.configure(
+                config,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters
+        );
+
+        return motor;
+    }
 }
