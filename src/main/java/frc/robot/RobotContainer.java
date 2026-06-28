@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -78,7 +79,8 @@ public class RobotContainer {
 
     private final SpindexerSubsystem spindexerSubsystem = new SpindexerSubsystem(
             motorComponents.getSpindexerRotateMotor(),
-            motorComponents.getSpindexerFeedMotor()
+            motorComponents.getSpindexerFeedMotor(),
+            motorComponents.getSpindexerAssist()
     );
 
 
@@ -402,6 +404,14 @@ public class RobotContainer {
            //joystickDriver.button(9).whileTrue(drivebase.centerModulesCommand());TODO: might be useful for testing?
            joystickDriver.button(9).whileTrue(Commands.runOnce(drivebase::lock));
            joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
+
+            ChassisSpeeds slowSpeed = new ChassisSpeeds(0.0, 0, Rotation2d.fromDegrees(45.0).getRadians());
+            ChassisSpeeds fastSpeed = new ChassisSpeeds(0.0,0,Rotation2d.fromDegrees(180).getRadians());
+            ChassisSpeeds findMaxSpeed = new ChassisSpeeds(0.0, 0,Rotation2d.fromDegrees(720.0).getRadians());
+
+            joystickDriver.button(4).whileTrue(Commands.runOnce(()->drivebase.drive(findMaxSpeed), drivebase).repeatedly());
+            joystickDriver.button(5).whileTrue(Commands.runOnce(()->drivebase.drive(slowSpeed), drivebase).repeatedly());
+            joystickDriver.button(6).whileTrue(Commands.runOnce(()->drivebase.drive(fastSpeed), drivebase).repeatedly());
 
 
 
