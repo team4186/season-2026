@@ -62,9 +62,7 @@ public class RobotContainer {
     // SmartDashboard, allowing selection of desired auto
     private final SendableChooser<Command> autoChooser;
 
-
-// TODO: Test and uncomment subsystems
-
+    // TODO: Test and uncomment subsystems
     private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(
             motorComponents.getIntakeExtensionStarboardMotor(),
             motorComponents.getIntakeExtensionPortMotor(),
@@ -344,12 +342,10 @@ public class RobotContainer {
         }
 
         if (Robot.isSimulation()) {
-
             // Create a target pose with destination, hold button to drive to pose
             Pose2d targetPose = new Pose2d(new Translation2d(15, 4),
                     Rotation2d.fromDegrees(180));
             driverPS5.cross().whileTrue(drivebase.driveToPose(targetPose));
-
         }
 
         if (DriverStation.isTest()) {
@@ -405,6 +401,7 @@ public class RobotContainer {
            joystickDriver.button(9).whileTrue(Commands.runOnce(drivebase::lock));
            joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
 
+
             ChassisSpeeds slowSpeed = new ChassisSpeeds(0.0, 0, Rotation2d.fromDegrees(45.0).getRadians());
             ChassisSpeeds fastSpeed = new ChassisSpeeds(0.0,0,Rotation2d.fromDegrees(180).getRadians());
             ChassisSpeeds findMaxSpeed = new ChassisSpeeds(0.0, 0,Rotation2d.fromDegrees(720.0).getRadians());
@@ -414,9 +411,6 @@ public class RobotContainer {
 //            joystickDriver.button(4).whileTrue(Commands.runOnce(()->drivebase.drive(findMaxSpeed), drivebase).repeatedly());
 //            joystickDriver.button(5).whileTrue(Commands.runOnce(()->drivebase.drive(slowSpeed), drivebase).repeatedly());
 //            joystickDriver.button(6).whileTrue(Commands.runOnce(()->drivebase.drive(fastSpeed), drivebase).repeatedly());
-
-
-
 
             //OPERATOR:
 //            joystickOperator.trigger()
@@ -457,10 +451,6 @@ public class RobotContainer {
                     .onTrue(turretSubsystem.setShooterMotor(0.0));
 
 
-
-
-
-
             joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
             // TODO: Shuffle Intake
@@ -479,27 +469,17 @@ public class RobotContainer {
 
             // TODO: Shooting aka spindexer and motor feed balls if shooter wheel is spinning (we should also force the shooter wheel to be kcoast by default anyways)
 
-
-
 //            joystickOperator.button(2)
 //                    .whileTrue(intakeSubsystem.stopPickupMotor());
-
 
 //            joystickOperator.button(5)
 //                    .whileTrue(intakeSubsystem.setSlowPickup(IntakeConstants.INTAKE_SPEED_SLOW))
 //                    .whileFalse(intakeSubsystem.stopPickupMotor());
 
-
-
-
 //
 //            joystickOperator.button(7)
 //                    .whileTrue(intakeSubsystem.shuffleIntakeCommand())
 //                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
-
-
-
-
 
             // TODO: Test setting to specific hood angle
             // joystickOperator.button(12).onTrue(Commands.runOnce(() -> turretSubsystem.updateHoodAngle(20)));
@@ -531,9 +511,9 @@ public class RobotContainer {
             driverXbox.back().whileTrue(Commands.none());
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.rightBumper().onTrue(Commands.none());
-
         }
     }
+
 
     //TODO: Finish at field
     public void updateDriverAllianceInfo(){
