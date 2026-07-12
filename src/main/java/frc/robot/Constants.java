@@ -49,12 +49,14 @@ public final class Constants {
 
         // Maximum speed of the robot in meters per second, used to limit acceleration.
     public static final class AutonConstants {
-        // default 5, 0, 0
+        // default path planner 5, 0, 0
+        // default yagsl 0.7, 0, 0
         public static final PIDConstants TRANSLATION_PID = new PIDConstants(
                 0.7,
                 0,
                 0);
-        // default 5, 0, 0
+        // default path planner 5, 0, 0
+        // default yagsl 0.4, 0, 0.01
         public static final PIDConstants ANGLE_PID = new PIDConstants(
                 0.4,
                 0,
