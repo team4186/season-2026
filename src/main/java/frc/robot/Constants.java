@@ -240,7 +240,7 @@ public final class Constants {
         public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.0;
 
-        public static final double HOOD_P = 0.005;
+        public static final double HOOD_P = 0.01;
         public static final double HOOD_I = 0.0;
         public static final double HOOD_D = 0.0;
 
@@ -249,12 +249,12 @@ public final class Constants {
 
         public static final double ROTATE_KS = 0.51;
         public static final double SHOOTER_KS = 0.185;
-        public static final double HOOD_KS = 1.9; // TODO: Update
+        public static final double HOOD_KS = 0.7; // TODO: Update
 
 
         // public static final double ROTATE_KV = 0.0; // TODO: Update
         public static final double SHOOTER_KV = 0.001425;
-         public static final double HOOD_KV = 0.008; // TODO: Update
+         public static final double HOOD_KV = 0.075; // TODO: Update
 
         public static final int HOOD_SMART_CURRENT_LIMIT = 40;
 
@@ -276,8 +276,8 @@ public final class Constants {
         public static final double SHOOTER_MIN_OUTPUT = -0.75;
         public static final double SHOOTER_MAX_OUTPUT = 0.75;
 
-        public static final double HOOD_MIN_OUTPUT = -0.4;
-        public static final double HOOD_MAX_OUTPUT = 0.4;
+        public static final double HOOD_MIN_OUTPUT = -1;
+        public static final double HOOD_MAX_OUTPUT = 1;
 
         public static final double HOOD_UP_SPEED = 0.4;
         public static final double HOOD_DOWN_SPEED = -0.35;
@@ -286,7 +286,7 @@ public final class Constants {
 
         public static final double ROTATE_ERROR_THRESHOLD = 0.13;
         public static final double SHOOTER_ERROR_THRESHOLD = 0.0;
-        public static final double HOOD_ERROR_THRESHOLD = 0.0;
+        public static final double HOOD_ERROR_THRESHOLD = 0.5;
 
 
 

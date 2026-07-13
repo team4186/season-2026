@@ -232,6 +232,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
+    public void setIntake(double speed){
+
+    }
 
     public void pickupBallsSlow(){
         pickupMotor.set(IntakeConstants.PICKUP_SLOW_SPEED);
@@ -317,4 +320,5 @@ public class IntakeSubsystem extends SubsystemBase {
         return Commands.runOnce(this::shuffleIntake,this).repeatedly();
     }
 
+    public Command stopIntake(){}
 }

@@ -439,16 +439,26 @@ public class RobotContainer {
 //                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L1_POSITION,Constants.TurretConstants.HOOD_L1_SPEED),turretSubsystem).repeatedly())
 //                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
 
+            joystickOperator.button(7)
+                    .whileTrue(turretSubsystem.setHoodAngle(15));
+            joystickOperator.button(9)
+                    .whileTrue(turretSubsystem.setHoodAngle(25));
+            joystickOperator.button(11)
+                    .whileTrue(turretSubsystem.setHoodAngle(35));
+            joystickOperator.button(2)
+                    .whileTrue(turretSubsystem.setHoodAngle(0));
+
+
             joystickOperator.button(8)
                             .whileTrue(turretSubsystem.setShooterMotor(4500.0));
             joystickOperator.button(10)
                             .whileTrue(turretSubsystem.setShooterMotor(3750.0));
-            joystickOperator.button(11)
-                    .whileTrue(turretSubsystem.setShooterMotor(4000.0)).whileFalse(turretSubsystem.setShooterMotor(0.0));
+//            joystickOperator.button(11)
+//                    .whileTrue(turretSubsystem.setShooterMotor(4000.0)).whileFalse(turretSubsystem.setShooterMotor(0.0));
             joystickOperator.button(12)
                             .whileTrue(turretSubsystem.setShooterMotor(3000.0));
-            joystickOperator.button(9)
-                    .onTrue(turretSubsystem.setShooterMotor(0.0));
+//            joystickOperator.button(5)
+//                    .onTrue(turretSubsystem.setShooterMotor(0.0));
 
 
             joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
@@ -554,5 +564,6 @@ public class RobotContainer {
         turretSubsystem.updateShooterSpeed(0.0);
         spindexerSubsystem.stopMotors();
         turretSubsystem.updateTurretRotation(0.0);
+        intakeSubsystem.stopPickup();
     }
 }

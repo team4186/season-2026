@@ -142,7 +142,7 @@ public class Components {
         if(spindexerAssistMotor == null){
             spindexerAssistMotor = customConfigs.applySpindexerAssistSparkConfig(
                     new SparkMax(SpindexerConstants.ASSIST_MOTOR_ID, SparkLowLevel.MotorType.kBrushless),
-                    false);
+                    true);
         }
         return spindexerAssistMotor;
     }
