@@ -134,68 +134,6 @@ public class RobotContainer {
         .allianceRelativeControl(true);
 
 
-//    // Copy of above but with x, y flipped for red side alliance
-//    SwerveInputStream driveAngularVelocityRedJoystick = SwerveInputStream.of(
-//                    drivebase.getSwerveDrive(),
-//                    () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * 1,
-//                    () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * 1)
-//            .withControllerRotationAxis(
-//                    () -> attenuated( joystickDriver.getTwist(), 3, 0.75 ) * -1)
-//            .deadband(OperatorConstants.DEADBAND)
-//            .allianceRelativeControl(true);
-//
-//    // Copy of above but with x, y flipped for red side alliance
-//    SwerveInputStream driveAngularVelocitySlowRedJoystick = SwerveInputStream.of(
-//                    drivebase.getSwerveDrive(),
-//                    () -> attenuated( joystickDriver.getY(), 2, 0.5 ) * 1,
-//                    () -> attenuated( joystickDriver.getX(), 2, 0.5 ) * 1)
-//            .withControllerRotationAxis(
-//                    () -> attenuated( joystickDriver.getTwist(), 3, 0.375 ) * -1)
-//            .deadband(OperatorConstants.DEADBAND)
-//            .allianceRelativeControl(true);
-
-
-    SwerveInputStream driveRobotRelativeSlowJoystick = SwerveInputStream.of(
-                    drivebase.getSwerveDrive(),
-                    () -> attenuated( joystickDriver.getY(), 2, 0.25 ) * 1,
-                    () -> attenuated( joystickDriver.getX(), 2, 0.25 ) * 1)
-            .withControllerRotationAxis(
-                    () -> attenuated( joystickDriver.getTwist(), 3, 0.25 ) * -1)
-            .deadband(OperatorConstants.DEADBAND)
-            .robotRelative(true);
-
-
-    SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
-            () -> -driverXbox.getLeftY(),
-            () -> -driverXbox.getLeftX())
-            .withControllerRotationAxis(() -> driverXbox.getRawAxis(
-                    2))
-            .deadband(OperatorConstants.DEADBAND)
-            .scaleTranslation(0.8)
-            .allianceRelativeControl(true);
-
-    // Derive the heading axis with math!
-    SwerveInputStream driveDirectAngleKeyboard = driveAngularVelocityKeyboard.copy()
-            .withControllerHeadingAxis(() -> Math.sin(
-                    driverXbox.getRawAxis(
-                            2) *
-                            Math.PI)
-                    *
-                    (Math.PI *
-                            2),
-                    () -> Math.cos(
-                            driverXbox.getRawAxis(
-                                    2) *
-                                    Math.PI)
-                            *
-                            (Math.PI *
-                                    2))
-            .headingWhile(true)
-            .translationHeadingOffset(true)
-            .translationHeadingOffset(Rotation2d.fromDegrees(
-                    0));
-
-
     SwerveInputStream driveStadia = SwerveInputStream.of(
                     drivebase.getSwerveDrive(),
                     () -> attenuated( driverStadia.getLeftY(), 2, 1.0 ) * -1,
@@ -310,9 +248,6 @@ public class RobotContainer {
      * Flight joysticks}.
      */
     private void configureBindings() {
-
-        Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
-        Command driveFieldOrientedAngularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
 
         Command driveFieldOrientedStadia = drivebase.driveFieldOriented(driveStadia);
 
