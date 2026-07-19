@@ -262,6 +262,12 @@ public class IntakeSubsystem extends SubsystemBase {
         pickupMotor.stopMotor();
     }
 
+    public void  updatePickupSpeed(double speed) {
+        pickupController.setSetpoint(
+                speed,
+                SparkBase.ControlType.kVelocity, ClosedLoopSlot.kSlot1);
+    }
+
 
     public double getStarboardPosition(){
         return extensionStarboardRelativeEncoder.getPosition();
@@ -320,5 +326,4 @@ public class IntakeSubsystem extends SubsystemBase {
         return Commands.runOnce(this::shuffleIntake,this).repeatedly();
     }
 
-    public Command stopIntake(){}
 }

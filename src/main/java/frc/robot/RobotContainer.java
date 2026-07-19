@@ -440,23 +440,23 @@ public class RobotContainer {
 //                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
 
             joystickOperator.button(7)
-                    .whileTrue(turretSubsystem.setHoodAngle(15));
+                    .whileTrue(turretSubsystem.setHoodAngle(10));
             joystickOperator.button(9)
-                    .whileTrue(turretSubsystem.setHoodAngle(25));
+                    .whileTrue(turretSubsystem.setHoodAngle(13.5));
             joystickOperator.button(11)
-                    .whileTrue(turretSubsystem.setHoodAngle(35));
+                    .whileTrue(turretSubsystem.setHoodAngle(15));
             joystickOperator.button(2)
                     .whileTrue(turretSubsystem.setHoodAngle(0));
 
 
             joystickOperator.button(8)
-                            .whileTrue(turretSubsystem.setShooterMotor(4500.0));
+                            .whileTrue(turretSubsystem.setShooterMotor(3000.0));
             joystickOperator.button(10)
-                            .whileTrue(turretSubsystem.setShooterMotor(3750.0));
+                            .whileTrue(turretSubsystem.setShooterMotor(2800.0));
 //            joystickOperator.button(11)
 //                    .whileTrue(turretSubsystem.setShooterMotor(4000.0)).whileFalse(turretSubsystem.setShooterMotor(0.0));
             joystickOperator.button(12)
-                            .whileTrue(turretSubsystem.setShooterMotor(3000.0));
+                            .whileTrue(turretSubsystem.setShooterMotor(2600.0));
 //            joystickOperator.button(5)
 //                    .onTrue(turretSubsystem.setShooterMotor(0.0));
 
