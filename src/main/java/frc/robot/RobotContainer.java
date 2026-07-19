@@ -413,10 +413,9 @@ public class RobotContainer {
 //            joystickDriver.button(6).whileTrue(Commands.runOnce(()->drivebase.drive(fastSpeed), drivebase).repeatedly());
 
             //OPERATOR:
-//            joystickOperator.trigger()
-//                    .whileTrue(simpleTurretTracking)
-//                    .onFalse(Commands.run(
-//                            () -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).withTimeout(0.5));
+            joystickOperator.trigger()
+                    .whileTrue(simpleTurretTracking);
+
             joystickOperator.button(3)
                 .whileTrue(turretSubsystem.setShooterMotor(0.0));
             joystickOperator.button(4)
@@ -442,22 +441,17 @@ public class RobotContainer {
             joystickOperator.button(7)
                     .whileTrue(turretSubsystem.setHoodAngle(10));
             joystickOperator.button(9)
-                    .whileTrue(turretSubsystem.setHoodAngle(13.5));
-            joystickOperator.button(11)
-                    .whileTrue(turretSubsystem.setHoodAngle(15));
-            joystickOperator.button(2)
                     .whileTrue(turretSubsystem.setHoodAngle(0));
 
 
             joystickOperator.button(8)
-                            .whileTrue(turretSubsystem.setShooterMotor(3000.0));
+                    .whileTrue(turretSubsystem.setShooterMotor(3000.0))
+                    .onFalse(turretSubsystem.setShooterMotor(0.0));
             joystickOperator.button(10)
-                            .whileTrue(turretSubsystem.setShooterMotor(2800.0));
-//            joystickOperator.button(11)
-//                    .whileTrue(turretSubsystem.setShooterMotor(4000.0)).whileFalse(turretSubsystem.setShooterMotor(0.0));
-            joystickOperator.button(12)
-                            .whileTrue(turretSubsystem.setShooterMotor(2600.0));
-//            joystickOperator.button(5)
+                    .whileTrue(turretSubsystem.setShooterMotor(2600.0))
+                    .onFalse(turretSubsystem.setShooterMotor(0.0));
+            ;
+//            joystickOperator.button(12)
 //                    .onTrue(turretSubsystem.setShooterMotor(0.0));
 
 

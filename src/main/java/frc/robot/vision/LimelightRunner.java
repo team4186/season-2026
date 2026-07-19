@@ -24,7 +24,6 @@ public class LimelightRunner {
 
     public final String limelightTurret = LimelightConstants.LIMELIGHT_TURRET;
     public final String limelightClimb = LimelightConstants.LIMELIGHT_ROBOT;
-
 //    private final DoubleSubscriber tvSub;
 //    private final DoubleSubscriber txSub;
 //    private final DoubleSubscriber tySub;
@@ -69,8 +68,18 @@ public class LimelightRunner {
         }else{
             LimelightHelpers.setLEDMode_ForceOff( limelightClimb );
         }
+
     }
 
+    public double getHoodAngleFromDistance(){
+        int key =  (int) Math.round(getDistanceToTagWithHelperWRTCamera( limelightTurret ) * 3.28084);
+        return Constants.TurretConstants.TURRET_LOOKUP_TABLE.get(key)[1];
+    }
+
+    public double getTurretVelocityFromDistance(){
+        int key =  (int) Math.round(getDistanceToTagWithHelperWRTCamera( limelightTurret ) * 3.28084);
+        return Constants.TurretConstants.TURRET_LOOKUP_TABLE.get(key)[0];
+    }
 
     /**
      * Information on how to set camera pose based on turret camera

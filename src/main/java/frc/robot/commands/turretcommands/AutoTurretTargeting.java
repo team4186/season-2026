@@ -19,6 +19,9 @@ public class AutoTurretTargeting extends Command {
     private double homeFieldYaw;
     private final double kp = 0.9;
 
+    public double retrievedTurretVelocity = 0;
+    public double retrievedTurretAngle = 0;
+
     public AutoTurretTargeting(TurretSubsystem turretSubsystem)
     {
         this.lastTagTimestamp = new Timer();
@@ -35,6 +38,10 @@ public class AutoTurretTargeting extends Command {
         }
 
         addRequirements(this.turretSubsystem);
+
+
+
+
     }
 
 
@@ -81,7 +88,8 @@ public class AutoTurretTargeting extends Command {
                 // turretSubsystem.updateHoodAngle( results[1] ); // TODO: Modify to bang bang control
                 // turretSubsystem.updateShooterSpeed( results[0] );
 
-                turretSubsystem.updateShooterSpeed(3000);
+                turretSubsystem.updateShooterSpeed(LimelightRunner.getInstance().getTurretVelocityFromDistance());
+                turretSubsystem.updateHoodAngle(LimelightRunner.getInstance().getHoodAngleFromDistance());
             } catch ( NullPointerException e ) {
                 SmartDashboard.getNumber("Error_LookupTable", distance);
             }
@@ -91,8 +99,8 @@ public class AutoTurretTargeting extends Command {
         SmartDashboard.putBoolean("Limelight Tracking TimeElapsed", lastTagTimestamp.hasElapsed(0.5));
         if (lastTagTimestamp.hasElapsed(0.5)){
             // reset to zero
-            //turretSubsystem.updateShooterSpeed(0.0);
-            // turretSubsystem.updateHoodAngle(0.0);
+            turretSubsystem.updateShooterSpeed(0.0);
+            turretSubsystem.updateHoodAngle(0.0);
             turretSubsystem.updateTurretRotation(0.0);
 
             // Use Swerve Location and angle
@@ -108,6 +116,8 @@ public class AutoTurretTargeting extends Command {
         //turretSubsystem.updateShooterSpeed(0.0);
         //turretSubsystem.moveHoodDown(0.0); // TODO: Hood angle is bang bang controller
         turretSubsystem.updateTurretRotation(0.0);
+        turretSubsystem.updateShooterSpeed(0.0);
+        turretSubsystem.updateHoodAngle(0.0);
     }
 
     // Returns true when the command should end.
