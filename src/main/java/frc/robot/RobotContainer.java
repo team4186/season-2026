@@ -117,8 +117,8 @@ public class RobotContainer {
      */
     SwerveInputStream driveAngularVelocityBlueJoystick = SwerveInputStream.of(
                     drivebase.getSwerveDrive(),
-            () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * 1,
-            () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * 1)
+            () -> attenuated( joystickDriver.getY(), 2, 1.0 ) * -1,
+            () -> attenuated( joystickDriver.getX(), 2, 1.0 ) * -1)
             .withControllerRotationAxis(
                     () -> attenuated( joystickDriver.getTwist(), 2, 0.75 ) * 1)
             .deadband(OperatorConstants.DEADBAND)
@@ -126,8 +126,8 @@ public class RobotContainer {
 
     SwerveInputStream driveAngularVelocitySlowBlueJoystick = SwerveInputStream.of(
             drivebase.getSwerveDrive(),
-            () -> attenuated( joystickDriver.getY(), 2, 0.25 ) * 1,
-            () -> attenuated( joystickDriver.getX(), 2, 0.25 ) * 1)
+            () -> attenuated( joystickDriver.getY(), 2, 0.25 ) * -1,
+            () -> attenuated( joystickDriver.getX(), 2, 0.25 ) * -1)
         .withControllerRotationAxis(
             () -> attenuated( joystickDriver.getTwist(), 2, 0.75 ) * 1)//scale originally 0.5
         .deadband(OperatorConstants.DEADBAND)
@@ -350,12 +350,15 @@ public class RobotContainer {
             //OPERATOR:
             joystickOperator.trigger()
                     .whileTrue(simpleTurretTracking);
+//TODO: UNCOMMENT!!!!!! Intake, being disabled because its currently broken
+//            joystickOperator.button(3)
+//                .whileTrue(turretSubsystem.setShooterMotor(0.0));
+//            joystickOperator.button(4)
+//                    .whileTrue(intakeSubsystem.retractIntake())
+//                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
-            joystickOperator.button(3)
-                .whileTrue(turretSubsystem.setShooterMotor(0.0));
-            joystickOperator.button(4)
-                    .whileTrue(intakeSubsystem.retractIntake())
-                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+
+
 //            joystickOperator.button(5)
 //                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly())
 //                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
