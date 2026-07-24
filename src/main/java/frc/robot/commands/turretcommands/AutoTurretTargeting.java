@@ -97,7 +97,7 @@ public class AutoTurretTargeting extends Command {
 
         // Last target seen > 1 second ago
         SmartDashboard.putBoolean("Limelight Tracking TimeElapsed", lastTagTimestamp.hasElapsed(0.5));
-        if (lastTagTimestamp.hasElapsed(0.5)){
+        if (lastTagTimestamp.hasElapsed(1.0)){
             // reset to zero
             turretSubsystem.updateShooterSpeed(0.0);
             turretSubsystem.updateHoodAngle(0.0);

@@ -73,12 +73,12 @@ public class LimelightRunner {
 
     public double getHoodAngleFromDistance(){
         int key =  (int) Math.round(getDistanceToTagWithHelperWRTCamera( limelightTurret ) * 3.28084);
-        return Constants.TurretConstants.TURRET_LOOKUP_TABLE.get(key)[1];
+        return Constants.TurretConstants.TURRET_LOOKUP_TABLE.getOrDefault(key,new Double[]{0.0,0.0})[1];
     }
 
     public double getTurretVelocityFromDistance(){
         int key =  (int) Math.round(getDistanceToTagWithHelperWRTCamera( limelightTurret ) * 3.28084);
-        return Constants.TurretConstants.TURRET_LOOKUP_TABLE.get(key)[0];
+        return Constants.TurretConstants.TURRET_LOOKUP_TABLE.getOrDefault(key,new Double[]{0.0,0.0})[0];
     }
 
     /**
