@@ -253,7 +253,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     public void stopPickup(){
-        pickupMotor.stopMotor();
+        pickupController.setSetpoint(
+                0.0,
+                SparkBase.ControlType.kVelocity,
+                ClosedLoopSlot.kSlot1);
     }
 
 

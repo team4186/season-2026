@@ -320,10 +320,14 @@ public class RobotContainer {
                    .whileFalse(spindexerSubsystem.stopFeed());
             joystickDriver.button(2)
                     .whileTrue(intakeSubsystem.outake(0.2))
-                    .whileFalse(intakeSubsystem.autoSetPickupSpeed());  //   TODO:  create command to set pickup speed reverse, has priority over auto set
+                    .onFalse(intakeSubsystem.stopPickupMotor());
+             //   TODO:  create command to set pickup speed reverse, has priority over auto set
            //TODO: create command to rotate turret maually for buttons 3,4,and5
             joystickDriver.button(3)
                     .whileTrue(simplePassing);
+            joystickDriver.button(4)
+                    .whileTrue(intakeSubsystem.autoSetPickupSpeed())
+                    .onFalse(intakeSubsystem.stopPickupMotor());
 //            joystickDriver.button(6)
 //                   .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly());
            joystickDriver.button(7)
@@ -352,12 +356,12 @@ public class RobotContainer {
             //OPERATOR:
             joystickOperator.trigger()
                     .whileTrue(simpleTurretTracking);
-//TODO: UNCOMMENT!!!!!! Intake, being disabled because its currently broken
-//            joystickOperator.button(3)
-//                .whileTrue(turretSubsystem.setShooterMotor(0.0));
-//            joystickOperator.button(4)
-//                    .whileTrue(intakeSubsystem.retractIntake())
-//                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
+
+            joystickOperator.button(3)
+                .whileTrue(turretSubsystem.setShooterMotor(0.0));
+            joystickOperator.button(4)
+                    .whileTrue(intakeSubsystem.retractIntake())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
 
 
@@ -395,7 +399,7 @@ public class RobotContainer {
 //                    .onTrue(turretSubsystem.setShooterMotor(0.0));
 
 
-            joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+//            joystickDriver.button(10).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
             // TODO: Shuffle Intake
             // joystickOperator.button( <> )
