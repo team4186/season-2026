@@ -2,6 +2,7 @@ package frc.robot.commands.auto;
 
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -25,6 +26,7 @@ public class DriveBackAndShoot  extends Command {
 
     private Timer autoTimer;
 
+    private Translation2d speed = new Translation2d(-1.0,0.0);
     // Robot State
 
     enum STATE {
@@ -42,6 +44,7 @@ public class DriveBackAndShoot  extends Command {
         this.swerve = swerve;
         this.spindexer = spindexer;
         autoTimer = new Timer();
+        addRequirements(turret,intake,swerve,spindexer);
     }
 
 
@@ -71,7 +74,7 @@ public class DriveBackAndShoot  extends Command {
         switch ( currentState ) {
             case DRIVE:
                 // Drive to location
-                swerve.driveBackward();
+                swerve.drive(speed,0.0,false);
 
                 if(autoTimer.get() >= 1.0){
                     autoTimer.reset();

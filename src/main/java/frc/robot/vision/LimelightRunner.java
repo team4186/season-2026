@@ -5,6 +5,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -81,7 +82,7 @@ public class LimelightRunner {
 
 
     // Using field location, measure distance and pass back hood angle
-    public double getHoodAngleUsingPose(Pose2d robotPose, Pose2d targetPose){
+    public double getHoodAngleUsingPose(Translation2d robotPose, Translation2d targetPose){
         int key = (int) Math.round(getDistanceInFeetBetweenTwoPoses(robotPose, targetPose));
         return Constants.TurretConstants.TURRET_LOOKUP_WRT_POSE.getOrDefault(key,new Double[]{0.0,0.0})[1];
     }
@@ -95,13 +96,13 @@ public class LimelightRunner {
 
 
     // Using field location, measure distance and pass back shooter speed
-    public double getTurretVelocityUsingPose(Pose2d robotPose, Pose2d targetPose){
+    public double getTurretVelocityUsingPose(Translation2d robotPose, Translation2d targetPose){
         int key = (int) Math.round(getDistanceInFeetBetweenTwoPoses(robotPose, targetPose));
         return Constants.TurretConstants.TURRET_LOOKUP_WRT_POSE.getOrDefault(key,new Double[]{0.0,0.0})[0];
     }
 
 
-    private double getDistanceInFeetBetweenTwoPoses(Pose2d poseOne, Pose2d poseTwo){
+    private double getDistanceInFeetBetweenTwoPoses(Translation2d poseOne, Translation2d poseTwo){
         // Pose2d in meters
         double distanceMeters = Math.sqrt((Math.pow(poseOne.getY() - poseTwo.getY(), 2) + Math.pow(poseOne.getX() - poseTwo.getX(), 2)));
         return distanceMeters * 3.28084;

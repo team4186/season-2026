@@ -20,10 +20,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.auto.DriveBackAndShoot;
 import frc.robot.commands.intakecommands.ExtendIntakeCommand;
 import frc.robot.commands.intakecommands.RetractIntakeCommand;
 import frc.robot.commands.turretcommands.AutoTurretPassToAlliance;
 import frc.robot.commands.turretcommands.AutoTurretTargeting;
+import frc.robot.commands.turretcommands.AutoTurretTargetingPose;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.*;
@@ -101,6 +103,10 @@ public class RobotContainer {
     //Intake Commands
     ExtendIntakeCommand extendIntakeCommand = new ExtendIntakeCommand(intakeSubsystem);
     RetractIntakeCommand retractIntakeCommand = new RetractIntakeCommand(intakeSubsystem);
+
+    //Auto All in One Commands
+    DriveBackAndShoot driveBackAndShootCommand = new DriveBackAndShoot(turretSubsystem,intakeSubsystem, drivebase,spindexerSubsystem);
+
     //Me AND Rishab goon to femboys but no one will ever see this comment becasue it's at the bottom 3.
 
     //Climb Commands
@@ -109,6 +115,7 @@ public class RobotContainer {
 
     AutoTurretTargeting simpleTurretTracking = new AutoTurretTargeting(turretSubsystem);
     AutoTurretPassToAlliance simplePassing = new AutoTurretPassToAlliance(turretSubsystem);
+    AutoTurretTargetingPose simplePoseTracking = new AutoTurretTargetingPose(turretSubsystem);
 
     // NOTE:  Coords are odd for Joysticks: https://docs.wpilib.org/en/stable/docs/software/basic-programming/joystick.html
     /**
@@ -180,6 +187,9 @@ public class RobotContainer {
                 climbSubsystem.simpleClimbDeploy(1.0), climbSubsystem).repeatedly());
         NamedCommands.registerCommand("climbArmDown",Commands.runOnce(() ->
                 climbSubsystem.simpleClimbMoveDown(-1.0), climbSubsystem).repeatedly());
+        //NamedCommands.registerCommand("");
+
+
 
 
         //Have the autoChooser pull in all PathPlanner autos as options
@@ -199,27 +209,29 @@ public class RobotContainer {
                 Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
                         .andThen(drivebase.driveBackward().withTimeout(1)));
 
-        autoChooser.addOption(
-                "Back Up and Shoot",
-                Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
-                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(1))
-                        .andThen(drivebase.driveBackward().withTimeout(1.0))
-                        .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
-                        .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(10.0))
+//        autoChooser.addOption(
+//                "Back Up and Shoot",
+//                Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
+//                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(1))
+//                        .andThen(drivebase.driveBackward().withTimeout(1.0))
+//                        .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
+//                        .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(10.0))
+//
+//        );
+//        autoChooser.addOption(
+//                "Back Up and Shoot with shuffle",
+//                Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
+//                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(1))
+//                        .andThen(drivebase.driveForward().withTimeout(1.0))
+//                        .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
+//                        .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(7.0))
+//                        .andThen(Commands.run(intakeSubsystem::extendIntake,intakeSubsystem).withTimeout(1.0))
+//                        .andThen(Commands.run(intakeSubsystem::retractIntake,intakeSubsystem).withTimeout(1.0))
+//                        .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(5.0))
+//        );
 
-        );
-        autoChooser.addOption(
-                "Back Up and Shoot with shuffle",
-                Commands.runOnce(drivebase::zeroGyroWithAlliance).withTimeout(.2)
-                        .andThen( turretSubsystem.setShooterMotor(3000).withTimeout(1))
-                        .andThen(drivebase.driveForward().withTimeout(1.0))
-                        .andThen(Commands.run(()->turretSubsystem.moveHoodUp(5,0.1)).withTimeout(0.6))
-                        .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(7.0))
-                        .andThen(Commands.run(intakeSubsystem::extendIntake,intakeSubsystem).withTimeout(1.0))
-                        .andThen(Commands.run(intakeSubsystem::retractIntake,intakeSubsystem).withTimeout(1.0))
-                        .andThen(Commands.run(spindexerSubsystem::feed, spindexerSubsystem).withTimeout(5.0))
-        );
 
+        autoChooser.addOption("Back Up and Shoot (Better)", driveBackAndShootCommand);
 
         // Put the autoChooser on the SmartDashboard
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -355,8 +367,9 @@ public class RobotContainer {
 
             //OPERATOR:
             joystickOperator.trigger()
+                    .whileTrue(simplePoseTracking);
+            joystickOperator.button(2)
                     .whileTrue(simpleTurretTracking);
-
             joystickOperator.button(3)
                 .whileTrue(turretSubsystem.setShooterMotor(0.0));
             joystickOperator.button(4)

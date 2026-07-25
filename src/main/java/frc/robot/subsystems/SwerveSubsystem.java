@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -50,7 +51,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
   private final SwerveDrive swerveDrive;
   private final LimelightRunner vision = LimelightRunner.getInstance();
-
+  private final Field2d field;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -59,6 +60,9 @@ public class SwerveSubsystem extends SubsystemBase
    */
    public SwerveSubsystem(File directory)
   {
+    field = new Field2d();
+    SmartDashboard.putData("Field", field);
+
     boolean blueAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
             Meter.of(4)),
@@ -171,6 +175,8 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
   {
+    field = new Field2d();
+    SmartDashboard.putData("Field", field);
     swerveDrive = new SwerveDrive(driveCfg,
                                   controllerCfg,
                                   Constants.MAX_SPEED,
@@ -182,6 +188,7 @@ public class SwerveSubsystem extends SubsystemBase
   @Override
   public void periodic()
   {
+    field.setRobotPose(swerveDrive.getPose());
     ChassisSpeeds chassisSpeeds = swerveDrive.getRobotVelocity();
     double speed = Math.sqrt( Math.pow(chassisSpeeds.vxMetersPerSecond, 2) + Math.pow( chassisSpeeds.vyMetersPerSecond, 2 ) );
     vision.updatePoseEstimate(swerveDrive);
@@ -189,7 +196,6 @@ public class SwerveSubsystem extends SubsystemBase
     SmartDashboard.putNumber("Swerve_Y_Position", swerveDrive.getPose().getTranslation().getY());
     SmartDashboard.putNumber("Swerve_Yaw_Angle", swerveDrive.getPose().getRotation().getDegrees());
     SmartDashboard.putNumber("Swerve_Chassis_Velocity", speed);
-
   }
 
 
