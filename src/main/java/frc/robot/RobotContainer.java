@@ -172,7 +172,6 @@ public class RobotContainer {
      */
     public RobotContainer() {
         // Configure the trigger bindings
-        configureBindings();
         DriverStation.silenceJoystickConnectionWarning(true);
 
         // Create the NamedCommands that will be used in PathPlanner
@@ -228,6 +227,9 @@ public class RobotContainer {
         if (autoChooser.getSelected() == null) {
             RobotModeTriggers.autonomous().onTrue(Commands.runOnce(drivebase::zeroGyroWithAlliance));
         }
+
+        // After Auto but before Alliance specific setup
+        configureBindings();
 
         // Update Alliance Relevant info
         updateDriverAllianceInfo();
