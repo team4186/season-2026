@@ -244,21 +244,16 @@ public final class Constants {
         public static final double HOOD_I = 0.0;
         public static final double HOOD_D = 0.0;
 
-        public static final double TURRET_ROTATE_ALLOWED_ERROR = 0.4;
-        // FeedForward // TODO: update
-
+        // FeedForward
         public static final double ROTATE_KS = 0.51;
         public static final double SHOOTER_KS = 0.185;
         public static final double HOOD_KS = 0.7; // TODO: Update
 
-
-        // public static final double ROTATE_KV = 0.0; // TODO: Update
+        public static final double ROTATE_KV =  NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED;
         public static final double SHOOTER_KV = 0.001425;
-         public static final double HOOD_KV = 0.075; // TODO: Update
+         public static final double HOOD_KV = 0.075;
 
         public static final int HOOD_SMART_CURRENT_LIMIT = 40;
-
-        public static final double ROTATE_KV =  NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED;
         //public static final double HOOD_KV = NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED; ;
 
         // Conversion factors and expected measured limits
@@ -273,8 +268,8 @@ public final class Constants {
         public static final double ROTATE_MIN_OUTPUT = -0.9;
         public static final double ROTATE_MAX_OUTPUT = 0.9;
 
-        public static final double SHOOTER_MIN_OUTPUT = -0.75;
-        public static final double SHOOTER_MAX_OUTPUT = 0.75;
+        public static final double SHOOTER_MIN_OUTPUT = -0.90;
+        public static final double SHOOTER_MAX_OUTPUT = 0.90;
 
         public static final double HOOD_MIN_OUTPUT = -1;
         public static final double HOOD_MAX_OUTPUT = 1;
@@ -284,9 +279,9 @@ public final class Constants {
 
         public static final double HOOD_MAX_POSITION = 35.0;
 
-        public static final double ROTATE_ERROR_THRESHOLD = 0.13;
+        public static final double ROTATE_ERROR_THRESHOLD = 0.113;
         public static final double SHOOTER_ERROR_THRESHOLD = 0.0;
-        public static final double HOOD_ERROR_THRESHOLD = 0.5;
+        public static final double HOOD_ERROR_THRESHOLD = 0.428;
 
 
 
