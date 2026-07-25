@@ -307,6 +307,20 @@ public final class Constants {
                     //,entry(8, new Double[]{ 0.0, 0.0})
         ));
 
+
+        public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE_ADJUSTED = new HashMap<Integer, Double[]>(
+                Map.ofEntries(
+                        entry(3, new Double[]{ 2600.0, 0.0}),
+                        entry(4,new Double[]{2600.0,3.8}),  //TODO: not tested (hallucinated valued)
+                        entry(5, new Double[]{ 2600.0, 7.5}),
+                        entry(6, new Double[]{ 2600.0, 10.0}),
+                        entry(7, new Double[]{ 2600.0, 13.5}),
+                        entry(8, new Double[]{ 2800.0, 13.5}),
+                        entry(9, new Double[]{ 3000.0, 15.0}),
+                        entry(10,new Double[]{3200.0,17.0}) // TODO: also a hallucinated value
+                        //,entry(8, new Double[]{ 0.0, 0.0})
+                ));
+
         public static final double SHOOTER_TARGET_FAR_SPEED = 3000.0;
         // public static final double SHOOTER_TARGET_CLOSE_SPEED = 5000.0;
     }
