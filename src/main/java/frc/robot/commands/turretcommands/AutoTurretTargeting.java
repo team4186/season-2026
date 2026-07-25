@@ -15,12 +15,12 @@ public class AutoTurretTargeting extends Command {
     private TurretSubsystem turretSubsystem;
     private Timer lastTagTimestamp;
     private LimelightRunner limelightRunner;
+
     private Translation2d stationLocation;
     private double homeFieldYaw;
     private final double kp = 0.9;
 
-    public double retrievedTurretVelocity = 0;
-    public double retrievedTurretAngle = 0;
+
 
     public AutoTurretTargeting(TurretSubsystem turretSubsystem)
     {
@@ -31,10 +31,8 @@ public class AutoTurretTargeting extends Command {
         boolean isRedAlliance = (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red);
         if (isRedAlliance) {
             this.stationLocation = Constants.StructureConstants.RED_SCORING_LOCATION;
-            // homeFieldYaw = 0.0;
         } else {
             this.stationLocation = Constants.StructureConstants.BLUE_SCORING_LOCATION;
-            // homeFieldYaw = 0.0;
         }
 
         addRequirements(this.turretSubsystem);
@@ -48,9 +46,9 @@ public class AutoTurretTargeting extends Command {
     @Override
     public void initialize() {
         // reset
-    //    turretSubsystem.updateHoodAngle(0.0);
+        turretSubsystem.updateHoodAngle(0.0);
         turretSubsystem.updateTurretRotation(0.0);
-    //    turretSubsystem.updateShooterSpeed(0.0);
+        turretSubsystem.updateShooterSpeed(0.0);
 
         // start timer
         lastTagTimestamp.start();
@@ -64,8 +62,7 @@ public class AutoTurretTargeting extends Command {
         // Adjust based on portion of full adjustment
 
         double[] targetingInfo = limelightRunner.getTurretTagBasicInfo();
-        // double[] targetingInfoWithOffset = limelightRunner.getTurretTagInfoWithOffsetPipeline();
-        turretSubsystem.moveHoodUp(15,0.18);
+
 
         double status = targetingInfo[0];
         double xOffset = targetingInfo[1];
@@ -83,10 +80,7 @@ public class AutoTurretTargeting extends Command {
 
                 SmartDashboard.putNumber("Limelight Tracking Tx_ADJUSTED", desiredAngle );
 
-                // Double[] results = Constants.TurretConstants.TURRET_LOOKUP_TABLE.getOrDefault( adjustedDist , new Double[]{0.0, 0.0});
                 turretSubsystem.updateTurretRotation(desiredAngle);
-                // turretSubsystem.updateHoodAngle( results[1] ); // TODO: Modify to bang bang control
-                // turretSubsystem.updateShooterSpeed( results[0] );
 
                 turretSubsystem.updateShooterSpeed(LimelightRunner.getInstance().getTurretVelocityFromDistance());
                 turretSubsystem.updateHoodAngle(LimelightRunner.getInstance().getHoodAngleFromDistance());
@@ -113,8 +107,7 @@ public class AutoTurretTargeting extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        //turretSubsystem.updateShooterSpeed(0.0);
-        //turretSubsystem.moveHoodDown(0.0); // TODO: Hood angle is bang bang controller
+
         turretSubsystem.updateTurretRotation(0.0);
         turretSubsystem.updateShooterSpeed(0.0);
         turretSubsystem.updateHoodAngle(0.0);
