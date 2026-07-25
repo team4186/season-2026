@@ -36,38 +36,30 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     @Override
-    public void periodic(){
-        SmartDashboard.putNumber( "Spin_Feed_Velocity", feedEncoder.getVelocity() );
-        SmartDashboard.putNumber( "Spin_Rotate_Velocity", rotateEncoder.getVelocity() );
+    public void periodic() {
+        SmartDashboard.putNumber("Spin_Feed_Velocity", feedEncoder.getVelocity());
+        SmartDashboard.putNumber("Spin_Rotate_Velocity", rotateEncoder.getVelocity());
     }
 
 
-    // TODO: Should we rename function? Also do we want to set power manually or leverage closed loop controller
-    // (Hint) How much do we care about maintaining consistent feeding and rotation speed?
-    public void rotateSpindexerSlow(){
-        rotateMotor.set(SpindexerConstants.ROTATE_SLOW_SPEED);
-        setAssistMotorSpeed(300.0); // RPM
-    }
-
-    public void setAssistMotorSpeed(double speed){
+    public void setAssistMotorSpeed(double speed) {
         assistCLController.setSetpoint(speed, SparkBase.ControlType.kVelocity, ClosedLoopSlot.kSlot1);
     }
 
-    public void rotateSpindexerFast(){
-        rotateMotor.set(SpindexerConstants.ROTATE_MAX_SPEED);
-        setAssistMotorSpeed(300.0); // RPM
-        //can create new constant that's different if needed
-    }
 
+    public void feed() {
+        double shooterSpeed = SmartDashboard.getNumber("Shooter_Velocity:", 0.0);
 
-    public void feed(){
-        double shooterSpeed = SmartDashboard.getNumber( "Shooter_Velocity:", 0.0);
+        if (shooterSpeed >= 1000) {
+            feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
+            rotateMotor.set(SpindexerConstants.ROTATE_MAX_SPEED);
+        } else {
+            feedMotor.stopMotor();
+            rotateMotor.stopMotor();
+        }
 
-        feedMotor.set(SpindexerConstants.FEED_MAX_SPEED);
-        rotateMotor.set(SpindexerConstants.ROTATE_MAX_SPEED);
         setAssistMotorSpeed(300.0);
     }
-
 
     public void stopMotors(){
         feedMotor.stopMotor();
