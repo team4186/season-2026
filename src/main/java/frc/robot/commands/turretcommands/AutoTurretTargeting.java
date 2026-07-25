@@ -82,8 +82,8 @@ public class AutoTurretTargeting extends Command {
 
                 turretSubsystem.updateTurretRotation(desiredAngle);
 
-                turretSubsystem.updateShooterSpeed(LimelightRunner.getInstance().getTurretVelocityFromDistance());
-                turretSubsystem.updateHoodAngle(LimelightRunner.getInstance().getHoodAngleFromDistance());
+                turretSubsystem.updateShooterSpeed(LimelightRunner.getInstance().getTurretVelocityCameraToAprilTag());
+                turretSubsystem.updateHoodAngle(LimelightRunner.getInstance().getHoodAngleCameraToAprilTag());
             } catch ( NullPointerException e ) {
                 SmartDashboard.getNumber("Error_LookupTable", distance);
             }

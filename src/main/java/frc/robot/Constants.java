@@ -296,7 +296,7 @@ public final class Constants {
         /**
          *  Lookup Table KEY: Distance in Feed  Value: { ShooterSpeed, HoodAngle}
          */
-        public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE = new HashMap<Integer, Double[]>(
+        public static final Map<Integer, Double[]> TURRET_LOOKUP_WRT_CAMERA = new HashMap<Integer, Double[]>(
             Map.ofEntries(
                     entry(2, new Double[]{ 2600.0, 0.0}),
                     entry(3, new Double[]{ 2600.0, 7.5}), // expected lower bound
@@ -308,7 +308,7 @@ public final class Constants {
         ));
 
 
-        public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE_ADJUSTED = new HashMap<Integer, Double[]>(
+        public static final Map<Integer, Double[]> TURRET_LOOKUP_WRT_POSE = new HashMap<Integer, Double[]>(
                 Map.ofEntries(
                         entry(3, new Double[]{ 2600.0, 0.0}),
                         entry(4,new Double[]{2600.0,3.8}),  //TODO: not tested (hallucinated valued)
