@@ -317,7 +317,8 @@ public final class Constants {
                         entry(7, new Double[]{ 2600.0, 13.5}),
                         entry(8, new Double[]{ 2800.0, 13.5}),
                         entry(9, new Double[]{ 3000.0, 15.0}),
-                        entry(10,new Double[]{3200.0,17.0}) // TODO: also a hallucinated value
+                        entry(10,new Double[]{3200.0,17.0}),
+                        entry(11,new Double[]{3400.0,19.0})// TODO: also a hallucinated value
                         //,entry(8, new Double[]{ 0.0, 0.0})
                 ));
 

@@ -191,6 +191,18 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+    public void VariablePairExtension(double speed){
+        if(!isStarboardExtended()){
+            extensionStarboardMotor.set(speed);
+        }else{
+            extensionStarboardMotor.stopMotor();
+        }
+        if(!isPortExtended()){
+            extensionPortMotor.set(speed);
+        }else{
+            extensionPortMotor.stopMotor();
+        }
+    }
 
     public void simplePairRetraction(){
         if(!isStarboardRetracted()){
@@ -302,6 +314,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command extendIntake(){
         return Commands.runOnce(this::simplePairExtension,this).repeatedly();
+    }
+
+    public Command variableExtendIntake(double speed){
+        return Commands.runOnce(()->VariablePairExtension(speed),this).repeatedly();
     }
 
 

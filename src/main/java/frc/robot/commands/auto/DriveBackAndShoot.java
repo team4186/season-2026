@@ -119,6 +119,7 @@ public class DriveBackAndShoot  extends Command {
     @Override
     public void end(boolean interrupted) {
         swerve.lock();
+        spindexer.stopMotors();
         turret.updateHoodAngle(0.0);
         turret.updateTurretRotation(0.0);
         turret.updateShooterSpeed(0.0);
