@@ -319,15 +319,6 @@ public class RobotContainer {
            //Teleop Command Keybinds
 
             // TODO: Test align to target on field, physically align the robot to ideal position and note it here
-            // Ideally as an x offset that would work for +- depending on side of approach
-            // RED N, RED S, BLUE N, BLUE S
-            Pose2d startPose = new Pose2d(new Translation2d(3.580, 4.179),
-                    Rotation2d.fromDegrees(180));
-            Pose2d targetPose = new Pose2d(new Translation2d(2.666, 4.179),
-                    Rotation2d.fromDegrees(180));
-
-        //         PLACE ALL TELEOP KEYBINDS HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
             turretSubsystem.setDefaultCommand(Commands.runOnce(turretSubsystem::returnTurretToZero, turretSubsystem));
 
 
@@ -340,13 +331,9 @@ public class RobotContainer {
                     .onFalse(intakeSubsystem.stopPickupMotor());
              //   TODO:  create command to set pickup speed reverse, has priority over auto set
            //TODO: create command to rotate turret maually for buttons 3,4,and5
-            joystickDriver.button(3)
-                    .whileTrue(simplePassing);
-            joystickDriver.button(4)
-                    .whileTrue(intakeSubsystem.autoSetPickupSpeed())
-                    .onFalse(intakeSubsystem.stopPickupMotor());
+
 //            joystickDriver.button(6)
-//                   .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly());
+//                   .whileTrue();
            joystickDriver.button(7)
                     .whileTrue(Commands.runOnce(
                             ()->climbSubsystem.simpleClimbDeploy(Constants.ClimbConstants.CLIMB_MAX_SPEED), climbSubsystem).repeatedly())
@@ -360,16 +347,6 @@ public class RobotContainer {
            joystickDriver.button(12).onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
 
 
-            ChassisSpeeds slowSpeed = new ChassisSpeeds(0.0, 0, Rotation2d.fromDegrees(45.0).getRadians());
-            ChassisSpeeds fastSpeed = new ChassisSpeeds(0.0,0,Rotation2d.fromDegrees(180).getRadians());
-            ChassisSpeeds findMaxSpeed = new ChassisSpeeds(0.0, 0,Rotation2d.fromDegrees(720.0).getRadians());
-
-
-            //drive motor testing functions
-//            joystickDriver.button(4).whileTrue(Commands.runOnce(()->drivebase.drive(findMaxSpeed), drivebase).repeatedly());
-//            joystickDriver.button(5).whileTrue(Commands.runOnce(()->drivebase.drive(slowSpeed), drivebase).repeatedly());
-//            joystickDriver.button(6).whileTrue(Commands.runOnce(()->drivebase.drive(fastSpeed), drivebase).repeatedly());
-
             //OPERATOR:
             joystickOperator.trigger()
                     .whileTrue(simplePoseTracking);
@@ -377,41 +354,24 @@ public class RobotContainer {
                     .whileTrue(simpleTurretTracking);
             joystickOperator.button(3)
                 .whileTrue(turretSubsystem.setShooterMotor(0.0));
-            joystickOperator.button(4)
-                    .whileTrue(intakeSubsystem.retractIntake())
-                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
-
-
-//            joystickOperator.button(5)
-//                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodDown(0.0),turretSubsystem).repeatedly())
-//                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
-            joystickOperator.button(6)
-                    .whileTrue(intakeSubsystem.extendIntake())
-                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
-
-//            joystickOperator.button(7)
-//                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L3_POSITION, Constants.TurretConstants.HOOD_L3_SPEED),turretSubsystem).repeatedly())
-//                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
-//            joystickOperator.button(9)
-//                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L2_POSITION,Constants.TurretConstants.HOOD_L2_SPEED),turretSubsystem).repeatedly())
-//                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
-//            joystickOperator.button(11)
-//                    .whileTrue(Commands.runOnce(() -> turretSubsystem.moveHoodUp(Constants.TurretConstants.HOOD_L1_POSITION,Constants.TurretConstants.HOOD_L1_SPEED),turretSubsystem).repeatedly())
-//                    .onFalse(Commands.runOnce(turretSubsystem::stopHoodMotor, turretSubsystem));
+            joystickOperator.button(5)
+                    .whileTrue(intakeSubsystem.autoSetPickupSpeed())
+                    .onFalse(intakeSubsystem.stopPickupMotor());
 
             joystickOperator.button(7)
-                    .whileTrue(turretSubsystem.setHoodAngle(10));
-            joystickOperator.button(9)
-                    .whileTrue(turretSubsystem.setHoodAngle(0));
+                    .whileTrue(simplePassing);
 
+            joystickOperator.button(9)
+                    .whileTrue(intakeSubsystem.extendIntake())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
 
             joystickOperator.button(8)
                     .whileTrue(turretSubsystem.setShooterMotor(3000.0))
                     .onFalse(turretSubsystem.setShooterMotor(0.0));
-            joystickOperator.button(10)
-                    .whileTrue(turretSubsystem.setShooterMotor(2600.0))
-                    .onFalse(turretSubsystem.setShooterMotor(0.0));
+            joystickOperator.button(11)
+                    .whileTrue(intakeSubsystem.retractIntake())
+                    .whileFalse(Commands.runOnce(intakeSubsystem::stopTranslation, intakeSubsystem));
             ;
 //            joystickOperator.button(12)
 //                    .onTrue(turretSubsystem.setShooterMotor(0.0));
