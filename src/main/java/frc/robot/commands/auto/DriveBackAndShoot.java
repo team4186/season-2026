@@ -14,19 +14,16 @@ import edu.wpi.first.wpilibj.Timer;
 public class DriveBackAndShoot  extends Command {
 
 
-    private TurretSubsystem turret;
-    private IntakeSubsystem intake;
-    private SwerveSubsystem swerve;
-    private SpindexerSubsystem spindexer;
+    private final TurretSubsystem turret;
+    private final SwerveSubsystem swerve;
+    private final SpindexerSubsystem spindexer;
     private boolean isCommandFinished;
-
-    private Pose2d startingCoords;
 
     private STATE currentState;
 
-    private Timer autoTimer;
+    private final Timer autoTimer;
 
-    private Translation2d speed = new Translation2d(-1.0,0.0);
+    private final Translation2d speed = new Translation2d(-1.0,0.0);
     // Robot State
 
     enum STATE {
@@ -40,10 +37,10 @@ public class DriveBackAndShoot  extends Command {
     public DriveBackAndShoot(TurretSubsystem turret, IntakeSubsystem intake, SwerveSubsystem swerve, SpindexerSubsystem spindexer){
         this.isCommandFinished = false;
         this.turret = turret;
-        this.intake = intake;
         this.swerve = swerve;
         this.spindexer = spindexer;
-        autoTimer = new Timer();
+        this.autoTimer = new Timer();
+
         addRequirements(turret,intake,swerve,spindexer);
     }
 
@@ -51,7 +48,6 @@ public class DriveBackAndShoot  extends Command {
     @Override
     public void initialize(){
         currentState = STATE.DRIVE;
-        this.startingCoords = this.swerve.getPose();
         swerve.zeroGyroWithAlliance();
         autoTimer.start();
     }

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.auto.DriveBackAndPrepare;
 import frc.robot.commands.auto.DriveBackAndShoot;
 import frc.robot.commands.intakecommands.ExtendIntakeCommand;
 import frc.robot.commands.intakecommands.RetractIntakeCommand;
@@ -106,6 +107,7 @@ public class RobotContainer {
 
     //Auto All in One Commands
     DriveBackAndShoot driveBackAndShootCommand = new DriveBackAndShoot(turretSubsystem,intakeSubsystem, drivebase,spindexerSubsystem);
+    DriveBackAndPrepare driveBackandLock = new DriveBackAndPrepare(drivebase, -1.0, 1.0);
 
     //Me AND Rishab goon to femboys but no one will ever see this comment becasue it's at the bottom 3.
 
@@ -183,11 +185,14 @@ public class RobotContainer {
 
         // Create the NamedCommands that will be used in PathPlanner
         NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-        NamedCommands.registerCommand("climbArmUp",Commands.runOnce(() ->
+        NamedCommands.registerCommand("climb_arm_up",Commands.runOnce(() ->
                 climbSubsystem.simpleClimbDeploy(1.0), climbSubsystem).repeatedly());
-        NamedCommands.registerCommand("climbArmDown",Commands.runOnce(() ->
+        NamedCommands.registerCommand("climb_arm_down",Commands.runOnce(() ->
                 climbSubsystem.simpleClimbMoveDown(-1.0), climbSubsystem).repeatedly());
-        //NamedCommands.registerCommand("");
+
+        NamedCommands.registerCommand("drive_back_and_lock", driveBackandLock);
+        NamedCommands.registerCommand("run_spindexer", Commands.runOnce(spindexerSubsystem::feed).repeatedly());
+        NamedCommands.registerCommand("turret_targeting", simplePoseTracking);
 
 
 
