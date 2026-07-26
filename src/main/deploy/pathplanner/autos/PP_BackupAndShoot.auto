@@ -5,28 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "drive_back_and_lock"
+            "pathName": "DriveBack"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "turret_targeting"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "run_spindexer"
-                }
-              }
-            ]
+            "name": "named command to target and shoot goes here"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterToClimb"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "named command to drive forward and climb goes here"
           }
         }
       ]
