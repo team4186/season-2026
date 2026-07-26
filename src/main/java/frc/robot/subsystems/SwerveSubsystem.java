@@ -64,10 +64,10 @@ public class SwerveSubsystem extends SubsystemBase
     SmartDashboard.putData("Field", field);
 
     boolean blueAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
-    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
+    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(4),
             Meter.of(4)),
             Rotation2d.fromDegrees(0))
-            : new Pose2d(new Translation2d(Meter.of(16),
+            : new Pose2d(new Translation2d(Meter.of(12.5),
             Meter.of(4)),
             Rotation2d.fromDegrees(180));
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
