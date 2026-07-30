@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -35,8 +36,8 @@ import static java.util.Map.entry;
  */
 public final class Constants {
 
-    // public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-    public static final double ROBOT_MASS = (112.72) * 0.453592; // 32lbs * kg per pound
+    // public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // kg per pound
+    public static final double ROBOT_MASS = (114.5 + 13.4 + 15.3) * 0.453592; // robot + battery + bumper (143.2 lbs) kg per pound
     public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag // TODO: Modify?
     public static final double MAX_SPEED = Units.feetToMeters(13.76); //orig value 14.5
@@ -48,15 +49,18 @@ public final class Constants {
 
         // Maximum speed of the robot in meters per second, used to limit acceleration.
     public static final class AutonConstants {
-            //         public static final PIDConstants TRANSLATION_PID = new PIDConstants(
-            //                 0.7,
-            //                 0,
-            //                 0);
-            //         public static final PIDConstants ANGLE_PID = new PIDConstants(
-            //                 0.4,
-            //                 0,
-            //                 0.01);
-            //Left and right are relative to robot looking at tags.
+        // default path planner 5, 0, 0
+        // default yagsl 0.7, 0, 0
+        public static final PIDConstants TRANSLATION_PID = new PIDConstants(
+                0.7,
+                0,
+                0);
+        // default path planner 5, 0, 0
+        // default yagsl 0.4, 0, 0.01
+        public static final PIDConstants ANGLE_PID = new PIDConstants(
+                0.4,
+                0,
+                0.01);
     }
 
 
@@ -236,25 +240,20 @@ public final class Constants {
         public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.0;
 
-        public static final double HOOD_P = 0.005;
+        public static final double HOOD_P = 0.01;
         public static final double HOOD_I = 0.0;
         public static final double HOOD_D = 0.0;
 
-        public static final double TURRET_ROTATE_ALLOWED_ERROR = 0.4;
-        // FeedForward // TODO: update
-
+        // FeedForward
         public static final double ROTATE_KS = 0.51;
         public static final double SHOOTER_KS = 0.185;
-        public static final double HOOD_KS = 1.9; // TODO: Update
-
-
-        // public static final double ROTATE_KV = 0.0; // TODO: Update
-        public static final double SHOOTER_KV = 0.001425;
-         public static final double HOOD_KV = 0.008; // TODO: Update
-
-        public static final int HOOD_SMART_CURRENT_LIMIT = 40;
+        public static final double HOOD_KS = 0.7; // TODO: Update
 
         public static final double ROTATE_KV =  NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED;
+        public static final double SHOOTER_KV = 0.001425;
+         public static final double HOOD_KV = 0.075;
+
+        public static final int HOOD_SMART_CURRENT_LIMIT = 40;
         //public static final double HOOD_KV = NOMINAL_VOLTAGE / NeoMotorConstants.NEO_550_FREE_SPEED; ;
 
         // Conversion factors and expected measured limits
@@ -269,20 +268,20 @@ public final class Constants {
         public static final double ROTATE_MIN_OUTPUT = -0.9;
         public static final double ROTATE_MAX_OUTPUT = 0.9;
 
-        public static final double SHOOTER_MIN_OUTPUT = -0.75;
-        public static final double SHOOTER_MAX_OUTPUT = 0.75;
+        public static final double SHOOTER_MIN_OUTPUT = -0.90;
+        public static final double SHOOTER_MAX_OUTPUT = 0.90;
 
-        public static final double HOOD_MIN_OUTPUT = -0.4;
-        public static final double HOOD_MAX_OUTPUT = 0.4;
+        public static final double HOOD_MIN_OUTPUT = -1;
+        public static final double HOOD_MAX_OUTPUT = 1;
 
         public static final double HOOD_UP_SPEED = 0.4;
         public static final double HOOD_DOWN_SPEED = -0.35;
 
         public static final double HOOD_MAX_POSITION = 35.0;
 
-        public static final double ROTATE_ERROR_THRESHOLD = 0.13;
+        public static final double ROTATE_ERROR_THRESHOLD = 0.113;
         public static final double SHOOTER_ERROR_THRESHOLD = 0.0;
-        public static final double HOOD_ERROR_THRESHOLD = 0.0;
+        public static final double HOOD_ERROR_THRESHOLD = 0.428;
 
 
 
@@ -297,31 +296,31 @@ public final class Constants {
         /**
          *  Lookup Table KEY: Distance in Feed  Value: { ShooterSpeed, HoodAngle}
          */
-        public static final Map<Integer, Double[]> TURRET_LOOKUP_TABLE = new HashMap<Integer, Double[]>(
+        public static final Map<Integer, Double[]> TURRET_LOOKUP_WRT_CAMERA = new HashMap<Integer, Double[]>(
             Map.ofEntries(
-                    entry(0, new Double[]{ 0.0, 0.0}),
-                    entry(1, new Double[]{ 30000.0, 0.0}), // expected lower bound
-                    entry(2, new Double[]{ 0.0, 0.0}),
-                    entry(3, new Double[]{ 0.0, 0.0}),
-                    entry(4, new Double[]{ 0.0, 0.0}),
-                    entry(5, new Double[]{ 3000.0, 7.5}),
-                    entry(6, new Double[]{ 0.0, 0.0}),
-                    entry(7, new Double[]{ 0.0, 0.0}),
-                    entry(8, new Double[]{ 0.0, 0.0}),
-                    entry(9, new Double[]{ 0.0, 0.0}),
-                    entry(10, new Double[]{ 0.0, 0.0}),
-                    entry(11, new Double[]{ 0.0, 0.0}),
-                    entry(12, new Double[]{ 0.0, 0.0}),
-                    entry(13, new Double[]{ 0.0, 0.0}),
-                    entry(14, new Double[]{ 0.0, 0.0}),
-                    entry(15, new Double[]{ 0.0, 0.0}),
-                    entry(16, new Double[]{ 0.0, 0.0}),
-                    entry(17, new Double[]{ 0.0, 0.0}),
-                    entry(18, new Double[]{ 0.0, 0.0}),
-                    entry(19, new Double[]{ 0.0, 0.0}),
-                    entry(20, new Double[]{ 0.0, 0.0}), // expected upper bound
-                    entry(21, new Double[]{ 0.0, 0.0})
+                    entry(2, new Double[]{ 2600.0, 0.0}),
+                    entry(3, new Double[]{ 2600.0, 7.5}), // expected lower bound
+                    entry(4, new Double[]{ 2600.0, 10.0}),
+                    entry(5, new Double[]{ 2600.0, 13.5}),
+                    entry(6, new Double[]{ 2800.0, 13.5}),
+                    entry(7, new Double[]{ 3000.0, 15.0})
+                    //,entry(8, new Double[]{ 0.0, 0.0})
         ));
+
+
+        public static final Map<Integer, Double[]> TURRET_LOOKUP_WRT_POSE = new HashMap<Integer, Double[]>(
+                Map.ofEntries(
+                        entry(3, new Double[]{ 2600.0, 0.0}),
+                        entry(4,new Double[]{2600.0,3.8}),  //TODO: not tested (hallucinated valued)
+                        entry(5, new Double[]{ 2600.0, 7.5}),
+                        entry(6, new Double[]{ 2600.0, 10.0}),
+                        entry(7, new Double[]{ 2600.0, 13.5}),
+                        entry(8, new Double[]{ 2800.0, 13.5}),
+                        entry(9, new Double[]{ 3000.0, 15.0}),
+                        entry(10,new Double[]{3200.0,17.0}),
+                        entry(11,new Double[]{3400.0,19.0})// TODO: also a hallucinated value
+                        //,entry(8, new Double[]{ 0.0, 0.0})
+                ));
 
         public static final double SHOOTER_TARGET_FAR_SPEED = 3000.0;
         // public static final double SHOOTER_TARGET_CLOSE_SPEED = 5000.0;
@@ -362,7 +361,7 @@ public final class Constants {
         public static final double EXTENSION_I = 0.0;
         public static final double EXTENSION_D = 0.0;
 
-        public static final double PICKUP_P = 0.0;
+        public static final double PICKUP_P = 0.00005;
         public static final double PICKUP_I = 0.0;
         public static final double PICKUP_D = 0.0;
 
@@ -370,8 +369,8 @@ public final class Constants {
         public static final double EXTENSION_KS = 0.0;
         public static final double EXTENSION_KV = 0.0;
 
-        public static final double PICKUP_KS = 0.0;
-        public static final double PICKUP_KV = 0.0;
+        public static final double PICKUP_KS = 0.021;
+        public static final double PICKUP_KV = 0.00171;
 
         public static final double EXTENSION_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
         public static final double EXTENSION_VELOCITY_CONVERSION_FACTOR = 1.0;
@@ -386,31 +385,32 @@ public final class Constants {
         public static final double PICKUP_ERROR_THRESHOLD = 0.0;
 
         // Pickup values
-        public static final double PICKUP_POSITION_CONVERSION_FACTOR = 2 * Math.PI * 0.762; // Convert to rev to cm. 0.762 in radius of gear in cm
-        public static final double PICKUP_VELOCITY_CONVERSION_FACTOR = 1.0;
+        public static final double PICKUP_POSITION_CONVERSION_FACTOR = 1.0; // Convert to rev to cm. 0.762 in radius of gear in cm
+        public static final double PICKUP_VELOCITY_CONVERSION_FACTOR = 1.25;
         public static final double PICKUP_MIN_OUTPUT = -0.75;
         public static final double PICKUP_MAX_OUTPUT = 0.75;
 
         //End of Rail values
         public static final double INTAKE_RAIL_END = 31.0; //
         public static final double INTAKE_RAIL_START = 0.0;
-
-
-
     }
 
 
     public static final class SpindexerConstants {
         public static final SparkBaseConfig.IdleMode FEED_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
         public static final SparkBaseConfig.IdleMode ROTATE_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
+        public static final SparkBaseConfig.IdleMode ASSIST_IDLE_MODE = SparkBaseConfig.IdleMode.kCoast;
 
         //TODO: change current limit to lower?
         public static final int FEED_CURRENT_LIMIT = 60;
         public static final int ROTATE_CURRENT_LIMIT = 50;
+        public static final int ASSIST_CURRENT_LIMIT = 40;
 
         // Spark ID'S
         public static final int ROTATE_MOTOR_ID = 25;
         public static final int FEED_MOTOR_ID = 26;
+        public static final int ASSIST_MOTOR_ID = 24;
+
 
         // Feed gear ratios & Rotate gear ratios TODO: UPDATE
         public static final double FEED_GEAR_RATIO = 1; // 1:1
@@ -425,17 +425,27 @@ public final class Constants {
         public static final double ROTATE_I = 0.0;
         public static final double ROTATE_D = 0.0;
 
+        public static final double ASSIST_P = 0.0;
+        public static final double ASSIST_I = 0.0;
+        public static final double ASSIST_D = 0.0;
+
+
         // FeedForward // TODO: UPDATE
         public static final double FEED_KV = 0;
         public static final double ROTATE_KV = 0;
+        public static final double ASSIST_KV = 0.022;
         public static final double FEED_KS = 0.185;
         public static final double ROTATE_KS = 0.185;
+        public static final double ASSIST_KS = 0.225;
+
 
         public static final double FEED_POSITION_CONVERSION_FACTOR = 1.0;
         public static final double ROTATE_POSITION_CONVERSION_FACTOR = 1.0;
+        public static final double ASSIST_POSITION_CONVERSION_FACTOR = 1.0;
 
         public static final double FEED_VELOCITY_CONVERSION_FACTOR = 1.0; // RPM
         public static final double ROTATE_VELOCITY_CONVERSION_FACTOR = 1.0; // RPM
+        public static final double ASSIST_VELOCITY_CONVERSION_FACTOR = 1.0; // RPM
 
         public static final double FEED_MIN_OUTPUT = -0.75;
         public static final double FEED_MAX_OUTPUT = 0.75;

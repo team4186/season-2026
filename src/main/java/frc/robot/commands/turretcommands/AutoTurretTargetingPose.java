@@ -10,7 +10,7 @@ import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.vision.LimelightRunner;
 
 
-public class AutoTurretTargeting extends Command {
+public class AutoTurretTargetingPose extends Command {
 
     private TurretSubsystem turretSubsystem;
     private Timer lastTagTimestamp;
@@ -22,7 +22,7 @@ public class AutoTurretTargeting extends Command {
 
 
 
-    public AutoTurretTargeting(TurretSubsystem turretSubsystem)
+    public AutoTurretTargetingPose(TurretSubsystem turretSubsystem)
     {
         this.lastTagTimestamp = new Timer();
         this.turretSubsystem = turretSubsystem;
@@ -66,7 +66,6 @@ public class AutoTurretTargeting extends Command {
 
         double status = targetingInfo[0];
         double xOffset = targetingInfo[1];
-        double distance = targetingInfo[2];
 
         // -1 is Failure to find tag, skip adjustment
         SmartDashboard.putNumber("Limelight Tracking STATUS", status);
@@ -74,18 +73,23 @@ public class AutoTurretTargeting extends Command {
             lastTagTimestamp.restart();
             SmartDashboard.putNumber("Limelight Tracking Tx", xOffset);
             try {
-                int adjustedDist = (int) distance;
                 double currTurretPosition = turretSubsystem.getTurretPosition();
                 double desiredAngle = currTurretPosition + (xOffset * kp);
+
+
+                double currentX = SmartDashboard.getNumber("Swerve_X_Position",-67); //This should NEVER EVER not get a number!!!
+                double currentY = SmartDashboard.getNumber("Swerve_Y_Position",-67);
+
+                Translation2d robotPose = new Translation2d(currentX,currentY);
 
                 SmartDashboard.putNumber("Limelight Tracking Tx_ADJUSTED", desiredAngle );
 
                 turretSubsystem.updateTurretRotation(desiredAngle);
 
-                turretSubsystem.updateShooterSpeed(LimelightRunner.getInstance().getTurretVelocityCameraToAprilTag());
-                turretSubsystem.updateHoodAngle(LimelightRunner.getInstance().getHoodAngleCameraToAprilTag());
+                turretSubsystem.updateShooterSpeed(LimelightRunner.getInstance().getTurretVelocityUsingPose(robotPose, stationLocation));
+                turretSubsystem.updateHoodAngle(LimelightRunner.getInstance().getHoodAngleUsingPose(robotPose, stationLocation));
             } catch ( NullPointerException e ) {
-                SmartDashboard.getNumber("Error_LookupTable", distance);
+                System.out.println("YOU HAVE AN ERROR! FIX IT! TRIPPLE T COMPLES YOU!");
             }
         }
 

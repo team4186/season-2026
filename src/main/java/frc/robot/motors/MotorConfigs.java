@@ -78,7 +78,7 @@ public final class MotorConfigs {
                 TurretConstants.ROTATE_MIN_OUTPUT,
                 TurretConstants.ROTATE_MAX_OUTPUT,
                 ClosedLoopSlot.kSlot0)
-            .allowedClosedLoopError(TurretConstants.TURRET_ROTATE_ALLOWED_ERROR,ClosedLoopSlot.kSlot0)
+            .allowedClosedLoopError(TurretConstants.ROTATE_ERROR_THRESHOLD, ClosedLoopSlot.kSlot0)
             .feedForward
             .kS(
                 TurretConstants.ROTATE_KS,
@@ -352,5 +352,44 @@ public final class MotorConfigs {
             );
 
             return motor;
+    }
+
+    public SparkMax applySpindexerAssistSparkConfig(
+            SparkMax motor,
+            boolean inverse
+    ) {
+        SparkBaseConfig config = DefaultSparkMaxConfig;
+
+        config
+                .inverted(inverse)
+                .smartCurrentLimit(SpindexerConstants.ASSIST_CURRENT_LIMIT)
+                .idleMode(SpindexerConstants.ASSIST_IDLE_MODE);
+
+        config.encoder
+                .positionConversionFactor(SpindexerConstants.ASSIST_POSITION_CONVERSION_FACTOR)
+                .velocityConversionFactor(SpindexerConstants.ASSIST_VELOCITY_CONVERSION_FACTOR);
+
+        config.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pid(
+                        SpindexerConstants.ASSIST_P,
+                        SpindexerConstants.ASSIST_I,
+                        SpindexerConstants.ASSIST_D,
+                        ClosedLoopSlot.kSlot1)
+                .feedForward
+                .kS(
+                        SpindexerConstants.ASSIST_KS,
+                        ClosedLoopSlot.kSlot1)
+                .kV(
+                        SpindexerConstants.ASSIST_KV,
+                        ClosedLoopSlot.kSlot1);
+
+        motor.configure(
+                config,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters
+        );
+
+        return motor;
     }
 }

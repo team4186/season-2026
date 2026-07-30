@@ -5,7 +5,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
-public class SimpleSequentialAuto extends Command {
+public class SimpleSequentialAutoTemplate extends Command {
 
     private TurretSubsystem turret;
     private IntakeSubsystem intake;
@@ -22,7 +22,7 @@ public class SimpleSequentialAuto extends Command {
     }
 
 
-    public SimpleSequentialAuto(){
+    public SimpleSequentialAutoTemplate(){
         this.isCommandFinished = false;
         this.turret = turret;
         this.intake = intake;

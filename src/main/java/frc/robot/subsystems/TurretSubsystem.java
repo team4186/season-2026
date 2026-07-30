@@ -54,7 +54,7 @@ public class TurretSubsystem extends SubsystemBase {
     private final RelativeEncoder shooterRelativeEncoder;
 
     // K: Distance (Rounded to nearest Integer in feet), V: { ShooterRpm, HoodAngle }
-    private final Map<Integer, Double[]> lookupTable;
+//    private final Map<Integer, Double[]> lookupTable;
     private final Timer aprilTagLastTime;
     private final LimelightRunner limelightRunner;
 
@@ -83,7 +83,7 @@ public class TurretSubsystem extends SubsystemBase {
         this.shooterRelativeEncoder = shooterMotor.getEncoder();
         this.hoodRelativeEncoder = hoodMotor.getEncoder();
 
-        this.lookupTable = TurretConstants.TURRET_LOOKUP_TABLE;
+//        this.lookupTable = TurretConstants.TURRET_LOOKUP_TABLE;
         this.limelightRunner = LimelightRunner.getInstance();
         aprilTagLastTime = new Timer();
         aprilTagLastTime.start();
@@ -103,7 +103,7 @@ public class TurretSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Shooter_is_at_set_speed", isShooterAtSetpoint());
         SmartDashboard.putBoolean("Hood_is_at_set_angle", isHoodAtSetpoint());
         SmartDashboard.putBoolean("Turret_is_at_target_position", isTurretAtSetpoint());
-        SmartDashboard.putNumber("Print something to smart dashboard", lookupTable.get(2)[0]);
+//        SmartDashboard.putNumber("Print something to smart dashboard", lookupTable.get(2)[0]);
         SmartDashboard.putNumber("Hood Motor Voltage",hoodMotor.getAppliedOutput());
 
         if (getHoodLimitSwitch()) {
@@ -279,6 +279,10 @@ public class TurretSubsystem extends SubsystemBase {
         return Commands.runOnce(() -> updateHoodAngle(getHoodPosition() - 0.5), this);
     }
 
+
+    public Command setHoodAngle(double angle) {
+        return Commands.runOnce(()-> updateHoodAngle(angle),this);
+    }
 
     public Command increaseShooterSpeed() {
         return Commands.runOnce(() -> updateShooterSpeed(getShooterVelocity() + 200), this);

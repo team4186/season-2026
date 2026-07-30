@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Basic Climb"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "pathName": "DriveBack"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "climbArmUp"
+            "name": "named command to target and shoot goes here"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterToClimb"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "named command to drive forward and climb goes here"
           }
         }
       ]

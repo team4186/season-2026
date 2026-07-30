@@ -191,6 +191,18 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+    public void VariablePairExtension(double speed){
+        if(!isStarboardExtended()){
+            extensionStarboardMotor.set(speed);
+        }else{
+            extensionStarboardMotor.stopMotor();
+        }
+        if(!isPortExtended()){
+            extensionPortMotor.set(speed);
+        }else{
+            extensionPortMotor.stopMotor();
+        }
+    }
 
     public void simplePairRetraction(){
         if(!isStarboardRetracted()){
@@ -212,13 +224,14 @@ public class IntakeSubsystem extends SubsystemBase {
     public void automaticSetPickupSteed(){
         if(isPortRetracted() || isStarboardRetracted()){
             // pickupController.setSetpoint(0.0, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
-            pickupMotor.set(0.0);
+            pickupController.setSetpoint(0.0, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
         }else if(getPortPosition()<IntakeConstants.INTAKE_RAIL_END/2){
             // pickupController.setSetpoint(IntakeConstants.PICKUP_SLOW_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
-            pickupMotor.set(0.2);
+            pickupController.setSetpoint(800.0, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
         }else if(getPortPosition()>=IntakeConstants.INTAKE_RAIL_END/2){
             // pickupController.setSetpoint(IntakeConstants.PICKUP_FAST_SPEED_SETPOINT, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
-            pickupMotor.set(0.5);
+            pickupController.setSetpoint(3000.0, SparkBase.ControlType.kVelocity,ClosedLoopSlot.kSlot1);
+
         }
     }
 
@@ -232,6 +245,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
+    public void setIntake(double speed){
+
+    }
 
     public void pickupBallsSlow(){
         pickupMotor.set(IntakeConstants.PICKUP_SLOW_SPEED);
@@ -249,7 +265,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     public void stopPickup(){
-        pickupMotor.stopMotor();
+        pickupController.setSetpoint(
+                0.0,
+                SparkBase.ControlType.kVelocity,
+                ClosedLoopSlot.kSlot1);
     }
 
 
@@ -257,6 +276,12 @@ public class IntakeSubsystem extends SubsystemBase {
         extensionPortMotor.stopMotor();
         extensionStarboardMotor.stopMotor();
         pickupMotor.stopMotor();
+    }
+
+    public void  updatePickupSpeed(double speed) {
+        pickupController.setSetpoint(
+                speed,
+                SparkBase.ControlType.kVelocity, ClosedLoopSlot.kSlot1);
     }
 
 
@@ -289,6 +314,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command extendIntake(){
         return Commands.runOnce(this::simplePairExtension,this).repeatedly();
+    }
+
+    public Command variableExtendIntake(double speed){
+        return Commands.runOnce(()->VariablePairExtension(speed),this).repeatedly();
     }
 
 

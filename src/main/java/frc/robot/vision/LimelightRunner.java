@@ -3,7 +3,9 @@ package frc.robot.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -24,7 +26,6 @@ public class LimelightRunner {
 
     public final String limelightTurret = LimelightConstants.LIMELIGHT_TURRET;
     public final String limelightClimb = LimelightConstants.LIMELIGHT_ROBOT;
-
 //    private final DoubleSubscriber tvSub;
 //    private final DoubleSubscriber txSub;
 //    private final DoubleSubscriber tySub;
@@ -69,6 +70,42 @@ public class LimelightRunner {
         }else{
             LimelightHelpers.setLEDMode_ForceOff( limelightClimb );
         }
+
+    }
+
+
+    // Using CAMERA_TO_TAG Limelight Measurement get hood value from lookup table
+    public double getHoodAngleCameraToAprilTag(){
+        int key =  (int) Math.round(getDistanceToTagWithHelperWRTCamera( limelightTurret ) * 3.28084);
+        return Constants.TurretConstants.TURRET_LOOKUP_WRT_CAMERA.getOrDefault(key,new Double[]{0.0,0.0})[1];
+    }
+
+
+    // Using field location, measure distance and pass back hood angle
+    public double getHoodAngleUsingPose(Translation2d robotPose, Translation2d targetPose){
+        int key = (int) Math.round(getDistanceInFeetBetweenTwoPoses(robotPose, targetPose));
+        return Constants.TurretConstants.TURRET_LOOKUP_WRT_POSE.getOrDefault(key,new Double[]{0.0,0.0})[1];
+    }
+
+
+    // Using CAMERA_TO_TAG Limelight Measurement get shooter value from lookup table
+    public double getTurretVelocityCameraToAprilTag(){
+        int key =  (int) Math.round(getDistanceToTagWithHelperWRTCamera( limelightTurret ) * 3.28084);
+        return Constants.TurretConstants.TURRET_LOOKUP_WRT_CAMERA.getOrDefault(key,new Double[]{0.0,0.0})[0];
+    }
+
+
+    // Using field location, measure distance and pass back shooter speed
+    public double getTurretVelocityUsingPose(Translation2d robotPose, Translation2d targetPose){
+        int key = (int) Math.round(getDistanceInFeetBetweenTwoPoses(robotPose, targetPose));
+        return Constants.TurretConstants.TURRET_LOOKUP_WRT_POSE.getOrDefault(key,new Double[]{0.0,0.0})[0];
+    }
+
+
+    private double getDistanceInFeetBetweenTwoPoses(Translation2d poseOne, Translation2d poseTwo){
+        // Pose2d in meters
+        double distanceMeters = Math.sqrt((Math.pow(poseOne.getY() - poseTwo.getY(), 2) + Math.pow(poseOne.getX() - poseTwo.getX(), 2)));
+        return distanceMeters * 3.28084;
     }
 
 
@@ -125,103 +162,6 @@ public class LimelightRunner {
             );
         }
     }
-
-
-    /**
-     * Setup Turret Limelight pipelines for offset ghost targeting
-     */
-//    public void turretPipelineSetup( boolean isRedAlliance ) {
-//        switchToPipeline(limelightTurret,0);
-//        resetFiducial3DOffset(limelightTurret);
-//
-//        switchToPipeline(limelightTurret, 1);
-//        setFiducial3DOffset(limelightTurret, 1.0,1.0,1.000);
-//
-//        switchToPipeline(limelightTurret, 0);
-//        setFiducial3DOffset(limelightTurret, 2.0, 2.0,2.0);
-//
-////        switchToPipeline(limelightTurret, 1);
-////        setFiducial3DOffset(
-////                limelightTurret,
-////                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
-////                0,
-////                0);
-////
-////        switchToPipeline(limelightTurret, 2);
-////        setFiducial3DOffset(
-////                limelightTurret,
-////                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
-////                Constants.StructureConstants.TURRET_TARGET_LEFT_SIDE_OFFSET,
-////                0);
-////
-////        switchToPipeline(limelightTurret, 3);
-////        setFiducial3DOffset(limelightTurret,
-////                Constants.StructureConstants.TURRET_TARGET_FORWARD_OFFSET,
-////                Constants.StructureConstants.TURRET_TARGET_RIGHT_SIDE_OFFSET,
-////                0);
-//
-//
-//        if ( isRedAlliance ) {
-//            fiducialIdFilterOverride(
-//                    limelightTurret,
-//                    Constants.StructureConstants.RED_FIDUCIAL_TURRET_IDS
-//            );
-//
-////            // Pipeline 1, all center ids
-////            switchToPipeline(limelightTurret, 1);
-////            fiducialIdFilterOverride(
-////                    limelightTurret,
-////                    Constants.StructureConstants.OFFSET_GROUP_CENTER_RED
-////            );
-////
-////            // Pipeline 2, all left ids
-////            switchToPipeline(limelightTurret, 2);
-////            fiducialIdFilterOverride(
-////                    limelightTurret,
-////                    Constants.StructureConstants.OFFSET_GROUP_LEFT_RED
-////            );
-////
-////            // Pipeline 3, all right ids
-////            switchToPipeline(limelightTurret, 3);
-////            fiducialIdFilterOverride(
-////                    limelightTurret,
-////                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_RED
-////            );
-//
-//            // Controls // TODO: Confirm blue and red
-//
-//        } else {
-//            fiducialIdFilterOverride(
-//                    limelightTurret,
-//                    Constants.StructureConstants.BLUE_FIDUCIAL_TURRET_IDS
-//            );
-////
-////            // Pipeline 1, all center ids
-////            switchToPipeline(limelightTurret, 1);
-////            fiducialIdFilterOverride(
-////                    limelightTurret,
-////                    Constants.StructureConstants.OFFSET_GROUP_CENTER_BLUE
-////            );
-////
-////            // Pipeline 2, all left ids
-////            switchToPipeline(limelightTurret, 2);
-////            fiducialIdFilterOverride(
-////                    limelightTurret,
-////                    Constants.StructureConstants.OFFSET_GROUP_LEFT_BLUE
-////            );
-////
-////            // Pipeline 3, all right ids
-////            switchToPipeline(limelightTurret, 3);
-////            fiducialIdFilterOverride(
-////                    limelightTurret,
-////                    Constants.StructureConstants.OFFSET_GROUP_RIGHT_BLUE
-////            );
-//        }
-//
-////        // Set to capture all tags
-////        switchToPipeline(limelightTurret, 0);
-//    }
-
 
 
     public boolean hasTargetTurret(){

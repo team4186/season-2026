@@ -16,7 +16,7 @@
   },
   "rampRate": {
     "drive": 0.25,
-    "angle": 0.25
+    "angle": 0.05
   },
   "optimalVoltage": 12,
   "robotMass": 51.129,
